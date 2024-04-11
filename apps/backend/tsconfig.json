@@ -10,12 +10,18 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+			"@*": ["./src/*"],
+			"@emails/*": ["src/messaging/emails/*"],
+			"@root/*": ["./*"]
+		},
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "jsx": "react"
   }
 }
