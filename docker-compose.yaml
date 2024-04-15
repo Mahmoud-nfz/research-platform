@@ -20,7 +20,8 @@ services:
 
   backend:
     build:
-      context: apps/backend
+      args:
+        APP: backend
     restart: on-failure
     ports:
       - 3001:3001

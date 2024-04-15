@@ -15,7 +15,7 @@ import {
 } from './dtos';
 import { SuccessMessage } from '@common';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
   constructor(protected readonly authService: AuthService) {}
 

@@ -37,4 +37,9 @@ export class User extends Base {
   @Exclude()
   @Column({ type: 'text', nullable: true, select: false })
   accessToken: string;
+
+  constructor(values: Partial<User>) {
+    super(values);
+    Object.assign(this, values);
+  }
 }

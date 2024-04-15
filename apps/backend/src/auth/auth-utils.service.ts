@@ -1,14 +1,17 @@
 import { LoggerService } from '@logger/logger.service';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import {
   BadRequestException,
   ForbiddenException,
+  Inject,
   Injectable,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User, UserStatus } from '@user/user.entity';
 import { compare, genSalt, hash } from 'bcrypt';
-import { timingSafeEqual } from 'crypto';
+import { randomInt, timingSafeEqual } from 'crypto';
+import { AuthStrategy } from './auth-strategy.enum';
 
 @Injectable()
 export class AuthUtilsService {
@@ -16,6 +19,7 @@ export class AuthUtilsService {
   constructor(
     private readonly logger: LoggerService,
     private readonly jwtService: JwtService,
+    @Inject(CACHE_MANAGER) private readonly cahceManager: Cache,
   ) {
     this.rounds = 10;
   }
@@ -106,5 +110,18 @@ export class AuthUtilsService {
     });
 
     return { newAccessToken, newRefreshToken };
+  }
+
+  generateOTP(user: User) {
+    const otp = randomInt(1e6, 1e7);
+    const key = this.getOTPCacheKey(user.id);
+    const exp = Date.now() + 1e3 * 60 * 60 * 1;
+    this.logger.trace(`Generate code: ${otp} for user: ${user.id}`);
+    this.cahceManager.set(key, [otp, exp]);
+    return otp;
+  }
+
+  getOTPCacheKey(userId: string) {
+    return AuthStrategy.otp + '_' + userId;
   }
 }

@@ -42,35 +42,7 @@ export default function EmailVerificationTemplate(
           />
         </Head>
         <Body className="bg-white">
-          <Section className="bg-primary-background p-4 rounded-b-2xl">
-            <Container>
-              <Img
-                className="mx-auto"
-                src="https://res.cloudinary.com/dk8quhoj2/image/upload/v1694109814/logo_avxn9k.png"
-                alt="logo"
-                width={105}
-                height={65}
-              />
-              <Heading
-                as="h1"
-                className="text-white text-center text-5xl font-bold"
-              >
-                {appName}
-              </Heading>
-            </Container>
-          </Section>
           <Section>
-            <Row>
-              <Container>
-                <Img
-                  className="mx-auto"
-                  src="https://res.cloudinary.com/dk8quhoj2/image/upload/v1694111262/sqbuuw4wvuppynz295dr.png"
-                  alt="account_activation"
-                  width={252}
-                  height={252}
-                />
-              </Container>
-            </Row>
             <Row>
               <Container>
                 <Heading
@@ -93,12 +65,9 @@ export default function EmailVerificationTemplate(
             </Row>
             <Row>
               <Container className="my-10">
-                <Link
-                  href={props.code ?? 'https://facebook.com'}
-                  className="px-10 block text-2xl font-semibold w-fit mx-auto py-2 text-white rounded-full bg-primary-background"
-                >
-                  Activate
-                </Link>
+                <div className="px-10 block text-2xl font-semibold w-fit mx-auto py-2 text-white rounded-full bg-primary-background">
+                  {props.code}
+                </div>
               </Container>
             </Row>
             <Row>

@@ -12,7 +12,7 @@ import { AuthModule } from '@auth/auth.module';
     ConfigModule.forRoot(),
     LoggerModule,
     DatabaseModule,
-    CacheModule.register({ isGlobal: true }),
+    CacheModule.register({ isGlobal: true, ttl: 1000 * 60 * 60 * 1 }),
     AuthModule,
   ],
   controllers: [AppController],

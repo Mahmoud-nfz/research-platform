@@ -6,13 +6,20 @@ import { User } from '@user/user.entity';
 import { AuthStrategy } from '@auth/auth-strategy.enum';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { UniqueTokenOptionsWithRequest } from 'passport-unique-token/dist/strategy';
+import { AuthUtilsService } from '@auth/auth-utils.service';
+import { LoggerService } from '@logger/logger.service';
+import { timingSafeEqual } from 'crypto';
 
 @Injectable()
 export class OneTimePasswordStrategy extends PassportStrategy(
   Strategy,
   AuthStrategy.otp,
 ) {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
+  constructor(
+    private readonly logger: LoggerService,
+    private readonly authUtilesService: AuthUtilsService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {
     super({
       tokenField: 'code',
       failOnMissing: true,
@@ -21,23 +28,36 @@ export class OneTimePasswordStrategy extends PassportStrategy(
   }
 
   async validate(req: Express.Request, code: string) {
-    const user = req.user as User;
-    const key = this.getKey(user.id);
-    const [otp, exp] = await this.cacheManager.get<[string, Date]>(key);
+    const userId = (req?.user as User)?.id ?? (req as any).body?.userId;
+    const key = this.authUtilesService.getOTPCacheKey(userId);
+    const value = await this.cacheManager.get<[string, Date]>(key);
 
     // no OTP associated with this user was found
-    if (otp === null) throw new UnauthorizedException();
-
-    // incorrect code
-    if (otp !== code) throw new UnauthorizedException();
-
-    // otp expired
-    if (Date.now() > new Date(exp).getTime()) throw new UnauthorizedException();
+    if (!value) {
+      this.logger.trace(`OTP not found for key: ${key}`);
+      throw new UnauthorizedException();
+    }
 
     await this.cacheManager.del(key);
-  }
+    const [otp, exp] = value;
 
-  private getKey(id: string) {
-    return id;
+    // incorrect code
+    if (
+      !timingSafeEqual(
+        Buffer.from(otp.toString()),
+        Buffer.from(code.toString()),
+      )
+    ) {
+      this.logger.trace('code provided does not match OTP');
+      throw new UnauthorizedException();
+    }
+
+    // otp expired
+    if (Date.now() > new Date(exp).getTime()) {
+      this.logger.trace('OTP expired');
+      throw new UnauthorizedException();
+    }
+
+    return userId;
   }
 }

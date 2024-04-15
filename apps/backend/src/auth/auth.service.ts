@@ -1,12 +1,11 @@
 import { LoggerService } from '@logger/logger.service';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from '@user/user.service';
 import { User, UserStatus } from '@user/user.entity';
 import { LocalSignupDto } from './dtos';
 import { AuthUtilsService } from './auth-utils.service';
 import { MailService } from '@messaging/emailing/mail.service';
 import { Template } from '@messaging/emailing/template.enum';
-import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +14,6 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly authUtilsService: AuthUtilsService,
     private readonly mailService: MailService,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   async verifyEmail(user: User) {
@@ -69,10 +67,12 @@ export class AuthService {
       status: UserStatus.pending_email_activation,
     });
 
+    const otp = this.authUtilsService.generateOTP(user);
+
     this.mailService.sendEmail({
       template: Template.email_verification,
       to: { address: email, name: infos.firstName },
-      context: { name: infos.firstName, code: '123456' },
+      context: { name: infos.firstName, code: otp },
     });
 
     return user;

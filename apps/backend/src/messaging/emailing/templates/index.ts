@@ -1,6 +1,6 @@
 import { Template } from '../template.enum';
 import React from 'react';
-import EmailVerificationTemplate from './AccountActivationTemplate';
+import EmailVerificationTemplate from './EmailVerificationTemplage';
 import EmailChangeTemplate from './EmailChangeTemplate';
 
 export const templates = {

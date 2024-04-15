@@ -5,11 +5,11 @@ import { IsString, MinLength } from 'class-validator';
 export class CreateUserDto implements Partial<User> {
   @IsString()
   @MinLength(2)
-  @Trim()
+//  @Trim()
   firstName: string;
 
   @IsString()
   @MinLength(2)
-  @Trim()
+//  @Trim()
   lastName: string;
 }

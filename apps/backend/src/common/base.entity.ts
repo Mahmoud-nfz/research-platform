@@ -14,4 +14,8 @@ export abstract class Base {
   updatedAt: Date;
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
+
+  constructor(values: Partial<Base>) {
+    Object.assign(this, values);
+  }
 }

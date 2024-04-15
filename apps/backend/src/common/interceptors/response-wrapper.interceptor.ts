@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 
 import { SUCCESS_MESSAGE_KEY } from '@common';
 import { LoggerService } from '@logger/logger.service';
+import { instanceToPlain } from 'class-transformer';
 
 export class Response<T> {
   statusCode: number;
@@ -59,7 +60,7 @@ export class ResponseWrapperInterceptor<T>
           : {
               message: message ?? 'SUCCESS',
               statusCode,
-              data,
+              data: instanceToPlain(data),
             },
       ),
     );
