@@ -1,27 +1,35 @@
 import { validate } from '@config/config.validator';
 import { registerAs } from '@nestjs/config';
-import { IsFQDN, IsNotEmpty, IsOptional, IsPort } from 'class-validator';
+import { IsFQDN, IsIn, IsNotEmpty, IsPort } from 'class-validator';
+
+const SUPPORTED_DATABASES = ['mysql', 'postgres', 'sqlite', 'mssql'] as const;
+type SupportedDatabases = (typeof SUPPORTED_DATABASES)[number];
 
 export interface DatabaseConfig {
+  type: SupportedDatabases;
   username: string;
   password: string;
   host: string;
   port: number;
-  name: string;
+  database: string;
   uri: string;
 }
 
 class EnvVariables {
+  @IsIn(SUPPORTED_DATABASES)
+  DB_TYPE: SupportedDatabases;
   @IsNotEmpty()
   DB_USERNAME: string;
   @IsNotEmpty()
   DB_PASSWORD: string;
-  @IsFQDN()
-  @IsOptional()
-  DB_HOST?: string;
+  @IsFQDN({
+    allow_numeric_tld: true,
+    allow_underscores: true,
+    require_tld: false,
+  })
+  DB_HOST: string;
   @IsPort()
-  @IsOptional()
-  DB_PORT?: string;
+  DB_PORT: string;
   @IsNotEmpty()
   DB_NAME: string;
   @IsNotEmpty()
@@ -31,11 +39,12 @@ class EnvVariables {
 export const databaseConfig = registerAs('database', (): DatabaseConfig => {
   const envVariables = validate(EnvVariables);
   return {
+    type: envVariables.DB_TYPE,
     username: envVariables.DB_USERNAME,
     password: envVariables.DB_PASSWORD,
-    host: envVariables.DB_HOST ?? '127.0.0.1',
-    port: parseInt(envVariables.DB_PORT ?? '5432'),
-    name: envVariables.DB_NAME,
+    host: envVariables.DB_HOST,
+    port: parseInt(envVariables.DB_PORT),
+    database: envVariables.DB_NAME,
     uri: envVariables.DB_URI,
   };
 });

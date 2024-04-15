@@ -1,0 +1,50 @@
+name: research-platform
+
+services:
+  db:
+    image: postgres:16
+    restart: on-failure
+    environment:
+      - POSTGRES_PASSWORD=/run/secrets/db_password
+      - POSTGRES_USER=/run/secrets/db_username
+      - POSTGRES_DB=${DB_NAME:-db}
+    entrypoint: /usr/local/bin/database_entrypoint.sh
+    volumes:
+      - ${SSL_DIR:?}:/ssl
+      - ./scripts/database_entrypoint.sh:/usr/local/bin/database_entrypoint.sh
+    secrets:
+      - db_username
+      - db_password
+    networks:
+      - db_network
+
+  backend:
+    build:
+      context: apps/backend
+    restart: on-failure
+    ports:
+      - 3001:3001
+    env_file:
+      - apps/backend/.env.example
+      - apps/backend/.env
+    environment:
+      - DB_TYPE=postgres
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-db}
+      - DB_PASSWORD=/run/secrets/db_password
+      - DB_USERNAME=/run/secrets/db_username
+    secrets:
+      - db_username
+      - db_password
+    networks:
+      - db_network
+
+secrets:
+  db_password:
+    file: ${SECRETS_DIR:?}/db_password.txt
+  db_username:
+    file: ${SECRETS_DIR:?}/db_username.txt
+
+networks:
+  db_network:

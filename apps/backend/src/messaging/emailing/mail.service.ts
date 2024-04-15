@@ -28,7 +28,7 @@ export class MailService {
    *
    * @param options - the templates to use. All templates are defined in `templates/index.ts`.
    */
-  async sendMail<T extends Template>(options: MailOptions<T>): Promise<void> {
+  async sendEmail<T extends Template>(options: MailOptions<T>): Promise<void> {
     this.logger.trace(`Sending ${options.template} email`);
     try {
       if (this.enabled)

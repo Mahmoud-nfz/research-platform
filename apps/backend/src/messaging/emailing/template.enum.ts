@@ -1,3 +1,4 @@
 export enum Template {
-  ACCOUNT_ACTIVATION = 'ACCOUNT_ACTIVATION',
+  email_change = 'EMAIL_CHANGE',
+  email_verification = 'EMAIL_VERIFICATION',
 }

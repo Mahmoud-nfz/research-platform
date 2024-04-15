@@ -6,7 +6,7 @@ import {
 } from 'class-validator';
 import ms from 'ms';
 
-export default function IsVercelMs(validationOptions?: ValidationOptions) {
+export function IsVercelMs(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
       name: 'isVercelMs',

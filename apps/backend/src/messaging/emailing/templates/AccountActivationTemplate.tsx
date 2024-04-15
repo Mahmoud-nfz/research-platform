@@ -17,12 +17,13 @@ import * as React from 'react';
 import config from './tailwind.config';
 import { APP_NAME } from '@common/constants';
 
-export interface IAccountActivationTemplate {
-  link: string;
+export interface IEmailVerificationTemplate {
+  code: string;
+  name: string;
 }
 
-export default function AccountActivationTemplate(
-  props: IAccountActivationTemplate,
+export default function EmailVerificationTemplate(
+  props: IEmailVerificationTemplate,
 ) {
   const appName = APP_NAME.toLowerCase();
   return (
@@ -93,7 +94,7 @@ export default function AccountActivationTemplate(
             <Row>
               <Container className="my-10">
                 <Link
-                  href={props.link ?? 'https://facebook.com'}
+                  href={props.code ?? 'https://facebook.com'}
                   className="px-10 block text-2xl font-semibold w-fit mx-auto py-2 text-white rounded-full bg-primary-background"
                 >
                   Activate

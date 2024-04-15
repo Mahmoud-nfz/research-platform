@@ -1,3 +1,4 @@
+import { React } from 'react';
 import { ISendMailOptions } from '@nestjs-modules/mailer';
 import { templates } from './templates';
 import { Template } from './template.enum';
