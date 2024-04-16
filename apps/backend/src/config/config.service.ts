@@ -1,3 +1,4 @@
+import { DatabaseConfig } from '@config/configs/database.config';
 import { MiscConfig } from '@config/configs/misc.config';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService as ConfigurationService } from '@nestjs/config';
@@ -10,6 +11,10 @@ export class ConfigService extends ConfigurationService {
     @Inject(CONFIGURATION_TOKEN) defaultConfig: Record<string, unknown>,
   ) {
     super(defaultConfig);
+  }
+
+  getDatabaseConfig(): DatabaseConfig {
+    return this.getOrThrow<DatabaseConfig>(ConfigKey.database);
   }
 
   getMiscConfig(): MiscConfig {
