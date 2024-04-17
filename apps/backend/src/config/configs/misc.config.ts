@@ -1,6 +1,7 @@
+import { ConfigKey } from '@config/config-key.enum';
 import { validate } from '@config/config.validator';
-import { LogLevel } from '@logger/logger.types';
 import { registerAs } from '@nestjs/config';
+import { LogLevel } from '@logger/logger.types';
 import { Type } from 'class-transformer';
 import { IsBooleanString, IsEnum, IsOptional, IsPort } from 'class-validator';
 
@@ -33,7 +34,7 @@ class EnvVariables {
   LOG_LEVEL: LogLevel = LogLevel.trace;
 }
 
-export const miscConfig = registerAs('misc', (): MiscConfig => {
+export const miscConfig = registerAs(ConfigKey.misc, (): MiscConfig => {
   const envVariables = validate(EnvVariables);
   return {
     port: parseInt(envVariables.PORT ?? '3001'),
