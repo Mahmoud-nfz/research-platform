@@ -1,3 +1,4 @@
+import { ConfigKey } from '@config/config-key.enum';
 import { validate } from '@config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { IsFQDN, IsIn, IsNotEmpty, IsPort } from 'class-validator';
@@ -36,15 +37,18 @@ class EnvVariables {
   DB_URI: string;
 }
 
-export const databaseConfig = registerAs('database', (): DatabaseConfig => {
-  const envVariables = validate(EnvVariables);
-  return {
-    type: envVariables.DB_TYPE,
-    username: envVariables.DB_USERNAME,
-    password: envVariables.DB_PASSWORD,
-    host: envVariables.DB_HOST,
-    port: parseInt(envVariables.DB_PORT),
-    database: envVariables.DB_NAME,
-    uri: envVariables.DB_URI,
-  };
-});
+export const databaseConfig = registerAs(
+  ConfigKey.database,
+  (): DatabaseConfig => {
+    const envVariables = validate(EnvVariables);
+    return {
+      type: envVariables.DB_TYPE,
+      username: envVariables.DB_USERNAME,
+      password: envVariables.DB_PASSWORD,
+      host: envVariables.DB_HOST,
+      port: parseInt(envVariables.DB_PORT),
+      database: envVariables.DB_NAME,
+      uri: envVariables.DB_URI,
+    };
+  },
+);
