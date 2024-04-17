@@ -1,3 +1,4 @@
+import { ConfigKey } from '@config/config-key.enum';
 import { validate } from '@config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { IsEnum, IsOptional, IsPort } from 'class-validator';
@@ -22,7 +23,7 @@ class EnvVariables {
   NODE_ENV?: Environment;
 }
 
-export const miscConfig = registerAs('misc', (): MiscConfig => {
+export const miscConfig = registerAs(ConfigKey.misc, (): MiscConfig => {
   const envVariables = validate(EnvVariables);
   return {
     port: parseInt(envVariables.PORT ?? '3001'),
