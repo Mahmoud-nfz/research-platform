@@ -2,12 +2,6 @@ import { validate } from '@config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { IsEnum, IsOptional, IsPort } from 'class-validator';
 
-export interface ReCaptchaConfig {
-  secret: string;
-  verify: URL;
-  siteKey: string;
-}
-
 export enum Environment {
   dev = 'development',
   prod = 'production',
