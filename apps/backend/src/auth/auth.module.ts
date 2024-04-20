@@ -11,6 +11,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@config';
 import { AuthUtilsService } from './auth-utils.service';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthUtilsService } from './auth-utils.service';
       }),
     }),
     UserModule,
+    CacheModule.register(),
   ],
   controllers: [AuthController],
   providers: [

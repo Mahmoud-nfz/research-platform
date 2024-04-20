@@ -7,35 +7,50 @@ export enum UserStatus {
   pending_email_activation = 1,
 }
 
-@Entity()
+@Entity({ name: 'users' })
 export class User extends Base {
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ name: 'first_name', type: 'varchar', length: 50 })
   firstName: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ name: 'last_name', type: 'varchar', length: 50 })
   lastName: string;
 
-  @Column({ type: 'varchar', unique: true, length: 100 })
+  @Column({ name: 'email', type: 'varchar', unique: true, length: 100 })
   email: string;
 
   @Exclude()
-  @Column({ type: 'varchar', length: 100, select: false })
+  @Column({
+    name: 'password_hash',
+    type: 'varchar',
+    length: 100,
+    select: false,
+  })
   passwordHash: string;
 
   @Exclude()
-  @Column({ type: 'varchar', length: 100, select: false })
+  @Column({ name: 'salt', type: 'varchar', length: 100, select: false })
   salt: string;
 
   @Exclude()
-  @Column({ type: 'smallint' })
+  @Column({ name: 'status', type: 'smallint' })
   status: UserStatus;
 
   @Exclude()
-  @Column({ type: 'text', nullable: true, select: false })
+  @Column({
+    name: 'refresh_token',
+    type: 'text',
+    nullable: true,
+    select: false,
+  })
   refreshToken: string;
 
   @Exclude()
-  @Column({ type: 'text', nullable: true, select: false })
+  @Column({
+    name: 'access_token',
+    type: 'text',
+    nullable: true,
+    select: false,
+  })
   accessToken: string;
 
   constructor(values: Partial<User>) {
