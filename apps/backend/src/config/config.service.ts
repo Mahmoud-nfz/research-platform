@@ -4,6 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService as ConfigurationService } from '@nestjs/config';
 import { CONFIGURATION_TOKEN } from '@nestjs/config/dist/config.constants';
 import { ConfigKey } from './config-key.enum';
+import { AuthConfig } from './configs/auth.config';
 
 @Injectable()
 export class ConfigService extends ConfigurationService {
@@ -11,6 +12,10 @@ export class ConfigService extends ConfigurationService {
     @Inject(CONFIGURATION_TOKEN) defaultConfig: Record<string, unknown>,
   ) {
     super(defaultConfig);
+  }
+
+  getAuthConfig(): AuthConfig {
+    return this.getOrThrow<AuthConfig>(ConfigKey.auth);
   }
 
   getDatabaseConfig(): DatabaseConfig {
