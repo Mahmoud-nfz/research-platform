@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           type: dbConfig.type,
           synchronize: env === Environment.dev,
           autoLoadEntities: true,
+          ssl: true,
         };
       },
     }),

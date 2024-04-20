@@ -1,17 +1,15 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory, Reflector, repl } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { LoggerService } from '@logger/logger.service';
 import { GlobalHttpExceptionFilter } from '@common/global-http.filter';
 import { ResponseWrapperInterceptor } from '@common/response-wrapper.interceptor';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ProviderTokens } from '@common/provider-tokens';
-import { ConfigService } from '@config/config.service';
 import { LoggerOptions } from 'winston';
 
-class ApplicationBootstrapper {
+export class ApplicationBootstrapper {
   static async bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const configService = app.get(ConfigService);
     const winstonConfig = await app.resolve<LoggerOptions>(
       ProviderTokens.WINSTON_CONFIG,
     );
@@ -56,6 +54,10 @@ class ApplicationBootstrapper {
     app.enableCors();
 
     await app.listen(3001);
+  }
+
+  static async repl() {
+    await repl(AppModule);
   }
 }
 

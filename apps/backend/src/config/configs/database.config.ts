@@ -3,7 +3,7 @@ import { validate } from '@config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { IsFQDN, IsIn, IsNotEmpty, IsPort } from 'class-validator';
 
-const SUPPORTED_DATABASES = ['mysql', 'postgres', 'sqlite', 'mssql'] as const;
+const SUPPORTED_DATABASES = ['postgres'] as const;
 type SupportedDatabases = (typeof SUPPORTED_DATABASES)[number];
 
 export interface DatabaseConfig {
