@@ -2,7 +2,7 @@ import { IsVercelMs } from '@common';
 import { ConfigKey } from '@config/config-key.enum';
 import { validate } from '@config/config.validator';
 import { registerAs } from '@nestjs/config';
-import { IsHash, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface AuthConfig {
   jwt: {
@@ -12,7 +12,7 @@ export interface AuthConfig {
 }
 
 class EnvVariables {
-  @IsHash('sha256')
+  @IsNotEmpty()
   JWT_SECRET: string;
   @IsVercelMs()
   @IsOptional()

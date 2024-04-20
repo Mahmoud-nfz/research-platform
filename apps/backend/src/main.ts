@@ -55,9 +55,7 @@ class ApplicationBootstrapper {
     // ) as string[];
     app.enableCors();
 
-    // get port to listen on from environment variables
-    const PORT = configService.getMiscConfig().port;
-    await app.listen(PORT);
+    await app.listen(3001);
   }
 }
 
