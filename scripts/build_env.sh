@@ -1,4 +1,4 @@
 #!/bin/bash
 
-./generate_secrets.sh > .env
-./generate_ssl_certificates >> .env
+./scripts/generate_secrets.sh > .env
+./scripts/generate_ssl_certificates.sh >> .env
