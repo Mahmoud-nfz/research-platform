@@ -7,20 +7,19 @@ export enum UserStatus {
   pending_email_activation = 1,
 }
 
-@Entity({ name: 'users' })
+@Entity()
 export class User extends Base {
-  @Column({ name: 'first_name', type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50 })
   firstName: string;
 
-  @Column({ name: 'last_name', type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50 })
   lastName: string;
 
-  @Column({ name: 'email', type: 'varchar', unique: true, length: 100 })
+  @Column({ type: 'varchar', unique: true, length: 100 })
   email: string;
 
   @Exclude()
   @Column({
-    name: 'password_hash',
     type: 'varchar',
     length: 100,
     select: false,
@@ -28,16 +27,15 @@ export class User extends Base {
   passwordHash: string;
 
   @Exclude()
-  @Column({ name: 'salt', type: 'varchar', length: 100, select: false })
+  @Column({ type: 'varchar', length: 100, select: false })
   salt: string;
 
   @Exclude()
-  @Column({ name: 'status', type: 'smallint' })
+  @Column({ type: 'smallint' })
   status: UserStatus;
 
   @Exclude()
   @Column({
-    name: 'refresh_token',
     type: 'text',
     nullable: true,
     select: false,
@@ -46,7 +44,6 @@ export class User extends Base {
 
   @Exclude()
   @Column({
-    name: 'access_token',
     type: 'text',
     nullable: true,
     select: false,
