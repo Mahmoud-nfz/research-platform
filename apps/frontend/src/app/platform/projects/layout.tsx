@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Connectez vouz à la plateforme de recherche"
 };
 
-export default function LoginLayout({
+export default function PlatformLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

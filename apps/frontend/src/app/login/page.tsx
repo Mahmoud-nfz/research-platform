@@ -84,7 +84,7 @@ export default function Login(): JSX.Element {
 						<div className="flex items-center justify-center">
 							<button
 								type="submit"
-								className="mt-5 w-1/2 bg-primary-700 text-white font-semibold p-2 rounded-md hover:bg-primary-900 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+								className="mt-5 w-1/2 bg-primary-700 text-white font-semibold p-2 rounded-md hover:bg-primary-900 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
 							>
 								Se connecter
 							</button>
