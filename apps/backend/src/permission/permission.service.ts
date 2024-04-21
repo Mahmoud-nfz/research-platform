@@ -15,20 +15,26 @@ export class PermissionService {
     user: User,
     permissions: Record<string, string[]>,
   ): Promise<boolean> {
+    const raw = await this.repositrory
+      .createQueryBuilder('permission')
+      .select('permission.subject_id')
+      .addSelect('permission.user_id')
+      .addSelect('array_agg(permission.action)', 'actions')
+      .where('permission.user_id = :userId', { userId: user.id })
+      .andWhere('permission.subject_id IN (:...subjectIds)', {
+        subjectIds: Object.keys(permissions),
+      })
+      .groupBy('permission.subject_id')
+      .addGroupBy('permission.user_id')
+      .execute();
+
     const result: (Pick<Permission, 'userId' | 'subjectId'> & {
       actions: string[];
-    })[] = await this.repositrory
-      .createQueryBuilder('permission')
-      .select('permission.subjectId', 'subjectId')
-      .addSelect('permission.userId', 'userId')
-      .addSelect('array_agg(permission.action)', 'actions')
-      .where('permission.userId = :user_id', { user_id: user.id })
-      .andWhere('permission.subjectId IN (:...subject_ids)', {
-        subject_ids: Object.keys(permissions),
-      })
-      .groupBy('permission.subjectId')
-      .addGroupBy('permission.userId')
-      .execute();
+    })[] = raw.map((row) => ({
+      ...row,
+      subjectId: row.subject_id,
+      userId: row.user_id,
+    }));
 
     return result.every((row) => {
       const requiredActions = permissions[row.subjectId];
