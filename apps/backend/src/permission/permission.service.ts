@@ -11,6 +11,22 @@ export class PermissionService {
     private readonly repositrory: Repository<Permission>,
   ) {}
 
+  async createOne(user: User, subjectId: string, action: string) {
+    const permission = new Permission({ user, action, subjectId });
+    return this.repositrory.save(permission);
+  }
+
+  async deleteOne(user: User, subjectId: string, action: string) {
+    return this.repositrory
+      .createQueryBuilder()
+      .delete()
+      .from(Permission)
+      .where('subject_id = :subjectId', { subjectId })
+      .andWhere('user_id = :userId', { userId: user.id })
+      .andWhere('action = :action', { action })
+      .execute();
+  }
+
   async checkUserPermissions(
     user: User,
     permissions: Record<string, string[]>,
