@@ -1,6 +1,7 @@
 import { ConfigService, Environment } from '@config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DatabaseSnakeNamingStrategy } from './database-snake-naming.strategy';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           synchronize: env === Environment.dev,
           autoLoadEntities: true,
           ssl: true,
+          namingStrategy: new DatabaseSnakeNamingStrategy(),
         };
       },
     }),
