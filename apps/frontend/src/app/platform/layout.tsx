@@ -15,7 +15,7 @@ export default function PlatformLayout({
   return (
     <div className="flex flex-col h-screen">
       <Navbar />
-      <div className="flex flex-grow overflow-hidden">
+      <div className="flex flex-grow overflow-hidden bg-[#ededed]">
         <SideBar />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
