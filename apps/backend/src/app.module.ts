@@ -7,6 +7,7 @@ import { LoggerModule } from '@logger/logger.module';
 import { UserModule } from '@user/user.module';
 import { PermissionModule } from '@permission/permisson.module';
 import { AuthModule } from '@auth/auth.module';
+import { ProjectModule } from '@project/project.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from '@auth/auth.module';
     UserModule,
     PermissionModule,
     AuthModule,
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],
