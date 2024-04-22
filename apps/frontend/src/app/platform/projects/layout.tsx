@@ -1,21 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Se connecter",
-  description: "Connectez vouz à la plateforme de recherche"
+	title: "Se connecter",
+	description: "Connectez vouz à la plateforme de recherche",
 };
 
-export default function PlatformLayout({
-  children,
+export default function ProjectsLayout({
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
-  );
+	return <div>{children}</div>;
 }
