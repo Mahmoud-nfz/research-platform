@@ -8,6 +8,7 @@ import { UserModule } from '@user/user.module';
 import { PermissionModule } from '@permission/permisson.module';
 import { AuthModule } from '@auth/auth.module';
 import { ProjectModule } from '@project/project.module';
+import { DataCollectionModule } from './data-collection/data-collection.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ProjectModule } from '@project/project.module';
     PermissionModule,
     AuthModule,
     ProjectModule,
+    DataCollectionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
