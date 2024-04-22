@@ -17,4 +17,9 @@ export class Permission extends Base {
 
   @RelationId((permission: Permission) => permission.user)
   userId: string;
+
+  constructor(data: Partial<Permission>) {
+    super(data);
+    Object.assign(this, data);
+  }
 }
