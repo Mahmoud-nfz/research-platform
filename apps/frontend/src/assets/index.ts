@@ -1,5 +1,8 @@
+export { default as CloudUploadIcon } from "./CloudUploadIcon";
 export { default as DataIcon } from "./DataIcon";
 export { default as DownChevronIcon } from "./DownChevronIcon";
+export { default as FilterIcon } from "./FilterIcon";
+export { default as FolderIcon } from "./FolderIcon";
 export { default as HomeIcon } from "./HomeIcon";
 export { default as LogoutIcon } from "./LogoutIcon";
 export { default as NotificationsIcon } from "./NotificationsIcon";
