@@ -58,7 +58,6 @@ export default function Home() {
 
 				reader.readAsArrayBuffer(chunk);
 			};
-			// sendBucketName();
 			sendChunks();
 		};
 
