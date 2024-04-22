@@ -14,7 +14,7 @@ export class ElasticController {
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'The record has been successfully added to elasticsearch.',
+    description: 'The object description has been successfully added to elasticsearch.',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
