@@ -11,8 +11,6 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
-.ssl
-.secrets
 
 # Testing
 coverage

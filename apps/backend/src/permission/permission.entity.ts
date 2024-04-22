@@ -2,13 +2,13 @@ import { Column, Entity, Index, ManyToOne, RelationId } from 'typeorm';
 import { Base } from '@common/base.entity';
 import { User } from '@user/user.entity';
 
-@Entity()
+@Entity({ name: 'permissions' })
 @Index(['user', 'subjectId', 'action'], { unique: true })
 export class Permission extends Base {
-  @Column({ type: 'varchar' })
+  @Column({ name: 'action', type: 'varchar' })
   action: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'subject_id', type: 'uuid' })
   subjectId: string;
 
   @Index()
@@ -17,9 +17,4 @@ export class Permission extends Base {
 
   @RelationId((permission: Permission) => permission.user)
   userId: string;
-
-  constructor(data: Partial<Permission>) {
-    super(data);
-    Object.assign(this, data);
-  }
 }

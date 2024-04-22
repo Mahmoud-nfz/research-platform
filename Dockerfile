@@ -2,7 +2,7 @@ FROM node:18-slim AS base
 
 # APP: backend | docs | frontend
 ARG APP
-ENV APP=${APP:?}
+ENV APP=${APP}
 
 # Use the correct version of the package manager
 ENV PNPM_HOME="/pnpm"

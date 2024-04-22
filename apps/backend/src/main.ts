@@ -1,18 +1,20 @@
 import { NestFactory, Reflector, repl } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { LoggerService } from '@logger/logger.service';
 import { GlobalHttpExceptionFilter } from '@common/global-http.filter';
 import { ResponseWrapperInterceptor } from '@common/response-wrapper.interceptor';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ProviderTokens } from '@common/provider-tokens';
 import { LoggerOptions } from 'winston';
-
+import { ElasticModule } from './elasticsearch/elastic.module';
 export class ApplicationBootstrapper {
   static async bootstrap() {
     const app = await NestFactory.create(AppModule);
     const winstonConfig = await app.resolve<LoggerOptions>(
       ProviderTokens.WINSTON_CONFIG,
     );
+    const elastic = await NestFactory.create<NestExpressApplication>(ElasticModule);
     const reflector = app.get(Reflector);
 
     // Enable versioning
@@ -53,6 +55,7 @@ export class ApplicationBootstrapper {
     // ) as string[];
     app.enableCors();
 
+    await elastic.listen(5601);
     await app.listen(3001);
   }
 

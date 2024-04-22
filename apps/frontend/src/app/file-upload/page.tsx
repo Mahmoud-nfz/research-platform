@@ -4,25 +4,32 @@ import React, { useState } from "react";
 export default function Home() {
 	const [socket, setSocket] = useState<WebSocket | null>(null);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+	const [bucketName, setBucketName] = useState<string | null>(null);
 	const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0] || null;
 		setSelectedFile(file);
 	};
+	const handleBucketName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const name = event.target.value || null;
+		setBucketName(name);
+	}
 
 	const handleFileUpload = () => {
 		if (!selectedFile) return;
 
-		const newSocket = new WebSocket("ws://localhost:8080/ws");
+		const newSocket = new WebSocket("ws://localhost:1206/ws");
 
 		newSocket.onopen = () => {
 			console.log("WebSocket connection established");
-			// Send filename as the first message
 			newSocket.send(selectedFile.name);
 
-			const CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
+			const CHUNK_SIZE = 1024 * 1024;
 			let offset = 0;
-
+			const sendBucketName = () => {
+				if (bucketName) {
+					newSocket.send(bucketName);
+				}
+			}
 			const sendChunks = () => {
 				const chunk = selectedFile.slice(offset, offset + CHUNK_SIZE);
 				const reader = new FileReader();
@@ -51,7 +58,7 @@ export default function Home() {
 
 				reader.readAsArrayBuffer(chunk);
 			};
-
+			// sendBucketName();
 			sendChunks();
 		};
 
@@ -67,6 +74,7 @@ export default function Home() {
 		<div className="flex flex-col">
 			<h1>WebSocket File Upload</h1>
 			<input type="file" onChange={handleFileSelect} />
+			<input type="text" placeholder="Enter bucket name" onChange={handleBucketName} />
 			<button onClick={handleFileUpload}>Upload File</button>
 		</div>
 	);
