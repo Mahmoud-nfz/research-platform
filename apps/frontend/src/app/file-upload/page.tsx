@@ -28,9 +28,6 @@ export default function Home() {
 
 		newSocket.onopen = () => {
 			console.log("WebSocket connection established");
-
-			// newSocket.send(selectedFile.name);
-			
 			const CHUNK_SIZE = 1024 * 1024;
 			let offset = 0;
 			const sendBucketName = () => {
