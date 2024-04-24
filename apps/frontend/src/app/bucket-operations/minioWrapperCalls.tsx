@@ -99,3 +99,17 @@ export const renameObject = async (bucketName: any, oldName: any, newName:any) =
         throw new Error("Error renaming object. Please try again.");
     }
 };
+
+export const copyObject = async (
+    sourceBucket: string,
+    destinationBucket: string,
+    objectName: string,
+) => {
+    try {
+        const response = await axios.post(`http://localhost:1206/bucket/${sourceBucket}/${destinationBucket}/${objectName}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error copying object:", error);
+        throw new Error("Error copying object. Please try again.");
+    }
+};

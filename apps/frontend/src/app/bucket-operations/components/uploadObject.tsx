@@ -1,11 +1,12 @@
 // Upload.tsx
 import React, { useState } from "react";
 import { handleFileUpload } from "../minioWrapperCalls";
+import { set } from "react-hook-form";
 
 const Upload: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [bucketName, setBucketName] = useState<string | null>(null);
-    const [folderName, setFolderName] = useState<string | null>(null);
+    const [folderName, setFolderName] = useState<string >("");
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [error, setError] = useState<string>("");
 
@@ -20,13 +21,13 @@ const Upload: React.FC = () => {
     };
 
     const handleFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const name = event.target.value || null;
+        const name = event.target.value || "";
         setFolderName(name);
     };
 
     const handleUpload = () => {
-        if (!selectedFile || !bucketName || !folderName) return;
-
+        if (!selectedFile || !bucketName ) return;
+        if (!folderName) {setFolderName('');}
         handleFileUpload(
             selectedFile,
             bucketName,
