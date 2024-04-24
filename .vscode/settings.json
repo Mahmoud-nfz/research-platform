@@ -1,7 +1,9 @@
 {
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#083612",
+        "titleBar.activeBackground": "#0C4B19",
+        "titleBar.activeForeground": "#F3FDF5",
+        "minimap.background": "#00000000",
+        "scrollbar.shadow": "#00000000"
     }
-  ]
 }
