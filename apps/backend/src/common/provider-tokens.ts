@@ -1,4 +1,0 @@
-export enum ProviderTokens {
-  LOGGER_CONTEXT = 'LOGGER_CONTEXT',
-  WINSTON_CONFIG = 'WINSTON_CONFIG',
-}
