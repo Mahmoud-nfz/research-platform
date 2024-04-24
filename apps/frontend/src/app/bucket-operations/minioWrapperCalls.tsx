@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 const MINIO_WRAPPER_ENDPOINT = process.env.MINIO_WRAPPER_ENDPOINT;
+
 export const handleFileUpload = (
     selectedFile: File,
     bucketName: string,
