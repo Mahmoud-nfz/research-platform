@@ -11,7 +11,7 @@ export const handleFileUpload = (
 ) => {
     const updatedFileName = bucketName + "/" + selectedFile.name;
     const updatedFile = new File([selectedFile], updatedFileName, { type: selectedFile.type });
-    const newSocket = new WebSocket("ws://localhost:1206/ws");
+    const newSocket = new WebSocket("ws://localhost:1206/upload");
     newSocket.onopen = () => {
         console.log("WebSocket connection established");
 
@@ -33,7 +33,7 @@ export const handleFileUpload = (
                     if (result instanceof ArrayBuffer) {
                         newSocket.send(result);
                         offset += result.byteLength;
-                        callback((offset / updatedFile.size) * 100); // Update progress
+                        callback((offset / updatedFile.size) * 100); 
                         if (offset < updatedFile.size) {
                             sendChunks();
                         } else {
@@ -61,6 +61,38 @@ export const handleFileUpload = (
         console.error("WebSocket error:", error);
         errorCallback("WebSocket error");
     };
+};
+export const handleFileDownload = (selectedObjects:any, bucketName:any) => {
+    selectedObjects.forEach((fileName:any) => {
+        const socket = new WebSocket("ws://localhost:1206/download");
+        socket.onopen = () => {
+            console.log("WebSocket connection established for download");
+            socket.send(JSON.stringify({ bucketName, fileName }));
+        };
+
+        socket.onmessage = (event) => {
+            const message = event.data;
+            if (typeof message === "string") {
+                // Handle string message if needed
+            } else if (message instanceof Blob) {
+                const fileUrl = URL.createObjectURL(message);
+                const a = document.createElement("a");
+                a.href = fileUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        };
+
+        socket.onclose = () => {
+            console.log("WebSocket connection closed for download");
+        };
+
+        socket.onerror = (error) => {
+            console.error("WebSocket error:", error);
+        };
+    });
 };
 
 
@@ -114,3 +146,18 @@ export const copyObject = async (
         throw new Error("Error copying object. Please try again.");
     }
 };
+
+
+export const fetchBucketObjectsFromMinio = async (bucketName: string): Promise<ObjectInfo[]> => {
+    try {
+      const response = await axios.get(`http://localhost:1206/bucket/${bucketName}/objects`);
+      return response.data.objects;
+    } catch (error) {
+      throw new Error(`Error fetching objects from Minio: ${error}`);
+    }
+  };
+interface ObjectInfo {
+  name: string;
+  size: number;
+}
+
