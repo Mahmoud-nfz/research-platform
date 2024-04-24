@@ -24,4 +24,12 @@ export class ProjectController {
   async findMyProjects(@AuthenticatedUser() owner: User) {
     return this.projectSerice.findManyByOwner(owner);
   }
+
+  /**
+   * List all projects accessible by authenticated user.
+   */
+  @Get()
+  async findAll(@AuthenticatedUser() user: User) {
+    return this.projectSerice.findManyByUser(user);
+  }
 }
