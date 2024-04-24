@@ -1,7 +1,11 @@
 "use client";
 import axios from "axios";
 const MINIO_WRAPPER_ENDPOINT = process.env.MINIO_WRAPPER_ENDPOINT;
-
+interface ObjectInfo {
+    name: string;
+    size: number;
+  }
+  
 export const handleFileUpload = (
     selectedFile: File,
     bucketName: string,
@@ -73,7 +77,6 @@ export const handleFileDownload = (selectedObjects:any, bucketName:any) => {
         socket.onmessage = (event) => {
             const message = event.data;
             if (typeof message === "string") {
-                // Handle string message if needed
             } else if (message instanceof Blob) {
                 const fileUrl = URL.createObjectURL(message);
                 const a = document.createElement("a");
@@ -156,8 +159,5 @@ export const fetchBucketObjectsFromMinio = async (bucketName: string): Promise<O
       throw new Error(`Error fetching objects from Minio: ${error}`);
     }
   };
-interface ObjectInfo {
-  name: string;
-  size: number;
-}
+
 
