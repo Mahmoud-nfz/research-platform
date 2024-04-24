@@ -8,6 +8,7 @@ import { JwtPayloadDto } from '@auth/dtos';
 import { ConfigService } from '@config';
 import { AuthStrategy } from '@auth/auth-strategy.enum';
 import { AuthUtilsService } from '@auth/auth-utils.service';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, AuthStrategy.jwt) {
@@ -31,13 +32,23 @@ export class JwtStrategy extends PassportStrategy(Strategy, AuthStrategy.jwt) {
     if (!accessToken) throw new UnauthorizedException('Invalid token');
 
     try {
-      const user = await this.userService.findOne(payload.id);
+      const user = await this.userService.findOne(payload.id, [
+        'id',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+        'firstName',
+        'lastName',
+        'email',
+        'status',
+        'accessToken',
+      ]);
       await this.authUtilsService.verifyStatus(user);
       await this.authUtilsService.verifyAccessTokenAgainstDatabase(
         user,
         accessToken,
       );
-      return user;
+      return instanceToPlain(user);
     } catch {
       throw new UnauthorizedException('Invalid token');
     }
