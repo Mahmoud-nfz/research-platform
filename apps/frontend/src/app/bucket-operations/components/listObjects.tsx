@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { getObjects } from "../minioFunctions";
+import { getObjects } from "../minioWrapperCalls";
 
 const ListObjects: React.FC = () => {
     const [bucketName, setBucketName] = useState<string>("");

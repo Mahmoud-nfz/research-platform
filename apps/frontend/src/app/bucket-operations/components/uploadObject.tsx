@@ -1,6 +1,6 @@
 // Upload.tsx
 import React, { useState } from "react";
-import { handleFileUpload } from "../minioFunctions";
+import { handleFileUpload } from "../minioWrapperCalls";
 
 const Upload: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
