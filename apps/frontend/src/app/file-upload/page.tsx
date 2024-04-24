@@ -2,7 +2,7 @@
 import { send } from "process";
 import React, { useState } from "react";
 
-export default function Home() {
+export default function Upload() {
 	const [socket, setSocket] = useState<WebSocket | null>(null);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [bucketName, setBucketName] = useState<string | null>(null);
@@ -63,7 +63,6 @@ export default function Home() {
 				reader.readAsArrayBuffer(chunk);
 			};
 			sendBucketName();
-			// sendFolderName();
 			sendChunks();
 		};
 
