@@ -1,11 +1,11 @@
 import React from 'react';
-import "./file-upload/page";
-import Upload from './file-upload/page';
-import ListObjectsInBucket from './list-rename-delete/listObjectsInBucket';
+import BucketOperationsPage from './bucket-operations/bucketOperationsPage';
 
 export default function App() {
     return (
-        <Upload />
-        // <ListObjectsInBucket />
+        <div>
+            <h1>Minio File Upload</h1>
+            <BucketOperationsPage />
+        </div>
     );
 }
