@@ -61,7 +61,7 @@ export class AuthService {
       email,
       salt,
       passwordHash,
-      status: UserStatus.pending_email_activation,
+      status: UserStatus.active,
     });
 
     return user;

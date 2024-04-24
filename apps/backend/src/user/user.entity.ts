@@ -18,6 +18,9 @@ export class User extends Base {
   @Column({ type: 'varchar', unique: true, length: 100 })
   email: string;
 
+  @Column({ type: 'smallint' })
+  status: UserStatus;
+
   @Exclude()
   @Column({
     type: 'varchar',
@@ -31,8 +34,12 @@ export class User extends Base {
   salt: string;
 
   @Exclude()
-  @Column({ type: 'smallint' })
-  status: UserStatus;
+  @Column({
+    type: 'text',
+    nullable: true,
+    select: false,
+  })
+  refreshToken?: string;
 
   @Exclude()
   @Column({
@@ -40,15 +47,7 @@ export class User extends Base {
     nullable: true,
     select: false,
   })
-  refreshToken: string;
-
-  @Exclude()
-  @Column({
-    type: 'text',
-    nullable: true,
-    select: false,
-  })
-  accessToken: string;
+  accessToken?: string;
 
   constructor(values: Partial<User>) {
     super(values);
