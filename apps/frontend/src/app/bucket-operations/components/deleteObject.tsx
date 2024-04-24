@@ -22,7 +22,7 @@ const ListObjects: React.FC = () => {
                 await deleteObject(bucketName, objectName);
                 setObjects((prevObjects) => prevObjects.filter((obj) => obj !== objectName));
             }
-            setSelectedObjects([]); // Clear selected objects after deletion
+            setSelectedObjects([]);
         } catch (error) {
             console.error("Error deleting objects:", error);
         }
