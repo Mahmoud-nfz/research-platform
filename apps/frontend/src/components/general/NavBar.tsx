@@ -3,14 +3,21 @@ import { NotificationsIcon, SettingsIcon } from "@/assets";
 import companyLogo from "~/company-logo-dark.png";
 import Link from "next/link";
 import { SearchBar } from "./SearchBar";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+import { Popover } from "@headlessui/react";
+import { Signout } from "./SideBar/Signout";
 
-const user = {
-  img: "/jeff.jpg",
-  name: "Jeffrey",
-  role: "Researcher",
+const testUser = {
+  imageUrl: "/jeff.jpg",
+  firstName: "Jeffrey",
+  job: "Researcher",
 };
 
-export const Navbar = () => {
+export const Navbar = async () => {
+  const session = await getServerSession(options);
+  const user: typeof testUser = { ...testUser, ...session?.user };
+
   return (
     <div
       className="text-white p-4 flex justify-between items-center"
@@ -28,21 +35,7 @@ export const Navbar = () => {
 
       <SearchBar />
 
-      <div className="flex items-center ml-5 space-x-4">
-        <SettingsIcon className="h-6 w-6" />
-        <NotificationsIcon className="h-6 w-6" />
-        <Image
-          src={user.img}
-          alt="Profile"
-          className="rounded-full"
-          width={32}
-          height={32}
-        />
-        <div>
-          <h1 className="text-sm font-semibold text-center">{user.name}</h1>
-          <h1 className="text-xs text-center">{user.role}</h1>
-        </div>
-      </div>
+      <Signout user={user} />
     </div>
   );
 };
