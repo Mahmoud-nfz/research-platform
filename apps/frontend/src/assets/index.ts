@@ -1,6 +1,8 @@
+export { default as ChevronLeftDouble } from "./ChevronLeftDouble";
 export { default as CloudUploadIcon } from "./CloudUploadIcon";
 export { default as DataIcon } from "./DataIcon";
 export { default as DownChevronIcon } from "./DownChevronIcon";
+export { default as EditIcon } from "./EditIcon";
 export { default as FilterIcon } from "./FilterIcon";
 export { default as FolderIcon } from "./FolderIcon";
 export { default as HomeIcon } from "./HomeIcon";
@@ -11,3 +13,4 @@ export { default as ProjectIcon } from "./ProjectIcon";
 export { default as SearchIcon } from "./SearchIcon";
 export { default as SettingsOutlineIcon } from "./SettingsOutlineIcon";
 export { default as SettingsIcon } from "./SettingsIcon";
+export { default as ShareIcon } from "./ShareIcon";
