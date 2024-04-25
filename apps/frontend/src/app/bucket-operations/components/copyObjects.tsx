@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { getObjects } from "../minioWrapperCalls";
-import { copyObject } from "../minioWrapperCalls";
+import { getObjects } from "../../../services/crud.service";
+import { copyObject } from "../../../services/crud.service";
 
 const CopyObjects: React.FC = () => {
     const [sourceBucketName, setSourceBucketName] = useState<string>("");

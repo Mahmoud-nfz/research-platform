@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { renameObject } from "../minioWrapperCalls";
+import { renameObject } from "../../../services/crud.service";
 
 const RenameObject: React.FC = () => {
     const [bucketName, setBucketName] = useState<string>("");
