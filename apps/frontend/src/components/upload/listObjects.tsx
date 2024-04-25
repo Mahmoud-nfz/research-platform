@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { getObjects } from "../../../services/crud.service";
+import { getObjects } from "../../services/crud.service";
 
 const ListObjects: React.FC = () => {
     const [bucketName, setBucketName] = useState<string>("");

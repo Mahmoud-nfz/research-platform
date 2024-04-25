@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import Upload from"./components/uploadObject";
-import ListObjects from "./components/listObjects";
-import DeleteObject from "./components/deleteObject";
-import RenameObject from "./components/renameObject";
-import CopyObjects from "./components/copyObjects";
-import Download from "./components/downloadObject";
+import Upload from"../../components/upload/uploadObject";
+import ListObjects from "../../components/upload/listObjects";
+import DeleteObject from "../../components/upload/deleteObject";
+import RenameObject from "../../components/upload/renameObject";
+import CopyObjects from "../../components/upload/copyObjects";
+import Download from "../../components/upload/downloadObject";
 
 
 const BucketOperationsPage: React.FC = () => {

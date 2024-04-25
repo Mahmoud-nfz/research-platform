@@ -1,6 +1,6 @@
 // Upload.tsx
 import React, { useState } from "react";
-import { handleFileUpload } from "../../../services/upload.service";
+import { handleFileUpload } from "../../services/upload.service";
 import { set } from "react-hook-form";
 
 const Upload: React.FC = () => {

@@ -1,32 +1,30 @@
+"use client";
 import React, { useState } from "react";
-import { getObjects } from "../../../services/crud.service";
-import { copyObject } from "../../../services/crud.service";
+import { getObjects, deleteObject } from "../../services/crud.service";
 
-const CopyObjects: React.FC = () => {
-    const [sourceBucketName, setSourceBucketName] = useState<string>("");
-    const [targetBucketName, setTargetBucketName] = useState<string>("");
+const ListObjects: React.FC = () => {
+    const [bucketName, setBucketName] = useState<string>("");
     const [objects, setObjects] = useState<string[]>([]);
     const [selectedObjects, setSelectedObjects] = useState<string[]>([]);
     const [error, setError] = useState<string>("");
 
     const handleGetObjects = async () => {
         try {
-            await getObjects(sourceBucketName, setObjects, setError);
+            await getObjects(bucketName, setObjects, setError);
         } catch (error) {
             console.error("Error getting objects:", error);
-            setError("Error getting objects. Please try again.");
         }
     };
 
-    const handleCopyObjects = async () => {
+    const handleDeleteObjects = async () => {
         try {
             for (const objectName of selectedObjects) {
-                await copyObject(sourceBucketName, targetBucketName, objectName);
-                console.log("Object copied:", objectName);
+                await deleteObject(bucketName, objectName);
+                setObjects((prevObjects) => prevObjects.filter((obj) => obj !== objectName));
             }
+            setSelectedObjects([]);
         } catch (error) {
-            console.error("Error copying objects:", error);
-            setError((error as Error).message);
+            console.error("Error deleting objects:", error);
         }
     };
 
@@ -42,14 +40,13 @@ const CopyObjects: React.FC = () => {
 
     return (
         <div>
-            <h1>Copy multiple objects between Buckets</h1>
+            <h1>Delete multiple objects in Bucket</h1>
             <h2>List Objects</h2>
-            <input type="text" value={sourceBucketName} onChange={(e) => setSourceBucketName(e.target.value)} placeholder="Enter Source Bucket Name" />
-            <input type="text" value={targetBucketName} onChange={(e) => setTargetBucketName(e.target.value)} placeholder="Enter Target Bucket Name" />
+            <input type="text" value={bucketName} onChange={(e) => setBucketName(e.target.value)} placeholder="Enter Bucket Name" />
             <button onClick={handleGetObjects}>Get Objects</button>
             
             {error && <p style={{ color: "red" }}>{error}</p>}
-            <h3>Objects in Source Bucket:</h3>
+            <h3>Objects in Bucket:</h3>
             <ul>
                 {objects.map((object, index) => (
                     <li key={index}>
@@ -58,9 +55,9 @@ const CopyObjects: React.FC = () => {
                     </li>
                 ))}
             </ul>
-            <button onClick={handleCopyObjects}>Copy Selected Objects</button>
+            <button onClick={handleDeleteObjects}>Delete Selected Objects</button>
         </div>
     );
 };
 
-export default CopyObjects;
+export default ListObjects;

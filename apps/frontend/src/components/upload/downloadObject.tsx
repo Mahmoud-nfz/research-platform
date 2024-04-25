@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { getObjects} from "../../../services/crud.service";
-import { handleFileDownload } from "../../../services/download.service";
+import { getObjects} from "../../services/crud.service";
+import { handleFileDownload } from "../../services/download.service";
 
 const Download: React.FC = () => {
     const [bucketName, setBucketName] = useState<string>("");
