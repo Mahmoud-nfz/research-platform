@@ -14,3 +14,4 @@ export { default as SearchIcon } from "./SearchIcon";
 export { default as SettingsOutlineIcon } from "./SettingsOutlineIcon";
 export { default as SettingsIcon } from "./SettingsIcon";
 export { default as ShareIcon } from "./ShareIcon";
+export { default as BigUploadCloudIcon } from "./BigUploadCloudIcon";
