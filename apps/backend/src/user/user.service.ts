@@ -25,8 +25,8 @@ export class UserService {
     return this.repository.findOne({ where: { id }, select });
   }
 
-  async findOneByEmail(email: string) {
-    return this.repository.findOne({ where: { email } });
+  async findOneByEmail(email: string, select?: FindOneOptions<User>['select']) {
+    return this.repository.findOne({ where: { email }, select });
   }
 
   async updateOne(id: string, values: Partial<User>) {

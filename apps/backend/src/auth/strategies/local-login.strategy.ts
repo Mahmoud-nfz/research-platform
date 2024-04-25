@@ -6,6 +6,7 @@ import { UserService } from '@/user/user.service';
 import { User } from '@user/user.entity';
 import { AuthStrategy } from '@auth/auth-strategy.enum';
 import { AuthUtilsService } from '@auth/auth-utils.service';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class LocalLoginsStrategy extends PassportStrategy(
@@ -25,16 +26,31 @@ export class LocalLoginsStrategy extends PassportStrategy(
   async validate(email: string, password: string) {
     let user: User;
     try {
-      user = await this.userService.findOneByEmail(email);
+      user = await this.userService.findOneByEmail(email, [
+        'id',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+        'email',
+        'firstName',
+        'lastName',
+        'passwordHash',
+        'salt',
+        'status',
+      ]);
     } catch (error) {
       throw new UnauthorizedException('Incorrect email or password');
     }
 
-    if (!this.authUtilsService.verifyPassword(user, password))
+    const isPasswordCorrect = await this.authUtilsService.verifyPassword(
+      user,
+      password,
+    );
+    if (!isPasswordCorrect)
       throw new UnauthorizedException('Incorrect email or password');
 
     this.authUtilsService.verifyStatus(user);
 
-    return user;
+    return instanceToPlain(user);
   }
 }
