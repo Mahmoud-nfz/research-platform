@@ -15,7 +15,7 @@ export const fetcher = async <R = never>(
   const url = new URL(path, process.env.BACKEND_URL);
 
   const session = await getServerSession(options);
-  const token = request_options?.token ?? session?.access_token;
+  const token = request_options?.token ?? session?.accessToken;
 
   const headers: HeadersInit = {
     Authorization: `Bearer ${token}`,

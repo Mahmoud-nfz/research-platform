@@ -1,12 +1,13 @@
 import Image from "next/image";
 import { CloudUploadIcon, FolderIcon } from "@/assets";
+import { Project } from "@/types/entities";
 
 function truncateText(text: string) {
 	const truncated = text.substring(0, 70) + "...";
 	return truncated;
   }
 
-export const ProjectCard = ({ project }: { project: Project }) => {
+export const ProjectCard = ({ project }: { project: Project; }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg w-72 h-52 m-3 flex flex-col">
       <div className="relative">
@@ -14,7 +15,7 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         <div
           className="rounded-t-lg absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url(${project.image})`,
+            backgroundImage: `url(${project.imageUrl})`,
             opacity: 0.5,
           }}
         ></div>
@@ -39,7 +40,7 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         <div className="relative px-2 py-1 opacity-100 flex flex-row justify-between text-black text-md font-bold">
           <div className="flex items-center justify-center">
             <div className="flex items-center justify-center">
-              {project.usersImages.map((url, index) => (
+              {/* {project.usersImages.map((url, index) => (
                 <div
                   key={index}
                   className="w-8 h-8 -ml-2 rounded-full overflow-hidden border-2 border-white"
@@ -52,7 +53,7 @@ export const ProjectCard = ({ project }: { project: Project }) => {
                     alt={"Member 1"}
                   />
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
           <div className="flex flex-col">
@@ -69,14 +70,14 @@ export const ProjectCard = ({ project }: { project: Project }) => {
                 style={{ fontSize: "12px" }}
               >
                 <CloudUploadIcon className="h-4 w-4 mr-1" />
-                {project.size}
+                {'5.7 GB'}
               </div>
               <div
                 className="p-1 flex flex-row justify-center items-center font-normal"
                 style={{ fontSize: "12px" }}
               >
                 <FolderIcon className="h-3 w-3 mr-1" />
-                {project.numFolders} {" fichiers"}
+                {12} {" collections"}
               </div>
             </div>
           </div>
@@ -85,15 +86,3 @@ export const ProjectCard = ({ project }: { project: Project }) => {
     </div>
   );
 };
-
-export interface Project {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  tags: string[];
-  usersImages: string[];
-  ownerImage: string;
-  size: string;
-  numFolders: number;
-}

@@ -27,3 +27,29 @@ export class User extends Base {
     Object.assign(this, values);
   }
 }
+
+export class Subject extends Base {
+  public static actions: Record<string, string>;
+}
+
+export enum ProjectAction {
+  read = 'project__read',
+  update = 'project__update',
+  create = 'project__create',
+  manage = 'project__manage',
+}
+
+export class Project extends Subject {
+  public static actions = ProjectAction;
+  name: string;
+  owner: User;
+  ownerId: string;
+  imageUrl: string;
+  description: string;
+  tags: string[];
+
+  constructor(data: Partial<Project>) {
+    super(data);
+    Object.assign(this, data);
+  }
+}
