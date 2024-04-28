@@ -1,6 +1,6 @@
-import { Base } from '@common/base.entity';
 import { Exclude } from 'class-transformer';
 import { Column, Entity } from 'typeorm';
+import { Base } from './base.entity';
 
 export enum UserStatus {
   active = 0,

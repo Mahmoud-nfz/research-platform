@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { AuthenticatedUser, UseJwtAuth } from '@auth/decorators';
 import { CreateProjectDto } from './dtos/create-project.dto';
-import { User } from '@user/user.entity';
+import { User } from '@database/entities';
 
 @Controller('projects')
 @UseJwtAuth()

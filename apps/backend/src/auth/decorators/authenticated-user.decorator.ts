@@ -1,5 +1,5 @@
+import { User } from '@database/entities';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { User } from '@user/user.entity';
 import { plainToInstance } from 'class-transformer';
 import { Request } from 'express';
 
