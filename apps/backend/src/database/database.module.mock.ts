@@ -1,4 +1,10 @@
-import { FactoryProvider, Global, Module } from '@nestjs/common';
+import {
+  FactoryProvider,
+  Global,
+  Inject,
+  Module,
+  OnApplicationShutdown,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseSnakeNamingStrategy } from './database-snake-naming.strategy';
 import {
@@ -38,4 +44,13 @@ const MockDBContainerProvider: FactoryProvider = {
   providers: [MockDBContainerProvider],
   exports: [TypeOrmModule, MockDBContainerProvider],
 })
-export class DatabaseModuleMock {}
+export class DatabaseModuleMock implements OnApplicationShutdown {
+  constructor(
+    @Inject(ProviderTokens.MOCK_DB_CONTAINER)
+    private readonly postgresContainer: StartedPostgreSqlContainer,
+  ) {}
+
+  async onApplicationShutdown() {
+    await this.postgresContainer.stop();
+  }
+}

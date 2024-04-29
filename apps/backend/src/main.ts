@@ -46,6 +46,8 @@ export class ApplicationBootstrapper {
     // enable logging
     app.useLogger(LoggerService.create(winstonConfig, this.name));
 
+    app.enableShutdownHooks();
+
     // @/configure CORS policy to accept requests only from frontend server
     // const { front, dashboard } = configService.getMiscConfig();
     // const allowedOrigins = [front, dashboard].filter(
