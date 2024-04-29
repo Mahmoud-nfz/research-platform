@@ -34,8 +34,7 @@ export class AuthUtilsService {
   async verifyPassword(user: User, password: string) {
     this.logger.trace(`Verifying password for user ${user.id}`);
     try {
-      await compare(password, user.passwordHash);
-      return true;
+      return compare(password, user.passwordHash);
     } catch (error) {
       return false;
     }

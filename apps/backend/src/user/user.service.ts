@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -21,12 +21,12 @@ export class UserService {
     return new User({ ...infos, id: metadata.identifiers[0].id });
   }
 
-  async findOne(id: string) {
-    return this.repository.findOne({ where: { id } });
+  async findOne(id: string, select?: FindOneOptions<User>['select']) {
+    return this.repository.findOne({ where: { id }, select });
   }
 
-  async findOneByEmail(email: string) {
-    return this.repository.findOne({ where: { email } });
+  async findOneByEmail(email: string, select?: FindOneOptions<User>['select']) {
+    return this.repository.findOne({ where: { email }, select });
   }
 
   async updateOne(id: string, values: Partial<User>) {
