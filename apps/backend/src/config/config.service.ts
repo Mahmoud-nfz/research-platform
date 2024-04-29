@@ -1,10 +1,9 @@
-import { DatabaseConfig } from '@config/configs/database.config';
-import { MiscConfig } from '@config/configs/misc.config';
+import { DatabaseConfig } from '@/config/configs/database.config';
+import { MiscConfig, AuthConfig } from '@/config/configs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService as ConfigurationService } from '@nestjs/config';
 import { CONFIGURATION_TOKEN } from '@nestjs/config/dist/config.constants';
 import { ConfigKey } from './config-key.enum';
-import { AuthConfig } from './configs/auth.config';
 
 @Injectable()
 export class ConfigService extends ConfigurationService {

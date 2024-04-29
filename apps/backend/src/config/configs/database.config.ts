@@ -1,5 +1,5 @@
-import { ConfigKey } from '@config/config-key.enum';
-import { validate } from '@config/config.validator';
+import { ConfigKey } from '@/config/config-key.enum';
+import { validate } from '@/config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { IsIn, IsNotEmpty } from 'class-validator';
 

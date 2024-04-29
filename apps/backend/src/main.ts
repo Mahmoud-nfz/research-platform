@@ -1,10 +1,10 @@
 import { NestFactory, Reflector, repl } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { LoggerService } from '@logger/logger.service';
-import { GlobalHttpExceptionFilter } from '@common/global-http.filter';
-import { ResponseWrapperInterceptor } from '@common/response-wrapper.interceptor';
+import { LoggerService } from '@/logger/logger.service';
+import { GlobalHttpExceptionFilter } from '@/common/global-http.filter';
+import { ResponseWrapperInterceptor } from '@/common/response-wrapper.interceptor';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { ProviderTokens } from '@common/provider-tokens';
+import { ProviderTokens } from '@/common/provider-tokens';
 import { LoggerOptions } from 'winston';
 
 export class ApplicationBootstrapper {
@@ -46,7 +46,7 @@ export class ApplicationBootstrapper {
     // enable logging
     app.useLogger(LoggerService.create(winstonConfig, this.name));
 
-    // configure CORS policy to accept requests only from frontend server
+    // @/configure CORS policy to accept requests only from frontend server
     // const { front, dashboard } = configService.getMiscConfig();
     // const allowedOrigins = [front, dashboard].filter(
     //   (origin) => origin !== undefined,

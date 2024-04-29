@@ -1,4 +1,4 @@
-import { ConfigService, Environment } from '@config';
+import { ConfigService, Environment } from '@/config';
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseSnakeNamingStrategy } from './database-snake-naming.strategy';

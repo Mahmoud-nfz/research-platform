@@ -1,3 +1,3 @@
-import { ApplicationBootstrapper } from '@main';
+import { ApplicationBootstrapper } from '@/main';
 
 ApplicationBootstrapper.repl();

@@ -1,4 +1,4 @@
-import { Base, Permission } from '@database/entities';
+import { Base, Permission } from '@/database/entities';
 import { IsIn, IsUUID } from 'class-validator';
 
 export class RevokePermissionDto

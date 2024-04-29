@@ -1,5 +1,5 @@
-import { AuthUtilsService } from '@auth/auth-utils.service';
-import { LoggerService } from '@logger/logger.service';
+import { AuthUtilsService } from '@/auth/auth-utils.service';
+import { LoggerService } from '@/logger/logger.service';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
