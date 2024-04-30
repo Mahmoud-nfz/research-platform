@@ -1,14 +1,8 @@
-import { UseFormRegister } from "react-hook-form";
-import { InputHTMLAttributes } from "react";
-import { FieldValues, Path } from "react-hook-form";
+"use client";
 
-interface InputProps<D extends FieldValues>
-	extends InputHTMLAttributes<HTMLInputElement> {
-	error?: string;
-	register: UseFormRegister<D>;
-	name: Path<D>;
-	label: string;
-}
+import { FieldValues, Path } from "react-hook-form";
+import { PasswordField } from "./PasswordField";
+import { InputProps } from "./InputProps";
 
 export default function Input<D extends FieldValues>({
 	error,
@@ -25,7 +19,17 @@ export default function Input<D extends FieldValues>({
 					<span className="text-red-500">*</span>
 				)}
 			</label>
-			<input id={name} {...props} {...register(name)} />
+			{name === "password" ? (
+				<PasswordField
+					error={error}
+					register={register}
+					name={name}
+					label={label}
+					{...props}
+				/>
+			) : (
+				<input id={name} {...props} {...register(name)} />
+			)}
 			<span className="ml-2.5 block text-sm font-medium text-red-700">
 				{error}
 			</span>
