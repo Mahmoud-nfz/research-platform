@@ -58,8 +58,8 @@ export const ProjectCard = ({ project }: { project: Project; }) => {
           </div>
           <div className="flex flex-col">
             <div className="flex flex-row justify-end">
-              {project.tags.slice(0, 3).map((tag) => (
-                <div className="bg-gray-200 rounded-lg p-1 font-semibold text-sm m-1">
+              {project.tags.slice(0, 3).map((tag, index) => (
+                <div key={index} className="bg-gray-200 rounded-lg p-1 font-semibold text-sm m-1">
                   {tag}
                 </div>
               ))}
