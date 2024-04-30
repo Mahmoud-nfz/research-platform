@@ -1,5 +1,4 @@
-import { Base } from '@common/base.entity';
-import { Permission } from '@permission/permission.entity';
+import { Base, Permission } from '@/database/entities';
 import { IsIn, IsUUID } from 'class-validator';
 
 export class GrantPermissionDto

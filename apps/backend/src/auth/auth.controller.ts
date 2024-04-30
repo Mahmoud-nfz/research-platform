@@ -5,7 +5,6 @@ import {
   UseLocalLoginAuth,
   UseOtpAuth,
 } from './decorators';
-import { User } from '@user/user.entity';
 import { AuthService } from './auth.service';
 import {
   JwtRefreshDto as JwtRotateDto,
@@ -13,9 +12,10 @@ import {
   ResetPasswordDto,
   LocalSignupDto,
 } from './dtos';
-import { SuccessMessage } from '@common';
+import { SuccessMessage } from '@/common';
 import { AddUserDto } from './dtos/add-user.dto';
 import { UseAddUserAuth } from './decorators/add-user.decorator';
+import { User } from '@/database/entities';
 
 @Controller('auth')
 export class AuthController {

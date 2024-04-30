@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { lastValueFrom } from 'rxjs';
 
 import { LoggerService } from '@/logger/logger.service';
-import { AuthStrategy } from '@auth/auth-strategy.enum';
+import { AuthStrategy } from '@/auth/auth-strategy.enum';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard(AuthStrategy.jwt) {

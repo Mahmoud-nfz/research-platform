@@ -1,9 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { DataCollectionService } from './data-collection.service';
-import { AuthenticatedUser, UseJwtAuth } from '@auth/decorators';
-import { User } from '@user/user.entity';
+import { AuthenticatedUser, UseJwtAuth } from '@/auth/decorators';
 import { CreateDataCollectionDto } from './dtos/create-data-collection.dto';
-import { Project } from '@project/project.entity';
+import { Project, User } from '@/database/entities';
 
 @Controller('data-collections')
 @UseJwtAuth()

@@ -1,8 +1,10 @@
-import { ConfigService, Environment } from '@config';
-import { Module } from '@nestjs/common';
+import { ConfigService, Environment } from '@/config';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseSnakeNamingStrategy } from './database-snake-naming.strategy';
+import { BuisnessEntities } from './entities';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -20,9 +22,10 @@ import { DatabaseSnakeNamingStrategy } from './database-snake-naming.strategy';
         };
       },
     }),
+    TypeOrmModule.forFeature(BuisnessEntities),
   ],
   controllers: [],
   providers: [],
-  exports: [],
+  exports: [TypeOrmModule],
 })
 export class DatabaseModule {}

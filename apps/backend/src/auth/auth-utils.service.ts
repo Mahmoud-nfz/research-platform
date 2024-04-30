@@ -1,4 +1,4 @@
-import { LoggerService } from '@logger/logger.service';
+import { LoggerService } from '@/logger/logger.service';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import {
   BadRequestException,
@@ -8,10 +8,10 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User, UserStatus } from '@user/user.entity';
 import { compare, genSalt, hash } from 'bcrypt';
 import { randomInt, timingSafeEqual } from 'crypto';
 import { AuthStrategy } from './auth-strategy.enum';
+import { User, UserStatus } from '@/database/entities';
 
 @Injectable()
 export class AuthUtilsService {

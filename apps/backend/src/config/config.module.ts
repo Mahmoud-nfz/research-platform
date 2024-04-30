@@ -1,5 +1,5 @@
-import { ConfigService } from '@config/config.service';
-import * as configs from '@config/configs';
+import { ConfigService } from '@/config/config.service';
+import * as configs from '@/config/configs';
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import {
   ConfigModule as ConfigurationModule,

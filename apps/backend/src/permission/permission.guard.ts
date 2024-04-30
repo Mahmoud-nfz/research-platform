@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PERMISSION_KEY } from './require-permission.decorator';
-import { User } from '@user/user.entity';
 import { PermissionService } from './permission.service';
 import { Request } from 'express';
+import { User } from '@/database/entities';
 
 type PermissionAggregate = {
   subject: (request: Request) => string | string[];

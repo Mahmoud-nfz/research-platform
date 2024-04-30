@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ProjectService } from './project.service';
-import { AuthenticatedUser, UseJwtAuth } from '@auth/decorators';
+import { AuthenticatedUser, UseJwtAuth } from '@/auth/decorators';
 import { CreateProjectDto } from './dtos/create-project.dto';
-import { User } from '@user/user.entity';
+import { User, Project } from '@/database/entities';
+import { VerifyIdPresenceInDatabase } from '@/common';
 
 @Controller('projects')
 @UseJwtAuth()
@@ -31,5 +32,17 @@ export class ProjectController {
   @Get()
   async findAll(@AuthenticatedUser() user: User) {
     return this.projectSerice.findManyByUser(user);
+  }
+
+  /**
+   * Get number of data collections accessible by authenticated user in a specific project.
+   */
+  @Get('num-data-collections')
+  async getNumDataCollections(
+    @AuthenticatedUser() user: User,
+    @Body('projectId', ParseUUIDPipe, VerifyIdPresenceInDatabase(Project))
+    project: Project,
+  ) {
+    return this.projectSerice.getNumDataCollections(project, user);
   }
 }

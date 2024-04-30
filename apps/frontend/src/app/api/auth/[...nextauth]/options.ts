@@ -4,6 +4,19 @@ import { fetcher } from "@/utils/fetcher";
 import { endpoints } from "@/constants";
 import { LoginResponse } from "@/types";
 import { User } from "@/types/entities";
+import { z } from "zod";
+
+const updateSessionSchema = z.object({
+  access_token: z.string(),
+  refresh_token: z.string(),
+  user: z.object({
+    phoneNumber: z.string(),
+    firstName: z.string(),
+    lastName: z.string(),
+    position: z.string(),
+    companyName: z.string(),
+  }),
+});
 
 export const options: NextAuthOptions = {
   providers: [
@@ -48,6 +61,35 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    session: async ({ session, token }) => {
+      Object.assign(session, token);
+      return session;
+    },
+    jwt: async ({ token, user, account, trigger, session }) => {
+      if (trigger === "signIn") {
+        if (account && account.provider === "credentials") {
+          // get user from authorize callback
+          Object.assign(token, user);
+        }
+      }
+
+      if (trigger === "update") {
+        // these updates come from the frontend. Extra checks must take place before authorizing these changes.
+        try {
+          const changes = await updateSessionSchema.parse(session);
+          Object.assign(token, changes);
+        } catch {
+          // TODO: log changes do not conform to the schema of session update
+        }
+      }
+
+      return token;
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
   pages: {
     signIn: "/login",
   },
