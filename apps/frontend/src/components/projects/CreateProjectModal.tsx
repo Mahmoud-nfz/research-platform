@@ -9,18 +9,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import useCreateProject from "@/hooks/useCreateProject";
 import Select from "../forms/Select";
-
-const createProjectSchema = z.object({
-  name: z
-    .string()
-    .min(4, { message: "Le nom doit contenir au moins 4 caractères" }),
-  imageUrl: z.string().url({ message: "L'image doit être un URL valide" }),
-  description: z.string().min(10, {
-    message: "La description doit contenir au moins 10 charactères",
-  }),
-  tags: z.array(z.string()),
-});
-type CreateProjectSchema = z.infer<typeof createProjectSchema>;
+import { CreateProjectSchema, createProjectSchema } from "@/types/schemas";
 
 export const CreateProjectModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -107,7 +96,6 @@ export const CreateProjectModal = () => {
                       placeholder="Nom"
                       type="text"
                       error={errors.name?.message}
-                      className="mt-1 p-2 bg-primary-200 placeholder-gray-500 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                     />
                     <Input
                       register={register}
@@ -116,7 +104,6 @@ export const CreateProjectModal = () => {
                       placeholder="Description"
                       type="text"
                       error={errors.description?.message}
-                      className="mt-1 p-2 bg-primary-200 placeholder-gray-500 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                     />
                     <Input
                       register={register}
@@ -125,7 +112,6 @@ export const CreateProjectModal = () => {
                       placeholder="Image"
                       type="url"
                       error={errors.imageUrl?.message}
-                      className="mt-1 p-2 bg-primary-200 placeholder-gray-500 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
                     />
                     <Select
                       className="mt-1 p-2 bg-primary-200 placeholder-gray-500 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"

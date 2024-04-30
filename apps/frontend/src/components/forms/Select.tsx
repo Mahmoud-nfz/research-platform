@@ -13,6 +13,7 @@ import {
 } from "react";
 import { FieldValues, Path } from "react-hook-form";
 import { DeleteLeftIcon } from "@/assets";
+import clsxm from "@/utils/clsxm";
 
 interface SelectProps<D extends FieldValues>
   extends InputHTMLAttributes<HTMLInputElement> {
@@ -75,6 +76,10 @@ export default function Input<D extends FieldValues>({
           name="add-element"
           onKeyDown={handleKeyDown}
           onChange={(event) => setElement(event.currentTarget.value.toString())}
+          className={clsxm(
+            "mt-1 p-2 bg-primary-200 placeholder-gray-500 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300",
+            props.className
+          )}
         />
         <button
           onClick={handleAddButtonClick}
