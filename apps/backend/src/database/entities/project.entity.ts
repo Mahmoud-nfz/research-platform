@@ -13,6 +13,15 @@ export class Project extends Subject {
   @RelationId((project: Project) => project.owner)
   ownerId: string;
 
+  @Column({ type: 'varchar' })
+  imageUrl: string;
+
+  @Column({ type: 'varchar' })
+  description: string;
+
+  @Column({ type: 'varchar', array: true })
+  tags: string[];
+
   constructor(data: Partial<Project>) {
     super(data);
     Object.assign(this, data);

@@ -1,18 +1,5 @@
-export abstract class Base {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
-
-  constructor(values: Partial<Base>) {
-    Object.assign(this, values);
-  }
-}
-
-export enum UserStatus {
-  active = 0,
-  pending_email_activation = 1,
-}
+import { Base } from "../base.entity";
+import { UserStatus } from "./user-status.enum";
 
 export class User extends Base {
   firstName: string;

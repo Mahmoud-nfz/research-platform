@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Project } from '../database/entities/project.entity';
 import { Repository } from 'typeorm';
-import { DataCollection, Permission, User } from '@/database/entities';
+import { DataCollection, Permission, User, Project } from '@/database/entities';
 
 @Injectable()
 export class ProjectService {
@@ -31,7 +30,7 @@ export class ProjectService {
       .getQuery();
 
     // Subquery to select data collections where the user has any permission
-    const dataCollectionPermissionSubQuery = this.repository.manager
+    const data_collectionPermissionSubQuery = this.repository.manager
       .createQueryBuilder(DataCollection, 'data_collection')
       .select('DISTINCT data_collection.project_id')
       .where('data_collection.owner_id = :userId', {
@@ -45,7 +44,43 @@ export class ProjectService {
       .createQueryBuilder('project')
       .where('project.owner_id = :userId', { userId: user.id })
       .orWhere(`project.id IN (${permissionSubQuery})`)
-      .orWhere(`project.id IN (${dataCollectionPermissionSubQuery})`)
+      .orWhere(`project.id IN (${data_collectionPermissionSubQuery})`)
       .getMany();
+  }
+
+  async getNumDataCollections(project: Project, user: User) {
+    const projectPermissionCount = await this.repository.manager
+      .createQueryBuilder(Permission, 'permission')
+      .where('permission.subject_id = :projectId', { projectId: project.id })
+      .andWhere('permission.user_id = :userId', { userId: user.id })
+      .getCount();
+
+    if (projectPermissionCount > 0 || project.ownerId === user.id) {
+      // If the user has access to the project as a whole, return the total number of data collections in the project
+      return this.repository.manager
+        .createQueryBuilder(DataCollection, 'data_collection')
+        .where('data_collection.project_id = :projectId', {
+          projectId: project.id,
+        })
+        .getCount();
+    } else {
+      // If the user does not have access to the project as a whole, return the number of data collections accessible by the user
+      return this.repository.manager
+        .createQueryBuilder(DataCollection, 'data_collection')
+        .innerJoinAndMapMany(
+          'data_collection.permissions',
+          Permission,
+          'permission',
+          'permission.subject_id = data_collection.id',
+        )
+        .where('data_collection.project_id = :projectId', {
+          projectId: project.id,
+        })
+        .andWhere(
+          '(data_collection.owner_id = :userId OR permission.user_id = :userId)',
+          { userId: user.id },
+        )
+        .getCount();
+    }
   }
 }
