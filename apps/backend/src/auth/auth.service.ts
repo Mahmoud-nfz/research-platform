@@ -1,9 +1,9 @@
 import { LoggerService } from '@logger/logger.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from '@user/user.service';
-import { User, UserStatus } from '@user/user.entity';
 import { LocalSignupDto } from './dtos';
 import { AuthUtilsService } from './auth-utils.service';
+import { User, UserStatus } from '@database/entities';
 
 @Injectable()
 export class AuthService {

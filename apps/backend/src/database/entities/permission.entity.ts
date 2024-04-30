@@ -1,6 +1,6 @@
 import { Column, Entity, Index, ManyToOne, RelationId } from 'typeorm';
-import { Base } from '@common/base.entity';
-import { User } from '@user/user.entity';
+import { User } from './user.entity';
+import { Base } from './base.entity';
 
 @Entity()
 @Index(['user', 'subjectId', 'action'], { unique: true })

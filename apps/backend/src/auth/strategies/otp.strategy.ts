@@ -1,13 +1,13 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { UniqueTokenStrategy as Strategy } from 'passport-unique-token';
-import { User } from '@user/user.entity';
 import { AuthStrategy } from '@auth/auth-strategy.enum';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { UniqueTokenOptionsWithRequest } from 'passport-unique-token/dist/strategy';
 import { AuthUtilsService } from '@auth/auth-utils.service';
 import { LoggerService } from '@logger/logger.service';
 import { timingSafeEqual } from 'crypto';
+import { User } from '@database/entities';
 
 @Injectable()
 export class OneTimePasswordStrategy extends PassportStrategy(

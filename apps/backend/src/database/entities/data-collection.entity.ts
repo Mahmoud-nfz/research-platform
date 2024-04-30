@@ -1,7 +1,7 @@
-import { Subject } from '@permission/subject.entity';
-import { Project } from '@project/project.entity';
-import { User } from '@user/user.entity';
 import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
+import { Subject } from './subject.entity';
+import { User } from './user.entity';
+import { Project } from './project.entity';
 
 @Entity()
 export class DataCollection extends Subject {

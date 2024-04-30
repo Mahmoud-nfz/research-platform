@@ -1,5 +1,4 @@
-import { Base } from '@common/base.entity';
-import { DataCollection } from '@data-collection/data-collection.entity';
+import { Base, DataCollection } from '@database/entities';
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateDataCollectionDto

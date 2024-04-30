@@ -1,4 +1,4 @@
-import { User } from '@user/user.entity';
+import { User } from '@database/entities';
 import { IsString, MinLength } from 'class-validator';
 
 export class CreateUserDto implements Partial<User> {

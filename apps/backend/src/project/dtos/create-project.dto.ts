@@ -1,5 +1,4 @@
-import { Base } from '@common/base.entity';
-import { Project } from '@project/project.entity';
+import { Base, Project } from '@database/entities';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProjectDto implements Partial<Omit<Project, keyof Base>> {

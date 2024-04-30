@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AuthenticatedUser, UseJwtAuth } from '@auth/decorators';
-import { User } from './user.entity';
+import { User } from '../database/entities/user.entity';
 
 @Controller('user')
 @UseJwtAuth()

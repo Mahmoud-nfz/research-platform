@@ -1,12 +1,9 @@
-import { Subject } from '@permission/subject.entity';
-import { User } from '@user/user.entity';
 import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
-import { ProjectAction } from './project-action.enum';
+import { User } from './user.entity';
+import { Subject } from './subject.entity';
 
 @Entity()
 export class Project extends Subject {
-  public static actions = ProjectAction;
-
   @Column({ type: 'varchar' })
   name: string;
 
