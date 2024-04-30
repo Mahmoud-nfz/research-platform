@@ -55,7 +55,7 @@ export class ApplicationBootstrapper {
     // ) as string[];
     app.enableCors();
 
-    await app.listen(3007);
+    await app.listen(3001);
   }
 
   static async repl() {
