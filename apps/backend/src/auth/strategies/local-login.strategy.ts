@@ -41,6 +41,9 @@ export class LocalLoginsStrategy extends PassportStrategy(
     } catch (error) {
       throw new UnauthorizedException('Incorrect email or password');
     }
+    if (!user) {
+      throw new UnauthorizedException('Incorrect email or password');
+    }
 
     const isPasswordCorrect = await this.authUtilsService.verifyPassword(
       user,
