@@ -1,7 +1,7 @@
-import { ConfigKey } from '@config/config-key.enum';
-import { validate } from '@config/config.validator';
+import { ConfigKey } from '@/config/config-key.enum';
+import { validate } from '@/config/config.validator';
 import { registerAs } from '@nestjs/config';
-import { LogLevel } from '@logger/logger.types';
+import { LogLevel } from '@/logger/logger.types';
 import { Type } from 'class-transformer';
 import { IsBooleanString, IsEnum, IsOptional } from 'class-validator';
 

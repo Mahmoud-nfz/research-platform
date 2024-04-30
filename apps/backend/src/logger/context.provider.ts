@@ -1,4 +1,4 @@
-import { ProviderTokens } from '@common/provider-tokens';
+import { ProviderTokens } from '@/common/provider-tokens';
 import { FactoryProvider, Scope, Type } from '@nestjs/common';
 import { INQUIRER } from '@nestjs/core';
 

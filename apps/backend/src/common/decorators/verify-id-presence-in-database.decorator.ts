@@ -1,4 +1,4 @@
-import { Base } from '@database/entities';
+import { Base } from '@/database/entities';
 import {
   HttpStatus,
   Injectable,

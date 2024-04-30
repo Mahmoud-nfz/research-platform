@@ -8,8 +8,8 @@ import { Reflector } from '@nestjs/core';
 import { Observable, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { SUCCESS_MESSAGE_KEY } from '@common';
-import { LoggerService } from '@logger/logger.service';
+import { SUCCESS_MESSAGE_KEY } from '@/common';
+import { LoggerService } from '@/logger/logger.service';
 import { instanceToPlain } from 'class-transformer';
 
 export class Response<T> {

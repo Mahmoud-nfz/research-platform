@@ -1,6 +1,6 @@
-import { IsVercelMs } from '@common';
-import { ConfigKey } from '@config/config-key.enum';
-import { validate } from '@config/config.validator';
+import { IsVercelMs } from '@/common';
+import { ConfigKey } from '@/config/config-key.enum';
+import { validate } from '@/config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 

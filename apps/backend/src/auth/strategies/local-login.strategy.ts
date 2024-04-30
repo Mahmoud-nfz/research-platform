@@ -3,10 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { IStrategyOptions, Strategy } from 'passport-local';
 
 import { UserService } from '@/user/user.service';
-import { AuthStrategy } from '@auth/auth-strategy.enum';
-import { AuthUtilsService } from '@auth/auth-utils.service';
+import { AuthStrategy } from '@/auth/auth-strategy.enum';
+import { AuthUtilsService } from '@/auth/auth-utils.service';
 import { instanceToPlain } from 'class-transformer';
-import { User } from '@database/entities';
+import { User } from '@/database/entities';
 
 @Injectable()
 export class LocalLoginsStrategy extends PassportStrategy(

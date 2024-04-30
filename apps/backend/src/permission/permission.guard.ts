@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { PERMISSION_KEY } from './require-permission.decorator';
 import { PermissionService } from './permission.service';
 import { Request } from 'express';
-import { User } from '@database/entities';
+import { User } from '@/database/entities';
 
 type PermissionAggregate = {
   subject: (request: Request) => string | string[];
