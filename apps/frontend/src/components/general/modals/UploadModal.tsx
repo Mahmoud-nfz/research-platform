@@ -1,6 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { group } from "console";
 import { Fragment, useState } from "react";
+import { handleFileUpload } from "../../../services/upload.service";
 
 interface ModalProps {
   buttonPrompt: string;
@@ -8,9 +9,37 @@ interface ModalProps {
   buttonIcon?: React.ReactNode;
   uploadIcon?: React.ReactNode;
 }
+
+const bucketName = "ddfdfdc"
 export default function UploadModal(props: ModalProps) {
   let [isOpen, setIsOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
+  const [folderName, setFolderName] = useState<string >("");
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [error, setError] = useState<string>("");
 
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0] || null;
+      setSelectedFile(file);
+  };
+
+  const handleFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const name = event.target.value || "";
+      setFolderName(name);
+  };
+
+  const handleUpload = () => {
+      if (!selectedFile || !bucketName ) return;
+      if (!folderName) {setFolderName('');}
+      handleFileUpload(
+          selectedFile,
+          bucketName,
+          folderName,
+          (progress) => setUploadProgress(progress),
+          (error) => setError(error)
+      );
+  };
   function closeModal() {
     setIsOpen(false);
   }
@@ -85,11 +114,13 @@ export default function UploadModal(props: ModalProps) {
                     <div className="w-full">
                       
                       <div className="flex justify-between"> {props.uploadIcon }
-
-                        <button className="bg-orange-200 py-3 px-4 rounded-md">
-                          <p className="text-xs font-medium">Select file</p>
-                        </button>
+                        
+                        <input type="file" className="bg-orange-200 py-3 px-4 rounded-md"
+                       
+                        onChange={handleFileSelect} />
                       </div>
+                      {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
+                      {error && <p style={{ color: "red" }}>{error}</p>}
                     </div>
 
                     <div className="w-full">
@@ -101,6 +132,7 @@ export default function UploadModal(props: ModalProps) {
                         id="parentFolder"
                         placeholder="No parent folder"
                         type="text"
+                        onChange={handleFolderName}
                       />
                     </div>
 
@@ -171,7 +203,7 @@ export default function UploadModal(props: ModalProps) {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={handleUpload}
                     >
                       Upload
                     </button>
