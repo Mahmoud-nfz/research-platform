@@ -12,10 +12,10 @@ import {
   ResetPasswordDto,
   LocalSignupDto,
 } from './dtos';
-import { SuccessMessage } from '@common';
+import { SuccessMessage } from '@/common';
 import { AddUserDto } from './dtos/add-user.dto';
 import { UseAddUserAuth } from './decorators/add-user.decorator';
-import { User } from '@database/entities';
+import { User } from '@/database/entities';
 
 @Controller('auth')
 export class AuthController {

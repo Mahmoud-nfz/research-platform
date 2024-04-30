@@ -1,5 +1,5 @@
-import { ProviderTokens as Tokens } from '@common/provider-tokens';
-import { LogLevel, LogOptions } from '@logger/logger.types';
+import { ProviderTokens as Tokens } from '@/common/provider-tokens';
+import { LogLevel, LogOptions } from '@/logger/logger.types';
 import {
   Inject,
   Injectable,

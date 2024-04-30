@@ -1,5 +1,5 @@
-import { ProviderTokens } from '@common/provider-tokens';
-import { APP_NAME } from '@common/constants';
+import { ProviderTokens } from '@/common/provider-tokens';
+import { APP_NAME } from '@/common/constants';
 import { FactoryProvider, Scope } from '@nestjs/common';
 import * as colors from 'colors-cli';
 import { format, LoggerOptions, transports } from 'winston';

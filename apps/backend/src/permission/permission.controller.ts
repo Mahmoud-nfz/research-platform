@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { PermissionService } from './permission.service';
-import { UseJwtAuth } from '@auth/decorators';
+import { UseJwtAuth } from '@/auth/decorators';
 import { GrantPermissionDto } from './dtos/grant-permission.dto';
 import { RevokePermissionDto } from './dtos/revoke-permission.dto';
-import { User } from '@database/entities';
+import { User } from '@/database/entities';
 
 @Controller('permissions')
 @UseJwtAuth()

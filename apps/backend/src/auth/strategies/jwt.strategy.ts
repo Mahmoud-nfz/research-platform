@@ -4,10 +4,10 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { UserService } from '@/user/user.service';
-import { JwtPayloadDto } from '@auth/dtos';
-import { ConfigService } from '@config';
-import { AuthStrategy } from '@auth/auth-strategy.enum';
-import { AuthUtilsService } from '@auth/auth-utils.service';
+import { JwtPayloadDto } from '@/auth/dtos';
+import { ConfigService } from '@/config';
+import { AuthStrategy } from '@/auth/auth-strategy.enum';
+import { AuthUtilsService } from '@/auth/auth-utils.service';
 import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
