@@ -68,7 +68,7 @@ export default function Login(): JSX.Element {
 						Connexion
 					</h1>
 					<h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
-						Join our community with all time access and free{" "}
+						Join our community with all time access and free
 					</h1>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
