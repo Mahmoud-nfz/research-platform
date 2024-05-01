@@ -1,16 +1,6 @@
 import axios from "axios";
+import { SearchResult } from "../../types/elastic-search";
 const ELASTIC_ENDPOINT = process.env.NEXT_PUBLIC_ELASTIC_ENDPOINT;
-
-interface SearchResult {
-  id: string;
-  data: {
-    objectName: string;
-    description: string;
-    tags: string[];
-    path: string;
-    type: string;
-  };
-}
 
  export const createObjectMetadata = async (
    objectName: string,
