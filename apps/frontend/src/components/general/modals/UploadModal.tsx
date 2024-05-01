@@ -34,8 +34,8 @@ export default function UploadModal(props: ModalProps) {
 
 	const handleUpload = useCallback((data: UploadSchema) => {
 		handleFileUpload(
-			data.files[0],
-			bucketName,
+			data.files[0] as File,
+			bucketName ?? "",
 			data.parentFolder ?? "",
 			(progress) => setUploadProgress(progress),
 			(error) => setError(error)
@@ -267,7 +267,7 @@ export default function UploadModal(props: ModalProps) {
 												<button
 													type="submit"
 													className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-													
+													onClick={handleCreateFileEntity}
 												>
 													Upload
 												</button>
