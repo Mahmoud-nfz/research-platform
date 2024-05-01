@@ -3,6 +3,7 @@ import { Fragment, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { uploadSchema, UploadSchema } from "@/types/schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
+import cslx from "clsx";
 import Input from "@/components/forms/Input";
 
 import { handleFileUpload } from "../../../services/minio/upload.service";
@@ -30,41 +31,12 @@ export default function UploadModal(props: ModalProps) {
 		resolver: zodResolver(uploadSchema),
 	});
 
-	let [isOpen, setIsOpen] = useState(false);
-	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [isOpen, setIsOpen] = useState(false);
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 	const [error, setError] = useState<string>("");
-	const [description, setDescription] = useState<string>("");
-	const [tags, setTags] = useState<string>("");
-	const [path, setPath] = useState<string>("");
-	const [folderName, setFolderName] = useState<string>("");
-	const [selectedFileType, setSelectedFileType] = useState(FileType.Model);
 
-	const handleDescription = ( event: React.ChangeEvent<HTMLInputElement>) => {
-		const description = event.target.value || "";
-		setDescription(description);
-	}
-	const handleTags = ( event: React.ChangeEvent<HTMLInputElement>) => {
-		const tags = event.target.value || "";
-		setTags(tags);
-	}
-	const handleFileTypeChange = (e: any) => {
-		setSelectedFileType(e.target.value);
-	};
-	const handleFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const name = event.target.value || "";
-		setFolderName(name);
-		const newPath = `${bucketName}/${folderName}`; // Appending folder name to the bucket name
-		setPath(newPath);
-	}
-	const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0] || null;
-		setSelectedFile(file);
-	};
 
 	const handleUpload = useCallback((data: UploadSchema) => {
-		console.log("here ", data.files);
-		console.log("here ", data.files[0]);
 		handleFileUpload(
 			data.files[0],
 			bucketName,
@@ -74,15 +46,14 @@ export default function UploadModal(props: ModalProps) {
 		); 
 	}, []);
 	const handleCreateObject = useCallback((data: UploadSchema) => {
-		console.log("here ", data.files);
 		createObject(
 			data.files[0].name,
-			description,
-			tags.split(","),
-			path,
-			selectedFileType
+			data.description ?? "",
+			data.tags ?? [], 
+			data.path ?? "",
+			data.selectedFileType ??"Raw Data",
 		);
-	}, [description, tags, path, selectedFileType]);
+	}, []);
 
 	const handleUploadAndCreateObject = useCallback((data: UploadSchema) => {
 		handleUpload(data);
@@ -104,11 +75,9 @@ export default function UploadModal(props: ModalProps) {
 				<button
 					type="button"
 					onClick={openModal}
-					className={
-						"items-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 flex flex-row" +
-						" " +
-						(props.buttonClassName ?? "")
-					}
+					className={cslx(
+						"items-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 flex flex-row"
+					)}
 				>
 					<div className="mr-1">{props.buttonIcon}</div>
 					<div className="ml-1">{props.buttonPrompt}</div>
@@ -178,9 +147,8 @@ export default function UploadModal(props: ModalProps) {
 															name="files"
 															label="File:"
 															type="file"
-															onChange={handleFileSelect}
 															className="bg-white placeholder:text-gray-400"
-                              //@ts-ignore
+                             								//@ts-ignore
 															error={
 																errors
 																	.files
@@ -211,7 +179,6 @@ export default function UploadModal(props: ModalProps) {
 														name="parentFolder"
 														label="Parent Folder:"
 														placeholder="No parent folder"
-														onChange={handleFolderName}
 														type="text"
 														className="bg-white placeholder:text-gray-400"
 														error={
@@ -237,12 +204,13 @@ export default function UploadModal(props: ModalProps) {
 														</h1>
 														<div className="flex flex-col space-y-2">
 															<div className="flex items-center space-x-4">
-																<input
+																<Input
+																register={register}
+																name="selectedFileType"
+																label="File Type:"
 																type="radio"
 																id="model"
 																value={FileType.Model}
-																checked={selectedFileType === FileType.Model}
-																onChange={handleFileTypeChange}
 																className="cursor-pointer bg-orange"
 																/>
 																<label htmlFor="model" className="font-poppins">
@@ -250,12 +218,14 @@ export default function UploadModal(props: ModalProps) {
 																</label>
 															</div>
 															<div className="flex items-center space-x-4">
-																<input
+															    <Input
+																register={register}
+																name="selectedFileType"
+																label="File Type:"
 																type="radio"
 																id="rawData"
 																value={FileType.RawData}
-																checked={selectedFileType === FileType.RawData}
-																onChange={handleFileTypeChange}
+																
 																className="cursor-pointer"
 																/>
 																<label htmlFor="rawData" className="font-poppins">
@@ -263,12 +233,13 @@ export default function UploadModal(props: ModalProps) {
 																</label>
 															</div>
 															<div className="flex items-center space-x-4">
-																<input
+															    <Input
+																register={register}
+																name="selectedFileType"
+																label="File Type:"
 																type="radio"
 																id="preprocessedData"
 																value={FileType.PreprocessedData}
-																checked={selectedFileType === FileType.PreprocessedData}
-																onChange={handleFileTypeChange}
 																className="cursor-pointer"
 																/>
 																<label htmlFor="preprocessedData" className="font-poppins">
@@ -282,23 +253,27 @@ export default function UploadModal(props: ModalProps) {
 														<h1 className="text-sm font-semibold">
 															Description :
 														</h1>
-														<input
+														<Input
+															register={register}
+															name="description"
+															label="Description:"
 															className="outline-none font-poppins rounded-lg text-black border-2 border-white w-full"
 															id="Description"
 															placeholder="No parent folder"
 															type="text"
-															onChange={handleDescription}
 														/>
 
 														<h1 className="text-sm font-semibold">
 															Tags
 														</h1>
-														<input
+														<Input
+																register={register}
+																name="tags"
+																label="tags"
 															className="outline-none font-poppins bg-white w-full rounded-lg  text-black border-2 border-white"
 															id="Tags"
 															placeholder="Tags"
 															type="text"
-															onChange={handleTags}
 														/>
 													</div>
 												</div>
