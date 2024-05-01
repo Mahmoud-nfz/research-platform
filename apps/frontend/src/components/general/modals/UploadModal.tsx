@@ -15,11 +15,7 @@ interface ModalProps {
 	buttonIcon?: React.ReactNode;
 	uploadIcon?: React.ReactNode;
 }
-const FileType = {
-	Model: 'Model',
-	RawData: 'Raw Data',
-	PreprocessedData: 'Preprocessed Data'
-  };
+
 
 const bucketName = "ddfdfdc";
 export default function UploadModal(props: ModalProps) {
@@ -55,7 +51,7 @@ export default function UploadModal(props: ModalProps) {
 		);
 	}, []);
 
-	const handleUploadAndCreateObject = useCallback((data: UploadSchema) => {
+	const handleCreateFileEntity = useCallback((data: UploadSchema) => {
 		handleUpload(data);
 		handleCreateObject(data);
 	}, [handleUpload, handleCreateObject]);
@@ -128,7 +124,7 @@ export default function UploadModal(props: ModalProps) {
 										{/* Title div */}
 										<form
 											// on submit handle upload and create object
-											onSubmit={handleSubmit(handleUploadAndCreateObject)}
+											onSubmit={handleSubmit(handleCreateFileEntity)}
 											
 											className="relative p-3 opacity-100 flex flex-col justify-between text-black text-md font-bold"
 										>
@@ -182,10 +178,7 @@ export default function UploadModal(props: ModalProps) {
 														placeholder="No parent folder"
 														type="text"
 														className="bg-white placeholder:text-gray-400"
-														error={
-															errors.parentFolder
-																?.message
-														}
+														
 													/>
 												</div>
 
@@ -197,46 +190,46 @@ export default function UploadModal(props: ModalProps) {
 													<select className="w-full h-full inline-flex justify-center rounded-md border border-transparent bg-orange-50  text-sm font-medium text-grey-900 hover:bg-grey-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-grey-500 focus-visible:ring-offset-2" />
 													<br />
 												</div>
-
 												<div className="flex flex-row mt-2 py-3">
-													<div className="w-1/2">
-														<div className="flex flex-row space-y-2">
-															<div className="flex items-center space-x-4">
+													<div className="w-1/2"><div className="flex flex-col space-y-2">
+														<h1 className="text-sm font-semibold">Data Type:</h1>
+															<div className="flex items-center">
 																<Input
-																register={register}
-																name="selectedFileType"
-																label="Model"
-																type="radio"
-																id="model"
-																value={FileType.Model}
-																className="cursor-pointer bg-orange"
+																	register={register}
+																	name="selectedFileType"
+																	label=""
+																	type="radio"
+																	id="model"
+																	value="Model"
+																	className="cursor-pointer bg-orange"
 																/>
-															
-															    <Input
-																register={register}
-																name="selectedFileType"
-																label="Raw Data"
-																type="radio"
-																id="rawData"
-																value={FileType.RawData}
-																
-																className="cursor-pointer"
-																/>
-																
-															
-															    <Input
-																register={register}
-																name="selectedFileType"
-																label="Pre-processed data"
-																type="radio"
-																id="preprocessedData"
-																value={FileType.PreprocessedData}
-																className="cursor-pointer"
-																/>
-																
+																<label htmlFor="model" className="ml-2">Model</label>
 															</div>
+															<div className="flex items-center">
+																<Input
+																	register={register}
+																	name="selectedFileType"
+																	label=""
+																	type="radio"
+																	id="rawData"
+																	value="Raw Data"
+																	className="cursor-pointer"
+																/>
+																<label htmlFor="rawData" className="ml-2">Raw Data</label>
 															</div>
-						
+															<div className="flex items-center">
+																<Input
+																	register={register}
+																	name="selectedFileType"
+																	label=""
+																	type="radio"
+																	id="preprocessedData"
+																	value="Preprocessed Data"
+																	className="cursor-pointer"
+																/>
+																<label htmlFor="preprocessedData" className="ml-2">Pre-processed data</label>
+															</div>
+														</div>
 													</div>
 													<div className="w-1/2">
 														<Input
@@ -245,7 +238,7 @@ export default function UploadModal(props: ModalProps) {
 															label="Description:"
 															className="outline-none font-poppins rounded-lg text-black border-2 border-white w-full"
 															id="Description"
-															placeholder="No parent folder"
+															placeholder="Description"
 															type="text"
 														/>
 
