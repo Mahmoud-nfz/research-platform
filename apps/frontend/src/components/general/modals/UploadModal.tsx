@@ -71,9 +71,24 @@ export default function UploadModal(props: ModalProps) {
 			data.parentFolder ?? "",
 			(progress) => setUploadProgress(progress),
 			(error) => setError(error)
-		);
-		createObject(data.files[0].name, description, [tags], path, selectedFileType); 
+		); 
 	}, []);
+	const handleCreateObject = useCallback((data: UploadSchema) => {
+		console.log("here ", data.files);
+		createObject(
+			data.files[0].name,
+			description,
+			tags.split(","),
+			path,
+			selectedFileType
+		);
+	}, [description, tags, path, selectedFileType]);
+
+	const handleUploadAndCreateObject = useCallback((data: UploadSchema) => {
+		handleUpload(data);
+		handleCreateObject(data);
+	}, [handleUpload, handleCreateObject]);
+
 
 	function closeModal() {
 		setIsOpen(false);
@@ -142,9 +157,9 @@ export default function UploadModal(props: ModalProps) {
 
 										{/* Title div */}
 										<form
-											onSubmit={handleSubmit(
-												handleUpload
-											)}
+											// on submit handle upload and create object
+											onSubmit={handleSubmit(handleUploadAndCreateObject)}
+											
 											className="relative p-3 opacity-100 flex flex-col justify-between text-black text-md font-bold"
 										>
 											<Dialog.Title
@@ -300,6 +315,7 @@ export default function UploadModal(props: ModalProps) {
 												<button
 													type="submit"
 													className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+													
 												>
 													Upload
 												</button>
