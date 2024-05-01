@@ -1,13 +1,14 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { uploadSchema, UploadSchema } from "@/types/schemas/index";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { uploadSchema, UploadSchema } from "@/types/schemas/upload.schema";
+import { ElasticCreateMetaData } from "../../../types/elastic-search";
 import cslx from "clsx";
 import Input from "@/components/forms/Input";
 
 import { handleFileUpload } from "../../../services/minio/upload.service";
 import { createObjectMetadata } from "../../../services/elastic/crud.service";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface ModalProps {
 	buttonPrompt: string;
@@ -40,21 +41,22 @@ export default function UploadModal(props: ModalProps) {
 			(error) => setError(error)
 		); 
 	}, []);
-	const handleCreateObject = useCallback((data: UploadSchema) => {
-		createObjectMetadata(
-			data.files[0].name,
-			data.description ?? "",
-			data.tags ?? [], 
-			data.path ?? "",
-			data.selectedFileType ??"Raw Data",
-		);
+	const handleCreateObjectMetadata = useCallback((data: UploadSchema) => {
+		const metadata: ElasticCreateMetaData = {
+			data: { 
+				objectName: data.files[0].name,
+				description: data.description ?? "",
+				tags: data.tags ?? [],
+				path: data.path ?? "",
+				type: data.selectedFileType ?? "Raw Data",
+			},
+		};
+		createObjectMetadata(metadata);
 	}, []);
-
 	const handleCreateFileEntity = useCallback((data: UploadSchema) => {
 		handleUpload(data);
-		handleCreateObject(data);
-	}, [handleUpload, handleCreateObject]);
-
+		handleCreateObjectMetadata(data);
+	}, []);
 
 	function closeModal() {
 		setIsOpen(false);

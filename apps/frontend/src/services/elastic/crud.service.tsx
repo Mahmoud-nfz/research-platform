@@ -1,9 +1,9 @@
 import axios from "axios";
-import { ElasticMetaData } from "../../types/elastic-search";
+import { ElasticCreateMetaData,ElasticSearchMetaData } from "../../types/elastic-search";
 
 const ELASTIC_ENDPOINT = process.env.NEXT_PUBLIC_ELASTIC_ENDPOINT;
 
-export const createObjectMetadata = async (metadata: ElasticMetaData) => {
+export const createObjectMetadata = async (metadata: ElasticCreateMetaData) => {
   try {
     const requestData = {
       id: metadata.id,
@@ -33,7 +33,7 @@ export const createObjectMetadata = async (metadata: ElasticMetaData) => {
  export const searchObjects = async (query: string): Promise<{ objectName: string; descriptionSnippet: string; path: string }[]> => {
    try {
      const response = await axios.get(`${ELASTIC_ENDPOINT}?search=${encodeURIComponent(query)}`);
-     const searchResults: ElasticMetaData[] = response.data;
+     const searchResults: ElasticSearchMetaData[] = response.data;
      const formattedResults = searchResults.map(result => ({
        objectName: result.data.objectName,
        descriptionSnippet: result.data.description.substring(0, 50), // Adjust the length as needed
