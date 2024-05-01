@@ -7,7 +7,6 @@ interface ObjectInfo {
   }
 
 export const getObjects = async (bucketName: any, setObjects: any, setError: any) => {
-    console.log(`${MINIO_WRAPPER_ENDPOINT}`)
     try {
         if (!bucketName.trim()) {
             setError("Please enter a bucket name.");

@@ -11,9 +11,7 @@ export const handleFileUpload = (
     const updatedFile = new File([selectedFile], updatedFileName, { type: selectedFile.type });
     const newSocket = new WebSocket(`ws://${MINIO_WRAPPER_ENDPOINT}/upload`);
     newSocket.onopen = () => {
-        console.log("WebSocket connection established");
-
-        const CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
+        const CHUNK_SIZE = 1024 * 1024; 
         let offset = 0;
 
         const sendBucketName = () => {
