@@ -33,18 +33,20 @@ export default function UploadModal(props: ModalProps) {
 
 
 	const handleUpload = useCallback((data: UploadSchema) => {
-		handleFileUpload(
-			data.files[0] as File,
-			bucketName ?? "",
-			data.parentFolder ?? "",
-			(progress) => setUploadProgress(progress),
-			(error) => setError(error)
-		); 
+		if (data.files && data.files.length > 0) {
+			handleFileUpload(
+				data.files as File,
+				bucketName ?? "",
+				data.parentFolder ?? "",
+				(progress) => setUploadProgress(progress),
+				(error) => setError(error)
+			);
+		}
 	}, []);
 	const handleCreateObjectMetadata = useCallback((data: UploadSchema) => {
 		const metadata: ElasticCreateMetaData = {
 			data: { 
-				objectName: data.files[0].name,
+				objectName: data.files,
 				description: data.description ?? "",
 				tags: data.tags ?? [],
 				path: data.path ?? "",
@@ -267,7 +269,7 @@ export default function UploadModal(props: ModalProps) {
 												<button
 													type="submit"
 													className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-													onClick={handleCreateFileEntity}
+												
 												>
 													Upload
 												</button>
