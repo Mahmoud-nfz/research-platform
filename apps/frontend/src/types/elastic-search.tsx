@@ -1,4 +1,4 @@
-export type SearchResult = {
+export type ElasticMetaData = {
         id: string;
         data: {
             objectName: string;
