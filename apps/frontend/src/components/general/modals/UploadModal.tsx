@@ -1,10 +1,12 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useState } from "react";
-import { handleFileUpload } from "../../../services/upload.service";
 import { useForm } from "react-hook-form";
 import { uploadSchema, UploadSchema } from "@/types/schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/forms/Input";
+
+import { handleFileUpload } from "../../../services/upload.service";
+import { createObject } from "../../../services/elastic/crud.service";
 
 interface ModalProps {
 	buttonPrompt: string;
@@ -12,6 +14,11 @@ interface ModalProps {
 	buttonIcon?: React.ReactNode;
 	uploadIcon?: React.ReactNode;
 }
+const FileType = {
+	Model: 'Model',
+	RawData: 'Raw Data',
+	PreprocessedData: 'Preprocessed Data'
+  };
 
 const bucketName = "ddfdfdc";
 export default function UploadModal(props: ModalProps) {
@@ -25,10 +32,31 @@ export default function UploadModal(props: ModalProps) {
 
 	let [isOpen, setIsOpen] = useState(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 	const [error, setError] = useState<string>("");
+	const [description, setDescription] = useState<string>("");
+	const [tags, setTags] = useState<string>("");
+	const [path, setPath] = useState<string>("");
+	const [folderName, setFolderName] = useState<string>("");
+	const [selectedFileType, setSelectedFileType] = useState(FileType.Model);
 
+	const handleDescription = ( event: React.ChangeEvent<HTMLInputElement>) => {
+		const description = event.target.value || "";
+		setDescription(description);
+	}
+	const handleTags = ( event: React.ChangeEvent<HTMLInputElement>) => {
+		const tags = event.target.value || "";
+		setTags(tags);
+	}
+	const handleFileTypeChange = (e: any) => {
+		setSelectedFileType(e.target.value);
+	};
+	const handleFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const name = event.target.value || "";
+		setFolderName(name);
+		const newPath = `${bucketName}/${folderName}`; // Appending folder name to the bucket name
+		setPath(newPath);
+	}
 	const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0] || null;
 		setSelectedFile(file);
@@ -43,6 +71,7 @@ export default function UploadModal(props: ModalProps) {
 			(progress) => setUploadProgress(progress),
 			(error) => setError(error)
 		);
+		createObject(data.files[0].name, description, tags, path);
 	}, []);
 
 	function closeModal() {
@@ -133,6 +162,7 @@ export default function UploadModal(props: ModalProps) {
 															name="files"
 															label="File:"
 															type="file"
+															onChange={handleFileSelect}
 															className="bg-white placeholder:text-gray-400"
 														/>
 													</div>
@@ -159,6 +189,7 @@ export default function UploadModal(props: ModalProps) {
 														name="parentFolder"
 														label="Parent Folder:"
 														placeholder="No parent folder"
+														onChange={handleFolderName}
 														type="text"
 														className="bg-white placeholder:text-gray-400"
 														error={
@@ -185,33 +216,45 @@ export default function UploadModal(props: ModalProps) {
 														<div className="flex flex-col space-y-2">
 															<div className="flex items-center space-x-4">
 																<input
-																	className="cursor-pointer bg-orange"
-																	type="radio"
+																type="radio"
+																id="model"
+																value={FileType.Model}
+																checked={selectedFileType === FileType.Model}
+																onChange={handleFileTypeChange}
+																className="cursor-pointer bg-orange"
 																/>
-																<label className="font-poppins">
-																	Model
+																<label htmlFor="model" className="font-poppins">
+																Model
 																</label>
 															</div>
 															<div className="flex items-center space-x-4">
 																<input
-																	className="cursor-pointer"
-																	type="radio"
+																type="radio"
+																id="rawData"
+																value={FileType.RawData}
+																checked={selectedFileType === FileType.RawData}
+																onChange={handleFileTypeChange}
+																className="cursor-pointer"
 																/>
-																<label className="font-poppins">
-																	Raw Data
+																<label htmlFor="rawData" className="font-poppins">
+																Raw Data
 																</label>
 															</div>
 															<div className="flex items-center space-x-4">
 																<input
-																	className="cursor-pointer"
-																	type="radio"
+																type="radio"
+																id="preprocessedData"
+																value={FileType.PreprocessedData}
+																checked={selectedFileType === FileType.PreprocessedData}
+																onChange={handleFileTypeChange}
+																className="cursor-pointer"
 																/>
-																<label className="font-poppins">
-																	Preprocessed
-																	Data
+																<label htmlFor="preprocessedData" className="font-poppins">
+																Preprocessed Data
 																</label>
 															</div>
-														</div>
+															</div>
+						
 													</div>
 													<div className="w-1/2">
 														<h1 className="text-sm font-semibold">
@@ -222,6 +265,7 @@ export default function UploadModal(props: ModalProps) {
 															id="Description"
 															placeholder="No parent folder"
 															type="text"
+															onChange={handleDescription}
 														/>
 
 														<h1 className="text-sm font-semibold">
@@ -232,6 +276,7 @@ export default function UploadModal(props: ModalProps) {
 															id="Tags"
 															placeholder="Tags"
 															type="text"
+															onChange={handleTags}
 														/>
 													</div>
 												</div>
