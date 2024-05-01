@@ -6,7 +6,6 @@ const ELASTIC_ENDPOINT = process.env.NEXT_PUBLIC_ELASTIC_ENDPOINT;
 export const createObjectMetadata = async (metadata: ElasticCreateMetaData) => {
   try {
     const requestData = {
-      id: metadata.id,
       data: {
         objectName: metadata.data.objectName,
         description: metadata.data.description,
