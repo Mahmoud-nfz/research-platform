@@ -10,10 +10,5 @@ export const uploadSchema = z.object({
 	path : z.any().optional(),
 
 });
-const FileType = {
-	Model: 'Model',
-	RawData: 'Raw Data',
-	PreprocessedData: 'Preprocessed Data'
-  };
 
 export type UploadSchema = z.infer<typeof uploadSchema>;

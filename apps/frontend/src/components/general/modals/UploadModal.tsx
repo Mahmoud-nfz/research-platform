@@ -11,7 +11,6 @@ import { createObject } from "../../../services/elastic/crud.service";
 
 interface ModalProps {
 	buttonPrompt: string;
-	buttonClassName?: string;
 	buttonIcon?: React.ReactNode;
 	uploadIcon?: React.ReactNode;
 }
