@@ -10,42 +10,35 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/forms/Input";
 import useLogin from "@/hooks/auth/useLogin";
 import { useRouter } from "next/navigation";
-
-const loginSchema = z.object({
-	email: z.string().email({ message: "Adresse email invalide" }),
-	password: z.string().min(6, {
-		message: "Mot de passe doit contenir au moins 6 caractères",
-	}),
-});
-type LoginSchema = z.infer<typeof loginSchema>;
+import { LoginSchema, loginSchema } from "@/types/schemas";
 
 export default function Login(): JSX.Element {
-	const router = useRouter();
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<LoginSchema>({
-		resolver: zodResolver(loginSchema),
-		mode: "onTouched",
-	});
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    mode: "onTouched",
+  });
 
-	const { mutate: login, isError, isPending } = useLogin();
+  const { mutate: login, isError, isPending } = useLogin();
 
-	const onSubmit = useCallback((data: LoginSchema) => {
-		login(
-			{
-				email: data.email,
-				password: data.password,
-				redirect: false,
-			},
-			{
-				onSuccess() {
-					router.replace("/platform", { scroll: false });
-				},
-			}
-		);
-	}, []);
+  const onSubmit = useCallback((data: LoginSchema) => {
+    login(
+      {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      },
+      {
+        onSuccess() {
+          router.replace("/platform", { scroll: false });
+        },
+      }
+    );
+  }, []);
 
 	return (
 		<div className="flex h-screen">
@@ -68,7 +61,7 @@ export default function Login(): JSX.Element {
 						Connexion
 					</h1>
 					<h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
-						Join our community with all time access and free
+						Join our community with all time access and free{" "}
 					</h1>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
@@ -82,7 +75,6 @@ export default function Login(): JSX.Element {
 								placeholder="Adresse email"
 								type="email"
 								error={errors.email?.message}
-								className="mt-1 p-2 bg-primary-200 placeholder-gray-500 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
 							/>
 						</div>
 						<div>
@@ -93,7 +85,6 @@ export default function Login(): JSX.Element {
 								placeholder="Mot de passe"
 								type="password"
 								error={errors.password?.message}
-								className="mt-1 p-2 bg-primary-200 placeholder-gray-500 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
 							/>
 						</div>
 						<div className="flex items-center justify-center">

@@ -1,6 +1,7 @@
 export { default as ChevronLeftDouble } from "./ChevronLeftDouble";
 export { default as CloudUploadIcon } from "./CloudUploadIcon";
 export { default as DataIcon } from "./DataIcon";
+export { default as DeleteLeftIcon } from "./DeleteLeftIcon";
 export { default as DownChevronIcon } from "./DownChevronIcon";
 export { default as EditIcon } from "./EditIcon";
 export { default as EyeClosedIcon } from "./EyeClosedIcon";

@@ -4,6 +4,7 @@ import { DownChevronIcon, FilterIcon } from "@/assets";
 import { useState } from "react";
 import { ProjectCard } from "./ProjectCard";
 import { Project } from "@/types/entities";
+import { CreateProjectModal } from "./CreateProjectModal";
 
 export const ProjectsList = ({
   projects,
@@ -22,9 +23,7 @@ export const ProjectsList = ({
           Liste de projets:
         </div>
         <div className="flex flex-row">
-          <button className="bg-primary-500 m-2 p-2 rounded-md">
-            Créer un projet
-          </button>
+          <CreateProjectModal />
           <div className="relative">
             <button
               onClick={toggleDropdown}
