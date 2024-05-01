@@ -7,7 +7,7 @@ import cslx from "clsx";
 import Input from "@/components/forms/Input";
 
 import { handleFileUpload } from "../../../services/minio/upload.service";
-import { createObject } from "../../../services/elastic/crud.service";
+import { createObjectMetadata } from "../../../services/elastic/crud.service";
 
 interface ModalProps {
 	buttonPrompt: string;
@@ -41,7 +41,7 @@ export default function UploadModal(props: ModalProps) {
 		); 
 	}, []);
 	const handleCreateObject = useCallback((data: UploadSchema) => {
-		createObject(
+		createObjectMetadata(
 			data.files[0].name,
 			data.description ?? "",
 			data.tags ?? [], 

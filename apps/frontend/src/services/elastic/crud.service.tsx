@@ -12,7 +12,7 @@ interface SearchResult {
   };
 }
 
- export const createObject = async (
+ export const createObjectMetadata = async (
    objectName: string,
    description: string,
    tags: string[],
