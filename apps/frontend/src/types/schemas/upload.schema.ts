@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const uploadSchema = z.object({
-	files: z.any(),
+	files: z.any().refine((files) => files?.length >= 1, {message: 'Please select a file'}),
 	parentFolder: z.string().optional(),
 });
 

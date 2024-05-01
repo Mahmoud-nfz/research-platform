@@ -134,6 +134,12 @@ export default function UploadModal(props: ModalProps) {
 															label="File:"
 															type="file"
 															className="bg-white placeholder:text-gray-400"
+                              //@ts-ignore
+															error={
+																errors
+																	.files
+																	?.message
+															}
 														/>
 													</div>
 													{uploadProgress > 0 && (
