@@ -119,7 +119,8 @@ export default function UploadModal(props: ModalProps) {
 											className="rounded-t-lg absolute inset-0 bg-cover bg-center"
 											style={{
 												backgroundImage:
-													"url('https://cooperandgracie.com/cdn/shop/articles/Horses_in_Meadow.png?v=1690365162')",
+													// src is a local image from the public folder
+													"url('/images/horses.webp')",
 												opacity: 0.2,
 											}}
 										></div>
@@ -199,60 +200,45 @@ export default function UploadModal(props: ModalProps) {
 
 												<div className="flex flex-row mt-2 py-3">
 													<div className="w-1/2">
-														<h1 className="text-sm font-semibold">
-															File Type :
-														</h1>
-														<div className="flex flex-col space-y-2">
+														<div className="flex flex-row space-y-2">
 															<div className="flex items-center space-x-4">
 																<Input
 																register={register}
 																name="selectedFileType"
-																label="File Type:"
+																label="Model"
 																type="radio"
 																id="model"
 																value={FileType.Model}
 																className="cursor-pointer bg-orange"
 																/>
-																<label htmlFor="model" className="font-poppins">
-																Model
-																</label>
-															</div>
-															<div className="flex items-center space-x-4">
+															
 															    <Input
 																register={register}
 																name="selectedFileType"
-																label="File Type:"
+																label="Raw Data"
 																type="radio"
 																id="rawData"
 																value={FileType.RawData}
 																
 																className="cursor-pointer"
 																/>
-																<label htmlFor="rawData" className="font-poppins">
-																Raw Data
-																</label>
-															</div>
-															<div className="flex items-center space-x-4">
+																
+															
 															    <Input
 																register={register}
 																name="selectedFileType"
-																label="File Type:"
+																label="Pre-processed data"
 																type="radio"
 																id="preprocessedData"
 																value={FileType.PreprocessedData}
 																className="cursor-pointer"
 																/>
-																<label htmlFor="preprocessedData" className="font-poppins">
-																Preprocessed Data
-																</label>
+																
 															</div>
 															</div>
 						
 													</div>
 													<div className="w-1/2">
-														<h1 className="text-sm font-semibold">
-															Description :
-														</h1>
 														<Input
 															register={register}
 															name="description"
@@ -263,9 +249,6 @@ export default function UploadModal(props: ModalProps) {
 															type="text"
 														/>
 
-														<h1 className="text-sm font-semibold">
-															Tags
-														</h1>
 														<Input
 																register={register}
 																name="tags"
