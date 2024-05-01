@@ -1,219 +1,261 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { group } from "console";
 import { Fragment, useState } from "react";
 import { handleFileUpload } from "../../../services/upload.service";
 
 interface ModalProps {
-  buttonPrompt: string;
-  buttonclassName?: string;
-  buttonIcon?: React.ReactNode;
-  uploadIcon?: React.ReactNode;
+	buttonPrompt: string;
+	buttonClassName?: string;
+	buttonIcon?: React.ReactNode;
+	uploadIcon?: React.ReactNode;
 }
 
-const bucketName = "ddfdfdc"
+const bucketName = "ddfdfdc";
 export default function UploadModal(props: ModalProps) {
-  let [isOpen, setIsOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
-  const [folderName, setFolderName] = useState<string >("");
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [error, setError] = useState<string>("");
+	let [isOpen, setIsOpen] = useState(false);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0] || null;
-      setSelectedFile(file);
-  };
+	const [folderName, setFolderName] = useState<string>("");
+	const [uploadProgress, setUploadProgress] = useState<number>(0);
+	const [error, setError] = useState<string>("");
 
-  const handleFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const name = event.target.value || "";
-      setFolderName(name);
-  };
+	const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0] || null;
+		setSelectedFile(file);
+	};
 
-  const handleUpload = () => {
-      if (!selectedFile || !bucketName ) return;
-      if (!folderName) {setFolderName('');}
-      handleFileUpload(
-          selectedFile,
-          bucketName,
-          folderName,
-          (progress) => setUploadProgress(progress),
-          (error) => setError(error)
-      );
-  };
-  function closeModal() {
-    setIsOpen(false);
-  }
+	const handleFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const name = event.target.value || "";
+		setFolderName(name);
+	};
 
-  function openModal() {
-    setIsOpen(true);
-  }
+	const handleUpload = () => {
+		if (!selectedFile || !bucketName) return;
+		if (!folderName) {
+			setFolderName("");
+		}
+		handleFileUpload(
+			selectedFile,
+			bucketName,
+			folderName,
+			(progress) => setUploadProgress(progress),
+			(error) => setError(error)
+		);
+	};
+	function closeModal() {
+		setIsOpen(false);
+	}
 
-  return (
-    <>
-      <div className="flex items-center justify-center m-1">
-        <button
-          type="button"
-          onClick={openModal}
-          className={
-            (props.buttonclassName ?? "") +
-            "rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-          }
-        >
-          {props.buttonIcon}
-          {props.buttonPrompt}
-        </button>
-      </div>
+	function openModal() {
+		setIsOpen(true);
+	}
 
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black/25" />
-          </Transition.Child>
+	return (
+		<>
+			<div className="flex items-center justify-center m-1">
+				<button
+					type="button"
+					onClick={openModal}
+					className={
+						"items-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 flex flex-row" +
+						" " +
+						(props.buttonClassName ?? "")
+					}
+				>
+					<div className="mr-1">{props.buttonIcon}</div>
+					<div className="ml-1">{props.buttonPrompt}</div>
+				</button>
+			</div>
 
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center"
-            style={{background: "rgba(0, 0, 0, 0.5)"}}
+			<Transition appear show={isOpen} as={Fragment}>
+				<Dialog as="div" className="relative z-10" onClose={closeModal}>
+					<Transition.Child
+						as={Fragment}
+						enter="ease-out duration-300"
+						enterFrom="opacity-0"
+						enterTo="opacity-100"
+						leave="ease-in duration-200"
+						leaveFrom="opacity-100"
+						leaveTo="opacity-0"
+					>
+						<div className="fixed inset-0 bg-black/25" />
+					</Transition.Child>
 
-            >
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel 
-                className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
-                style={{
-                    background: "rgba(0, 0, 0, 0.5)",
-                    backgroundImage: "url('https://cooperandgracie.com/cdn/shop/articles/Horses_in_Meadow.png?v=1690365162')",
-                     
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                    }}
-                >
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Téléverser des données
-                  </Dialog.Title>
+					<div className="fixed inset-0 overflow-y-auto">
+						<div
+							className="flex min-h-full items-center justify-center p-4 text-center"
+							style={{ background: "rgba(0, 0, 0, 0.5)" }}
+						>
+							<Transition.Child
+								as={Fragment}
+								enter="ease-out duration-300"
+								enterFrom="opacity-0 scale-95"
+								enterTo="opacity-100 scale-100"
+								leave="ease-in duration-200"
+								leaveFrom="opacity-100 scale-100"
+								leaveTo="opacity-0 scale-95"
+							>
+								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-0 text-left align-middle shadow-xl transition-all">
+									<div className="relative">
+										{/* Background div */}
+										<div
+											className="rounded-t-lg absolute inset-0 bg-cover bg-center"
+											style={{
+												backgroundImage:
+													"url('https://cooperandgracie.com/cdn/shop/articles/Horses_in_Meadow.png?v=1690365162')",
+												opacity: 0.2,
+											}}
+										></div>
 
-                  <div className="flex flex-col space-y-4">
-                    <div className="w-full">
-                      
-                      <div className="flex justify-between"> {props.uploadIcon }
-                        
-                        <input type="file" className="bg-orange-200 py-3 px-4 rounded-md"
-                       
-                        onChange={handleFileSelect} />
-                      </div>
-                      {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
-                      {error && <p style={{ color: "red" }}>{error}</p>}
-                    </div>
+										{/* Title div */}
+										<div className="relative p-3 opacity-100 flex flex-col justify-between text-black text-md font-bold">
+											<Dialog.Title
+												as="h3"
+												className="text-lg font-medium leading-6 text-gray-900"
+											>
+												Téléverser des données
+											</Dialog.Title>
 
-                    <div className="w-full">
-                      <h1 className="text-sm font-semibold">
-                        Parent Folder :
-                      </h1>
-                      <input
-                        className="outline-none font-poppins bg-white w-full rounded-lg p-2 text-black border-2 border-white"
-                        id="parentFolder"
-                        placeholder="No parent folder"
-                        type="text"
-                        onChange={handleFolderName}
-                      />
-                    </div>
+											<div className="flex flex-col p-2">
+												<div className="w-full my-2">
+													<div className="  flex items-center justify-center">
+														{props.uploadIcon}
+														<input
+															type="file"
+															className="bg-orange-50 py-3 px-4 rounded-md flex items-center justify-center"
+															onChange={
+																handleFileSelect
+															}
+														/>
+													</div>
+													{uploadProgress > 0 && (
+														<p>
+															Upload Progress:{" "}
+															{uploadProgress}%
+														</p>
+													)}
+													{error && (
+														<p
+															style={{
+																color: "red",
+															}}
+														>
+															{error}
+														</p>
+													)}
+												</div>
 
-                    <div className=" justify-center">
-                      <h1 className="justify-center float-left text-sm font-semibold">Share with other projects :</h1>
-                      <select className="w-full h-full inline-flex justify-center rounded-md border border-transparent bg-orange-100  text-sm font-medium text-grey-900 hover:bg-grey-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-grey-500 focus-visible:ring-offset-2" />
-                      <br />
-                      </div>
+												<div className="w-full mb-2">
+													<h1 className="text-sm font-semibold">
+														Parent Folder :
+													</h1>
+													<input
+														className="outline-none font-poppins bg-white w-full rounded-lg p-2 text-black border-2 border-white"
+														id="parentFolder"
+														placeholder="No parent folder"
+														type="text"
+														onChange={
+															handleFolderName
+														}
+													/>
+												</div>
 
-                    <div className="flex space-x-4">
-                      <div className="w-1/2">
-                        <h1 className="text-sm font-semibold">File Type :</h1>
-                        <div className="flex flex-col space-y-2">
-                          <div className="flex items-center space-x-4">
-                            <input
-                              className="cursor-pointer bg-orange"
-                              type="radio"
-                            />
-                            <label className="font-poppins">Model</label>
-                          </div>
-                          <div className="flex items-center space-x-4">
-                            <input
-                              className="cursor-pointer"
-                              type="radio"
-                            />
-                            <label className="font-poppins">Raw Data</label>
-                          </div>
-                          <div className="flex items-center space-x-4">
-                            <input
-                              className="cursor-pointer"
-                              type="radio"
-                            />
-                            <label className="font-poppins">
-                              Preprocessed Data
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="w-1/2">
-                        <h1 className="text-sm font-semibold">Description :</h1>
-                        <input
-                          className="outline-none font-poppins rounded-lg text-black border-2 border-white w-full"
-                          id="Description"
-                          placeholder="No parent folder"
-                          type="text"
-                        />
-                                 
-                      <h1 className="text-sm font-semibold"> Tags</h1>
-                      <input
-                        className="outline-none font-poppins bg-white w-full rounded-lg  text-black border-2 border-white"
-                        id="Tags"
-                        placeholder="Tags"
-                        type="text"
-                      />
-                      </div>
-                    </div>
-                  </div>
+												<div className="mb-2 justify-center">
+													<h1 className="justify-center float-left text-sm font-semibold">
+														Share with other projects :
+													</h1>
+													<select className="w-full h-full inline-flex justify-center rounded-md border border-transparent bg-orange-50  text-sm font-medium text-grey-900 hover:bg-grey-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-grey-500 focus-visible:ring-offset-2" />
+													<br />
+												</div>
 
-    
-                  <div className="flex justify-end mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border bg-beige-100 px-4 py-2 text-sm font-medium text-black-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-                      onClick={handleUpload}
-                    >
-                      Upload
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
-    </>
-  );
+												<div className="flex flex-row mt-2 py-3">
+													<div className="w-1/2">
+														<h1 className="text-sm font-semibold">
+															File Type :
+														</h1>
+														<div className="flex flex-col space-y-2">
+															<div className="flex items-center space-x-4">
+																<input
+																	className="cursor-pointer bg-orange"
+																	type="radio"
+																/>
+																<label className="font-poppins">
+																	Model
+																</label>
+															</div>
+															<div className="flex items-center space-x-4">
+																<input
+																	className="cursor-pointer"
+																	type="radio"
+																/>
+																<label className="font-poppins">
+																	Raw Data
+																</label>
+															</div>
+															<div className="flex items-center space-x-4">
+																<input
+																	className="cursor-pointer"
+																	type="radio"
+																/>
+																<label className="font-poppins">
+																	Preprocessed
+																	Data
+																</label>
+															</div>
+														</div>
+													</div>
+													<div className="w-1/2">
+														<h1 className="text-sm font-semibold">
+															Description :
+														</h1>
+														<input
+															className="outline-none font-poppins rounded-lg text-black border-2 border-white w-full"
+															id="Description"
+															placeholder="No parent folder"
+															type="text"
+														/>
+
+														<h1 className="text-sm font-semibold">
+															Tags
+														</h1>
+														<input
+															className="outline-none font-poppins bg-white w-full rounded-lg  text-black border-2 border-white"
+															id="Tags"
+															placeholder="Tags"
+															type="text"
+														/>
+													</div>
+												</div>
+											</div>
+
+											<div className="flex justify-end mt-4">
+												<button
+													type="button"
+													className="inline-flex justify-center rounded-md border bg-beige-100 px-4 py-2 text-sm font-medium text-black-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+													onClick={closeModal}
+												>
+													Annuler
+												</button>
+												<button
+													type="button"
+													className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+													onClick={handleUpload}
+												>
+													Upload
+												</button>
+											</div>
+										</div>
+
+										{/* Dots of options */}
+										<button className="absolute top-0 right-3 font-black">
+											...
+										</button>
+									</div>
+								</Dialog.Panel>
+							</Transition.Child>
+						</div>
+					</div>
+				</Dialog>
+			</Transition>
+		</>
+	);
 }
