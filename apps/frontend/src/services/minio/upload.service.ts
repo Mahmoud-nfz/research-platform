@@ -13,7 +13,7 @@ export const handleFileUpload = (
     newSocket.onopen = () => {
         console.log("WebSocket connection established");
 
-        const CHUNK_SIZE = 20480000 * 2048000;
+        const CHUNK_SIZE = 1024 * 1024; // 1MB chunk size
         let offset = 0;
 
         const sendBucketName = () => {
@@ -21,8 +21,9 @@ export const handleFileUpload = (
             newSocket.send(btt);
         };
 
-        const sendChunks = () => {
-            const chunk = updatedFile.slice(offset, offset + CHUNK_SIZE);
+        const sendNextChunk = () => {
+            const chunkSize = Math.min(CHUNK_SIZE, updatedFile.size - offset);
+            const chunk = updatedFile.slice(offset, offset + chunkSize);
             const reader = new FileReader();
 
             reader.onload = (e) => {
@@ -30,13 +31,13 @@ export const handleFileUpload = (
                     const result = e.target.result;
                     if (result instanceof ArrayBuffer) {
                         newSocket.send(result);
-                        offset += result.byteLength;
-                        callback((offset / updatedFile.size) * 100); 
-                        while (offset < updatedFile.size) {
-                            sendChunks();
-                        } 
+                        offset += chunkSize;
+                        callback((offset / updatedFile.size) * 100);
+                        if (offset < updatedFile.size) {
+                            sendNextChunk();
+                        } else {
                             newSocket.close();
-                        
+                        }
                     } else {
                         console.error("Unexpected result type:", typeof result);
                         errorCallback("Unexpected result type");
@@ -48,7 +49,7 @@ export const handleFileUpload = (
         };
 
         sendBucketName();
-        sendChunks();
+        sendNextChunk();
     };
 
     newSocket.onclose = () => {

@@ -1,44 +1,40 @@
 import axios from "axios";
-const ELASTIC_ENDPOINT = process.env.NEXT_PUBLIC_ELASTIC_ENDPOINT;
+const ELASTIC_ENDPOINT = 'http://localhost:3002/elastic';
 
 interface ObjectInfo {
 
   name: string;
 
-  size: number;
+  size: number;}
 
- }
-
- export const createObject = async (objectName:any, description:any, tags:any, path:any) => {
-
+ export const createObject = async (
+   objectName: string,
+   description: string,
+   tags: string[],
+   path: string,
+  type: string
+ ) => {
    try {
-
      const data = {
-
        objectName: objectName,
-
        description: description,
-
        tags: tags,
-
-       path: path
-
+       path: path,
+       type : type
      };
-
-     const response = await axios.post(`${ELASTIC_ENDPOINT}/endpoint/create`, data);
-
+ 
+     const response = await axios.post(`${ELASTIC_ENDPOINT}/create`, data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
      return response.data;
-
-   } catch (error) {
-
+   } catch (error: any) {
      console.error("Error creating object:", error);
-
-     throw new Error("Error creating object. Please try again.");
-
+     throw new Error(error.message);
    }
-
  }
-
+ 
   
 
 export const getObjects = async (bucketName: any, setObjects: any, setError: any) => {

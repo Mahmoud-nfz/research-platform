@@ -5,7 +5,7 @@ import { uploadSchema, UploadSchema } from "@/types/schemas/index";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Input from "@/components/forms/Input";
 
-import { handleFileUpload } from "../../../services/upload.service";
+import { handleFileUpload } from "../../../services/minio/upload.service";
 import { createObject } from "../../../services/elastic/crud.service";
 
 interface ModalProps {
@@ -64,6 +64,7 @@ export default function UploadModal(props: ModalProps) {
 
 	const handleUpload = useCallback((data: UploadSchema) => {
 		console.log("here ", data.files);
+		console.log("here ", data.files[0]);
 		handleFileUpload(
 			data.files[0],
 			bucketName,
@@ -71,7 +72,7 @@ export default function UploadModal(props: ModalProps) {
 			(progress) => setUploadProgress(progress),
 			(error) => setError(error)
 		);
-		createObject(data.files[0].name, description, tags, path);
+		createObject(data.files[0].name, description, [tags], path, selectedFileType); 
 	}, []);
 
 	function closeModal() {
