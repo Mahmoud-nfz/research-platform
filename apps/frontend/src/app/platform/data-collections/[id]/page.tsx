@@ -38,7 +38,6 @@ export default function DataCollections(): JSX.Element {
 				<UploadModal
 					buttonPrompt="Televerser des donnees"
 					buttonIcon={<CloudUploadIcon />}
-					buttonClassName="bg-primary-300"
 					uploadIcon={<CloudUploadIcon className="h-20 w-20" />}
 				/>
 			</div>
