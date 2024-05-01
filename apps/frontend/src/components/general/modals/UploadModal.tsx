@@ -1,6 +1,10 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { handleFileUpload } from "../../../services/upload.service";
+import { useForm } from "react-hook-form";
+import { uploadSchema, UploadSchema } from "@/types/schemas/index";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Input from "@/components/forms/Input";
 
 interface ModalProps {
 	buttonPrompt: string;
@@ -11,10 +15,17 @@ interface ModalProps {
 
 const bucketName = "ddfdfdc";
 export default function UploadModal(props: ModalProps) {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<UploadSchema>({
+		resolver: zodResolver(uploadSchema),
+	});
+
 	let [isOpen, setIsOpen] = useState(false);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-	const [folderName, setFolderName] = useState<string>("");
 	const [uploadProgress, setUploadProgress] = useState<number>(0);
 	const [error, setError] = useState<string>("");
 
@@ -23,24 +34,17 @@ export default function UploadModal(props: ModalProps) {
 		setSelectedFile(file);
 	};
 
-	const handleFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const name = event.target.value || "";
-		setFolderName(name);
-	};
-
-	const handleUpload = () => {
-		if (!selectedFile || !bucketName) return;
-		if (!folderName) {
-			setFolderName("");
-		}
+	const handleUpload = useCallback((data: UploadSchema) => {
+		console.log("here ", data.files);
 		handleFileUpload(
-			selectedFile,
+			data.files[0],
 			bucketName,
-			folderName,
+			data.parentFolder ?? "",
 			(progress) => setUploadProgress(progress),
 			(error) => setError(error)
 		);
-	};
+	}, []);
+
 	function closeModal() {
 		setIsOpen(false);
 	}
@@ -107,7 +111,12 @@ export default function UploadModal(props: ModalProps) {
 										></div>
 
 										{/* Title div */}
-										<div className="relative p-3 opacity-100 flex flex-col justify-between text-black text-md font-bold">
+										<form
+											onSubmit={handleSubmit(
+												handleUpload
+											)}
+											className="relative p-3 opacity-100 flex flex-col justify-between text-black text-md font-bold"
+										>
 											<Dialog.Title
 												as="h3"
 												className="text-lg font-medium leading-6 text-gray-900"
@@ -119,12 +128,12 @@ export default function UploadModal(props: ModalProps) {
 												<div className="w-full my-2">
 													<div className="  flex items-center justify-center">
 														{props.uploadIcon}
-														<input
+														<Input
+															register={register}
+															name="files"
+															label="File:"
 															type="file"
-															className="bg-orange-50 py-3 px-4 rounded-md flex items-center justify-center"
-															onChange={
-																handleFileSelect
-															}
+															className="bg-white placeholder:text-gray-400"
 														/>
 													</div>
 													{uploadProgress > 0 && (
@@ -145,23 +154,24 @@ export default function UploadModal(props: ModalProps) {
 												</div>
 
 												<div className="w-full mb-2">
-													<h1 className="text-sm font-semibold">
-														Parent Folder :
-													</h1>
-													<input
-														className="outline-none font-poppins bg-white w-full rounded-lg p-2 text-black border-2 border-white"
-														id="parentFolder"
+													<Input
+														register={register}
+														name="parentFolder"
+														label="Parent Folder:"
 														placeholder="No parent folder"
 														type="text"
-														onChange={
-															handleFolderName
+														className="bg-white placeholder:text-gray-400"
+														error={
+															errors.parentFolder
+																?.message
 														}
 													/>
 												</div>
 
 												<div className="mb-2 justify-center">
 													<h1 className="justify-center float-left text-sm font-semibold">
-														Share with other projects :
+														Share with other
+														projects :
 													</h1>
 													<select className="w-full h-full inline-flex justify-center rounded-md border border-transparent bg-orange-50  text-sm font-medium text-grey-900 hover:bg-grey-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-grey-500 focus-visible:ring-offset-2" />
 													<br />
@@ -236,14 +246,13 @@ export default function UploadModal(props: ModalProps) {
 													Annuler
 												</button>
 												<button
-													type="button"
+													type="submit"
 													className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-													onClick={handleUpload}
 												>
 													Upload
 												</button>
 											</div>
-										</div>
+										</form>
 
 										{/* Dots of options */}
 										<button className="absolute top-0 right-3 font-black">

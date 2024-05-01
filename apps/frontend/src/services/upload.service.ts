@@ -7,6 +7,7 @@ export const handleFileUpload = (
     callback: (progress: number) => void,
     errorCallback: (error: string) => void
 ) => {
+    console.log("Uploading file:", selectedFile.name);
     const updatedFileName = bucketName + "/" + selectedFile.name;
     const updatedFile = new File([selectedFile], updatedFileName, { type: selectedFile.type });
     const newSocket = new WebSocket(`ws://${MINIO_WRAPPER_ENDPOINT}/upload`);
