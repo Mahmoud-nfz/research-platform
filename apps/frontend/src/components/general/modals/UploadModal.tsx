@@ -164,6 +164,12 @@ export default function UploadModal(props: ModalProps) {
 															type="file"
 															onChange={handleFileSelect}
 															className="bg-white placeholder:text-gray-400"
+                              //@ts-ignore
+															error={
+																errors
+																	.files
+																	?.message
+															}
 														/>
 													</div>
 													{uploadProgress > 0 && (
