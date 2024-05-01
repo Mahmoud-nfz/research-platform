@@ -23,9 +23,6 @@ export default async function Projects() {
   const { data: projects } = await getProjects();
 
   return (
-    <ProjectsList
-      filters={filters}
-      projects={[...projects, dummyProject]}
-    ></ProjectsList>
+    <ProjectsList filters={filters} projects={[...projects, dummyProject]} />
   );
 }
