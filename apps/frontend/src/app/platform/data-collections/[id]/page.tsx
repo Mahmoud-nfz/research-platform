@@ -4,7 +4,6 @@ import React from "react";
 import {
 	ChevronLeftDouble,
 	CloudUploadIcon,
-	BigUploadCloudIcon,
 } from "@/assets";
 import { Folder, FolderCard } from "@/components/data-collections/FolderCard";
 import UploadModal from "@/components/general/modals/UploadModal";
@@ -40,7 +39,7 @@ export default function DataCollections(): JSX.Element {
 					buttonPrompt="Televerser des donnees"
 					buttonIcon={<CloudUploadIcon />}
 					buttonClassName="bg-primary-300"
-					uploadIcon={<BigUploadCloudIcon />}
+					uploadIcon={<CloudUploadIcon className="h-20 w-20" />}
 				/>
 			</div>
 		</div>
