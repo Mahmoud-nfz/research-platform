@@ -16,15 +16,5 @@
   "packageManager": "pnpm@9.0.6",
   "engines": {
     "node": ">=18"
-  },
-  "dependencies": {
-    "@elastic/elasticsearch": "^8.13.1",
-    "@headlessui/react": "^1.7.19",
-    "@nestjs/elasticsearch": "^10.0.1",
-    "@nestjs/mapped-types": "^2.0.5",
-    "@nestjs/microservices": "^10.3.8",
-    "@nestjs/swagger": "^7.3.1",
-    "@typescript-eslint/eslint-plugin": "6.0.0",
-    "@typescript-eslint/parser": "^5.0.0"
   }
 }
