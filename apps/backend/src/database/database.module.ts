@@ -19,6 +19,7 @@ import { BuisnessEntities } from './entities';
           autoLoadEntities: true,
           ssl: true,
           namingStrategy: new DatabaseSnakeNamingStrategy(),
+          logging: 'all',
         };
       },
     }),

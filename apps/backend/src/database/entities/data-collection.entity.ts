@@ -20,6 +20,15 @@ export class DataCollection extends Subject {
   @RelationId((dataCollection: DataCollection) => dataCollection.project)
   projectId: string;
 
+  @Column({ type: 'varchar' })
+  imageUrl: string;
+
+  @Column({ type: 'varchar' })
+  description: string;
+
+  @Column({ type: 'varchar', array: true })
+  tags: string[];
+
   constructor(data: Partial<DataCollection>) {
     super(data);
     Object.assign(this, data);

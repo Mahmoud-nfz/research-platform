@@ -48,4 +48,32 @@ export class DataCollectionService {
         .getMany()
     );
   }
+
+  async findManyByProject(user: User, project: Project) {
+    // Subquery to select subjects where the user has any permission
+    const permissionSubQuery = this.repository.manager
+      .createQueryBuilder(Permission, 'permission')
+      .select('DISTINCT permission.subject_id')
+      .where('permission.user_id = :userId', { userId: user.id });
+
+    // Main query to select data collections accessible by the user
+    return this.repository
+      .createQueryBuilder('data_collection')
+      .where('data_collection.project_id = :projectId', {
+        projectId: project.id,
+      })
+      .andWhere((qb) =>
+        qb
+          // Owner of data collection
+          .where('data_collection.owner_id = :userId', { userId: user.id })
+          // User has permission on data collection
+          .orWhere(`data_collection.id IN (${permissionSubQuery.getQuery()})`)
+          // User has permission on project
+          .orWhere(`:projectId IN (${permissionSubQuery.getQuery()})`, {
+            projectId: project.id,
+          })
+          .setParameters(permissionSubQuery.getParameters()),
+      )
+      .getMany();
+  }
 }

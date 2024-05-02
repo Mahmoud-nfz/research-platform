@@ -45,4 +45,12 @@ export class ProjectController {
   ) {
     return this.projectSerice.getNumDataCollections(project, user);
   }
+
+  /**
+   * List all projects on which authenticated user has the `create` permission.
+   */
+  @Get('can-create')
+  async findWithCreatePermission(@AuthenticatedUser() user: User) {
+    return this.projectSerice.findManyByUserWithCreatePermission(user);
+  }
 }

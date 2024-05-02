@@ -1,4 +1,6 @@
+export { default as CheckIcon } from "./CheckIcon";
 export { default as ChevronLeftDouble } from "./ChevronLeftDouble";
+export { default as ChevronUpDownIcon } from "./ChevronUpDownIcon";
 export { default as CloudUploadIcon } from "./CloudUploadIcon";
 export { default as DataIcon } from "./DataIcon";
 export { default as DeleteLeftIcon } from "./DeleteLeftIcon";
