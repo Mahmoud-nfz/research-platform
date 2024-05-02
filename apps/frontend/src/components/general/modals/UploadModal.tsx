@@ -1,292 +1,177 @@
+"use client";
+
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { uploadSchema, UploadSchema } from "@/types/schemas/upload.schema";
-import { ElasticCreateMetaData } from "../../../types/elastic-search";
-import cslx from "clsx";
 import Input from "@/components/forms/Input";
 
-import { handleFileUpload } from "../../../services/minio/upload.service";
-import { createObjectMetadata } from "../../../services/elastic/crud.service";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useUploadFile from "@/hooks/upload/useUploadFile";
+import { CloudUploadIcon, FileIcon, UploadIcon } from "@/assets";
+import toHumanReadableSize from "@/utils/toHumanReadableSize";
 
-interface ModalProps {
-	buttonPrompt: string;
-	buttonIcon?: React.ReactNode;
-	uploadIcon?: React.ReactNode;
-}
+export default function UploadModal() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm<UploadSchema>({
+    resolver: zodResolver(uploadSchema),
+    mode: "onTouched",
+  });
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
-const bucketName = "ddfdfdc";
-export default function UploadModal(props: ModalProps) {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<UploadSchema>({
-		resolver: zodResolver(uploadSchema),
-	});
+  const { mutate: uploadFile, isError, isPending } = useUploadFile();
 
-	const [isOpen, setIsOpen] = useState(false);
-	const [uploadProgress, setUploadProgress] = useState<number>(0);
-	const [error, setError] = useState<string>("");
+  const handleUpload = useCallback((data: UploadSchema) => {
+    uploadFile({
+      data,
+      setUploadProgress,
+    });
+  }, []);
 
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="items-center w-fit rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 flex flex-row"
+      >
+        <CloudUploadIcon />
+        <p className="ml-1">Téléverser des données</p>
+      </button>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
 
-	const handleUpload = useCallback((data: UploadSchema) => {
-		if (data.files && data.files.length > 0) {
-			handleFileUpload(
-				data.files as File,
-				bucketName ?? "",
-				data.parentFolder ?? "",
-				(progress) => setUploadProgress(progress),
-				(error) => setError(error)
-			);
-		}
-	}, []);
-	const handleCreateObjectMetadata = useCallback((data: UploadSchema) => {
-		const metadata: ElasticCreateMetaData = {
-			data: { 
-				objectName: data.files,
-				description: data.description ?? "",
-				tags: data.tags ?? [],
-				path: data.path ?? "",
-				type: data.selectedFileType ?? "Raw Data",
-			},
-		};
-		createObjectMetadata(metadata);
-	}, []);
-	const handleCreateFileEntity = useCallback((data: UploadSchema) => {
-		handleUpload(data);
-		handleCreateObjectMetadata(data);
-	}, []);
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full space-y-10 max-w-md transform overflow-hidden rounded-2xl bg-white px-12 py-20 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="font-bold text-center text-4xl"
+                  >
+                    Téléverser des données
+                  </Dialog.Title>
 
-	function closeModal() {
-		setIsOpen(false);
-	}
-
-	function openModal() {
-		setIsOpen(true);
-	}
-
-	return (
-		<>
-			<div className="flex items-center justify-center m-1">
-				<button
-					type="button"
-					onClick={openModal}
-					className={cslx(
-						"items-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 flex flex-row"
-					)}
-				>
-					<div className="mr-1">{props.buttonIcon}</div>
-					<div className="ml-1">{props.buttonPrompt}</div>
-				</button>
-			</div>
-
-			<Transition appear show={isOpen} as={Fragment}>
-				<Dialog as="div" className="relative z-10" onClose={closeModal}>
-					<Transition.Child
-						as={Fragment}
-						enter="ease-out duration-300"
-						enterFrom="opacity-0"
-						enterTo="opacity-100"
-						leave="ease-in duration-200"
-						leaveFrom="opacity-100"
-						leaveTo="opacity-0"
-					>
-						<div className="fixed inset-0 bg-black/25" />
-					</Transition.Child>
-
-					<div className="fixed inset-0 overflow-y-auto">
-						<div
-							className="flex min-h-full items-center justify-center p-4 text-center"
-							style={{ background: "rgba(0, 0, 0, 0.5)" }}
-						>
-							<Transition.Child
-								as={Fragment}
-								enter="ease-out duration-300"
-								enterFrom="opacity-0 scale-95"
-								enterTo="opacity-100 scale-100"
-								leave="ease-in duration-200"
-								leaveFrom="opacity-100 scale-100"
-								leaveTo="opacity-0 scale-95"
-							>
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-0 text-left align-middle shadow-xl transition-all">
-									<div className="relative">
-										{/* Background div */}
-										<div
-											className="rounded-t-lg absolute inset-0 bg-cover bg-center"
-											style={{
-												backgroundImage:
-													// src is a local image from the public folder
-													"url('/images/horses.webp')",
-												opacity: 0.2,
-											}}
-										></div>
-
-										{/* Title div */}
-										<form
-											// on submit handle upload and create object
-											onSubmit={handleSubmit(handleCreateFileEntity)}
-											
-											className="relative p-3 opacity-100 flex flex-col justify-between text-black text-md font-bold"
-										>
-											<Dialog.Title
-												as="h3"
-												className="text-lg font-medium leading-6 text-gray-900"
-											>
-												Téléverser des données
-											</Dialog.Title>
-
-											<div className="flex flex-col p-2">
-												<div className="w-full my-2">
-													<div className="  flex items-center justify-center">
-														{props.uploadIcon}
-														<Input
-															register={register}
-															name="files"
-															label="File:"
-															type="file"
-															className="bg-white placeholder:text-gray-400"
-                             								//@ts-ignore
-															error={
-																errors
-																	.files
-																	?.message
-															}
-														/>
-													</div>
-													{uploadProgress > 0 && (
-														<p>
-															Upload Progress:{" "}
-															{uploadProgress}%
-														</p>
-													)}
-													{error && (
-														<p
-															style={{
-																color: "red",
-															}}
-														>
-															{error}
-														</p>
-													)}
-												</div>
-
-												<div className="w-full mb-2">
-													<Input
-														register={register}
-														name="parentFolder"
-														label="Parent Folder:"
-														placeholder="No parent folder"
-														type="text"
-														className="bg-white placeholder:text-gray-400"
-														
-													/>
-												</div>
-
-												<div className="mb-2 justify-center">
-													<h1 className="justify-center float-left text-sm font-semibold">
-														Share with other
-														projects :
-													</h1>
-													<select className="w-full h-full inline-flex justify-center rounded-md border border-transparent bg-orange-50  text-sm font-medium text-grey-900 hover:bg-grey-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-grey-500 focus-visible:ring-offset-2" />
-													<br />
-												</div>
-												<div className="flex flex-row mt-2 py-3">
-													<div className="w-1/2"><div className="flex flex-col space-y-2">
-														<h1 className="text-sm font-semibold">Data Type:</h1>
-															<div className="flex items-center">
-																<Input
-																	register={register}
-																	name="selectedFileType"
-																	label=""
-																	type="radio"
-																	id="model"
-																	value="Model"
-																	className="cursor-pointer bg-orange"
-																/>
-																<label htmlFor="model" className="ml-2">Model</label>
-															</div>
-															<div className="flex items-center">
-																<Input
-																	register={register}
-																	name="selectedFileType"
-																	label=""
-																	type="radio"
-																	id="rawData"
-																	value="Raw Data"
-																	className="cursor-pointer"
-																/>
-																<label htmlFor="rawData" className="ml-2">Raw Data</label>
-															</div>
-															<div className="flex items-center">
-																<Input
-																	register={register}
-																	name="selectedFileType"
-																	label=""
-																	type="radio"
-																	id="preprocessedData"
-																	value="Preprocessed Data"
-																	className="cursor-pointer"
-																/>
-																<label htmlFor="preprocessedData" className="ml-2">Pre-processed data</label>
-															</div>
-														</div>
-													</div>
-													<div className="w-1/2">
-														<Input
-															register={register}
-															name="description"
-															label="Description:"
-															className="outline-none font-poppins rounded-lg text-black border-2 border-white w-full"
-															id="Description"
-															placeholder="Description"
-															type="text"
-														/>
-
-														<Input
-																register={register}
-																name="tags"
-																label="tags"
-															className="outline-none font-poppins bg-white w-full rounded-lg  text-black border-2 border-white"
-															id="Tags"
-															placeholder="Tags"
-															type="text"
-														/>
-													</div>
-												</div>
-											</div>
-
-											<div className="flex justify-end mt-4">
-												<button
-													type="button"
-													className="inline-flex justify-center rounded-md border bg-beige-100 px-4 py-2 text-sm font-medium text-black-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-													onClick={closeModal}
-												>
-													Annuler
-												</button>
-												<button
-													type="submit"
-													className="inline-flex justify-center rounded-md border bg-orange-100 px-4 py-2 text-sm font-medium text-orange-900 hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
-												
-												>
-													Upload
-												</button>
-											</div>
-										</form>
-
-										{/* Dots of options */}
-										<button className="absolute top-0 right-3 font-black">
-											...
-										</button>
-									</div>
-								</Dialog.Panel>
-							</Transition.Child>
-						</div>
-					</div>
-				</Dialog>
-			</Transition>
-		</>
-	);
+                  <form
+                    onSubmit={handleSubmit(handleUpload)}
+                    className="space-y-4"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-4">
+                        <UploadIcon height={36} width={36} className="mx-2" />
+                        <label htmlFor="files" className="text-sm font-medium">
+                          Selectionne un fichier ou bien drag'N'drop ici
+                        </label>
+                        <label
+                          htmlFor="files"
+                          className="text-center cursor-pointer p-2 text-xs font-bold uppercase bg-primary-300 hover:bg-primary-400 transition rounded-lg"
+                        >
+                          Sélectionner un fichier
+                        </label>
+                        <input
+                          id="files"
+                          type="file"
+                          {...register("files")}
+                          className="hidden"
+                        />
+                      </div>
+                      {watch("files")?.length > 0 && (
+                        <div className="relative select-none p-3 gap-3 bg-gray-300 rounded-lg flex items-center justify-between">
+                          <FileIcon width={12} height={18} />
+                          <div className="flex grow basis-full items-center justify-between">
+                            <span className="font-semibold text-xs">
+                              {watch("files")[0]?.name}
+                            </span>
+                            <span className="font-semibold text-xs">
+                              {toHumanReadableSize(watch("files")[0]?.size)}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => setValue("files", undefined)}
+                            className="rounded-full text-xs bg-black size-4 text-white absolute -top-1.5 -right-1.5"
+                          >
+                            x
+                          </button>
+                        </div>
+                      )}
+                      <span className="ml-2.5 block text-sm font-medium text-red-700">
+                        {errors.files?.message?.toString()}
+                      </span>
+                    </div>
+                    <Input
+                      name="parentFolder"
+                      register={register}
+                      label="Dossier parent"
+                      error={errors.parentFolder?.message}
+                    />
+                    <Input
+                      name="description"
+                      register={register}
+                      label="Description"
+                      error={errors.description?.message}
+                    />
+                    <div className="flex items-center justify-center">
+                      <button
+                        type="submit"
+                        className="mt-5 w-1/2 bg-primary-700 text-white font-semibold p-2 rounded-md hover:bg-primary-900 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+                      >
+                        {isPending ? (
+                          <div
+                            className="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-[#332d2d] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                            role="status"
+                          >
+                            <span className="rounded-lg !absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                              Loading...
+                            </span>
+                          </div>
+                        ) : (
+                          "Terminé"
+                        )}
+                      </button>
+                    </div>
+                    {isError && (
+                      <div className="mt-4 text-sm text-red-600 text-center">
+                        <p>Une erreur est survenue. Veuillez réessayer.</p>
+                      </div>
+                    )}
+                  </form>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  );
 }

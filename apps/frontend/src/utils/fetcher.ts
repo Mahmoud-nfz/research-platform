@@ -3,16 +3,32 @@ import * as process from "process";
 import { ResponseType } from "@/types";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 
-export const fetcher = async <R = never>(
+export async function fetcher<R = never>(
   path: string | undefined,
   request_options?: RequestInit & {
     token?: string;
   },
   tags?: string[]
-): Promise<ResponseType<R>> => {
+): Promise<ResponseType<R>>;
+export async function fetcher<R = never>(
+  path: string | undefined,
+  request_options?: RequestInit & {
+    token?: string;
+    base: string | URL;
+  },
+  tags?: string[]
+): Promise<R>;
+export async function fetcher<R = never>(
+  path: string | undefined,
+  request_options?: RequestInit & {
+    token?: string;
+    base?: string | URL;
+  },
+  tags?: string[]
+): Promise<ResponseType<R> | R> {
   if (path === undefined) throw new Error("Incorrect path");
 
-  const url = new URL(path, process.env.BACKEND_URL);
+  const url = new URL(path, request_options?.base ?? process.env.BACKEND_URL);
 
   const session = await getServerSession(options);
   const token = request_options?.token ?? session?.accessToken;
@@ -37,4 +53,4 @@ export const fetcher = async <R = never>(
 
     return { data, message };
   });
-};
+}

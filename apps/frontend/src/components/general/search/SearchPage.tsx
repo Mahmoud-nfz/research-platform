@@ -1,6 +1,6 @@
 "use client";
+import { searchObjects } from '@/actions/metadata/searchObjects';
 import { useState } from 'react';
-import { searchObjects } from '../../../services/elastic/crud.service';
 
 const SearchPage = () => {
 const [query, setQuery] = useState('');
