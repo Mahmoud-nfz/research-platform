@@ -3,4 +3,8 @@ export const endpoints = {
   profile: "/user/profile",
   projects: "/projects",
   createProject: "/projects",
+  createDataCollection: "/data-collections",
+  allDataCollections: "/data-collections",
+  dataCollectionsPerProject: "/data-collections",
+  projectsWithCreatePermission: "/projects/can-create",
 };
