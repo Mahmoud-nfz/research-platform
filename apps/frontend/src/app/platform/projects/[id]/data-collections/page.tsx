@@ -22,15 +22,6 @@ async function getProjectsWithCreatePermission() {
 
 const filters = ['Option 1', 'Option 2', 'Option 3'];
 
-const dataCollection = {
-	id: '1',
-	name: 'Collection 1',
-	description:
-		'Ce sont des donnees de tracking des chevaux de course. Les donnees sont collectees par des capteurs sur les chevaux et sont stockees dans une base de donnees. Les donnees sont ensuite analysees pour determiner les performances des chevaux et les facteurs qui influencent ces performances.',
-	imageUrl: '/welcome-image.png',
-	tags: ['tag1', 'tag2'],
-} as DataCollection;
-
 export default async function DataCollections({ params }: PageProps) {
 	if (!params?.id) notFound();
 
@@ -41,7 +32,7 @@ export default async function DataCollections({ params }: PageProps) {
 
 	return (
 		<DataCollectionsList
-			dataCollections={[...dataCollections, dataCollection]}
+			dataCollections={[...dataCollections]}
 			filters={filters}
 			projectsWithCreatePermission={[...projects]}
 		/>

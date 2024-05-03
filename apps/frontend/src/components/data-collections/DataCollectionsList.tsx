@@ -5,6 +5,7 @@ import { DataCollection, Project } from '@/types/entities';
 import { useState } from 'react';
 import { DataCollectionCard } from './DataCollectionCard';
 import { CreateDataCollectionModal } from './CreateDataCollectionModal';
+import { EmptyComponent } from '../general/EmptyComponent';
 
 export const DataCollectionsList = ({
 	dataCollections,
@@ -60,11 +61,15 @@ export const DataCollectionsList = ({
 			<div className="px-10 w-full">
 				<div className="w-full h-0.5 bg-primary-500"></div>
 			</div>
-			<div className="w-full flex flex-wrap">
-				{dataCollections.map((dataCollection, idx) => (
-					<DataCollectionCard key={idx} dataCollection={dataCollection} />
-				))}
-			</div>
+			{dataCollections.length > 0 ? (
+				<div className="w-full flex flex-wrap">
+					{dataCollections.map((dataCollection, idx) => (
+						<DataCollectionCard key={idx} dataCollection={dataCollection} />
+					))}
+				</div>
+			) : (
+				<EmptyComponent message="Aucune collection de données trouvée" />
+			)}
 		</div>
 	);
 };

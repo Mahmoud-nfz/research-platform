@@ -21,3 +21,4 @@ export { default as SettingsOutlineIcon } from './SettingsOutlineIcon';
 export { default as SettingsIcon } from './SettingsIcon';
 export { default as ShareIcon } from './ShareIcon';
 export { default as UploadIcon } from './UploadIcon';
+export { default as WarningIcon } from './WarningIcon';

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ProjectCard } from './ProjectCard';
 import { Project } from '@/types/entities';
 import { CreateProjectModal } from './CreateProjectModal';
+import { EmptyComponent } from '../general/EmptyComponent';
 
 export const ProjectsList = ({
 	projects,
@@ -51,11 +52,15 @@ export const ProjectsList = ({
 			<div className="px-10 w-full">
 				<div className="w-full h-0.5 bg-primary-500"></div>
 			</div>
-			<div className="w-full flex flex-wrap">
-				{projects.map((project, idx) => (
-					<ProjectCard key={idx} project={project} />
-				))}
-			</div>
+			{projects.length > 0 ? (
+				<div className="w-full flex flex-wrap">
+					{projects.map((project, idx) => (
+						<ProjectCard key={idx} project={project} />
+					))}
+				</div>
+			) : (
+				<EmptyComponent message="Aucun projet trouvé" />
+			)}
 		</div>
 	);
 };

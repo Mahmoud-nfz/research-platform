@@ -1,4 +1,3 @@
-import { DataCollection } from '@/components/data-collections/DataCollectionCard';
 import {
 	EntityTypes,
 	InformationSidebar,
@@ -20,12 +19,12 @@ export default function DataCollectionLayout({
 	);
 }
 
-const dataCollection: DataCollection = {
-	id: 156456,
+const dataCollection = {
+	id: '156456',
 	name: 'Collection 1',
 	description:
 		'Ce sont des donnees de tracking des chevaux de course. Les donnees sont collectees par des capteurs sur les chevaux et sont stockees dans une base de donnees. Les donnees sont ensuite analysees pour determiner les performances des chevaux et les facteurs qui influencent ces performances.',
-	image: '/welcome-image.png',
+	imageUrl: '/welcome-image.png',
 	tags: ['tag1', 'tag2'],
 	usersImages: ['/jeff.jpg', '/jeff.jpg', '/jeff.jpg'],
 	ownerImage: '/jeff.jpg',
