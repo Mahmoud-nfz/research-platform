@@ -50,12 +50,11 @@ export class ApplicationBootstrapper {
 
 		app.enableShutdownHooks();
 
-		// @/configure CORS policy to accept requests only from frontend server
-		// const { front, dashboard } = configService.getMiscConfig();
-		// const allowedOrigins = [front, dashboard].filter(
-		//   (origin) => origin !== undefined,
-		// ) as string[];
-		app.enableCors();
+		// configure CORS policy to accept requests only from frontend server
+		const { allowedOrigines } = configService.getMiscConfig();
+		app.enableCors({
+			origin: Object.entries(allowedOrigines).map(([, value]) => value),
+		});
 
 		const port = await configService.getMiscConfig().port;
 		await app.listen(port);
