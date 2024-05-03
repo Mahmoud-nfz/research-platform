@@ -11,8 +11,8 @@ const CopyObjects: React.FC = () => {
 
   const handleGetObjects = async () => {
     try {
-      const objects = await getObjects(sourceBucketName);
-      setObjects(objects.map((object) => object.name));
+      const {data: objects} = await getObjects(sourceBucketName);
+      setObjects(objects);
       setError("");
     } catch (error) {
       console.error("Error getting objects:", error);
