@@ -31,15 +31,17 @@ export default function useUploadFile() {
       // upload object second
       const folderName = data.parentFolder;
       const bucketName = "ddfdfdc";
-      const selectedFile = data.files;
+      const selectedFile = data.files[0];
       const updatedFileName = bucketName + "/" + selectedFile.name;
       const updatedFile = new File([selectedFile], updatedFileName, {
         type: selectedFile.type,
       });
+
       const url = new URL(
         endpoints.upload,
         process.env.NEXT_PUBLIC_MINIO_WRAPPER_WEBSOCKET_URL
       );
+
       const socket = new WebSocket(url);
 
       const sendBucketName = () => {
@@ -59,7 +61,7 @@ export default function useUploadFile() {
             offset += chunkSize;
             setUploadProgress((offset / updatedFile.size) * 100);
             if (offset < updatedFile.size) {
-              sendNextChunk();
+              sendNextChunk(offset);
             } else {
               socket.close();
             }
