@@ -1,44 +1,44 @@
-"use client";
+'use client';
 
-import { useCallback } from "react";
-import Image from "next/image";
-import welcomeImage from "~/welcome-image.png";
-import companyLogo from "~/company-logo.png";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "@/components/forms/Input";
-import useLogin from "@/hooks/auth/useLogin";
-import { useRouter } from "next/navigation";
-import { LoginSchema, loginSchema } from "@/types/schemas";
+import { useCallback } from 'react';
+import Image from 'next/image';
+import welcomeImage from '~/welcome-image.png';
+import companyLogo from '~/company-logo.png';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Input from '@/components/forms/Input';
+import useLogin from '@/hooks/auth/useLogin';
+import { useRouter } from 'next/navigation';
+import { LoginSchema, loginSchema } from '@/types/schemas';
 
 export default function Login(): JSX.Element {
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
-    mode: "onTouched",
-  });
+	const router = useRouter();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<LoginSchema>({
+		resolver: zodResolver(loginSchema),
+		mode: 'onTouched',
+	});
 
-  const { mutate: login, isError, isPending } = useLogin();
+	const { mutate: login, isError, isPending } = useLogin();
 
-  const onSubmit = useCallback((data: LoginSchema) => {
-    login(
-      {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      },
-      {
-        onSuccess() {
-          router.replace("/platform", { scroll: false });
-        },
-      }
-    );
-  }, []);
+	const onSubmit = useCallback((data: LoginSchema) => {
+		login(
+			{
+				email: data.email,
+				password: data.password,
+				redirect: false,
+			},
+			{
+				onSuccess() {
+					router.replace('/platform', { scroll: false });
+				},
+			}
+		);
+	}, []);
 
 	return (
 		<div className="flex h-screen">
@@ -52,21 +52,14 @@ export default function Login(): JSX.Element {
 			</div>
 			<div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center rounded-l-3xl">
 				<div className="max-w-md w-full p-6">
-					<Image
-						src={companyLogo}
-						alt="Logo"
-						className="h-full object-cover"
-					/>
+					<Image src={companyLogo} alt="Logo" className="h-full object-cover" />
 					<h1 className="text-3xl font-semibold mb-6 text-black text-center">
 						Connexion
 					</h1>
 					<h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
-						Join our community with all time access and free{" "}
+						Join our community with all time access and free{' '}
 					</h1>
-					<form
-						onSubmit={handleSubmit(onSubmit)}
-						className="space-y-4"
-					>
+					<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 						<div>
 							<Input
 								register={register}
@@ -109,15 +102,12 @@ export default function Login(): JSX.Element {
 					</form>
 					{isError && (
 						<div className="mt-4 text-sm text-red-600 text-center">
-							<p>
-								Vos identifiants sont incorrects. Veuillez
-								réessayer
-							</p>
+							<p>Vos identifiants sont incorrects. Veuillez réessayer</p>
 						</div>
 					)}
 					<div className="mt-4 text-sm text-gray-600 text-center">
 						<p>
-							Vous rencontrer des problèmes?{" "}
+							Vous rencontrer des problèmes?{' '}
 							<a href="#" className="text-black hover:underline">
 								Contactez votre administrateur
 							</a>

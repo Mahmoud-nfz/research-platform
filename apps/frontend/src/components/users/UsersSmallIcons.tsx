@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 export const UsersSmallIcons = ({ usersImages }: { usersImages: string[] }) => (
 	<div className="flex items-center justify-center">
@@ -12,7 +12,7 @@ export const UsersSmallIcons = ({ usersImages }: { usersImages: string[] }) => (
 					height={50}
 					width={50}
 					className="w-full h-full object-cover"
-					alt={"Member 1"}
+					alt={'Member 1'}
 				/>
 			</div>
 		))}
