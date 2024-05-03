@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { CloudUploadIcon, FolderIcon } from "@/assets";
+import { DataCollection } from "@/types/entities";
 
 function truncateText(text: string) {
 	const truncated = text.substring(0, 70) + "...";
@@ -18,7 +19,7 @@ export const DataCollectionCard = ({
 				<div
 					className="rounded-t-lg absolute inset-0 bg-cover bg-center"
 					style={{
-						backgroundImage: `url(${dataCollection.image})`,
+						backgroundImage: `url(${dataCollection.imageUrl})`,
 						opacity: 0.5,
 					}}
 				></div>
@@ -43,7 +44,7 @@ export const DataCollectionCard = ({
 				<div className="relative px-2 py-1 opacity-100 flex flex-row justify-between text-black text-md font-bold">
 					<div className="flex items-center justify-center">
 						<div className="flex items-center justify-center">
-							{dataCollection.usersImages.map((url, index) => (
+							{["/jeff.jpg", "/jeff.jpg", "/jeff.jpg"].map((url, index) => (
 								<div
 									key={index}
 									className="w-8 h-8 -ml-2 rounded-full overflow-hidden border-2 border-white"
@@ -61,8 +62,8 @@ export const DataCollectionCard = ({
 					</div>
 					<div className="flex flex-col">
 						<div className="flex flex-row justify-end">
-							{dataCollection.tags.slice(0, 3).map((tag) => (
-								<div className="bg-gray-200 rounded-lg p-1 font-semibold text-sm m-1">
+							{dataCollection.tags.slice(0, 3).map((tag, index) => (
+								<div key={index} className="bg-gray-200 rounded-lg p-1 font-semibold text-sm m-1">
 									{tag}
 								</div>
 							))}
@@ -73,14 +74,14 @@ export const DataCollectionCard = ({
 								style={{ fontSize: "12px" }}
 							>
 								<CloudUploadIcon className="h-4 w-4 mr-1" />
-								{dataCollection.size}
+								3.5 GB
 							</div>
 							<div
 								className="p-1 flex flex-row justify-center items-center font-normal"
 								style={{ fontSize: "12px" }}
 							>
 								<FolderIcon className="h-3 w-3 mr-1" />
-								{dataCollection.numFolders} {" fichiers"}
+								{12} {" fichiers"}
 							</div>
 						</div>
 					</div>
@@ -89,15 +90,3 @@ export const DataCollectionCard = ({
 		</div>
 	);
 };
-
-export interface DataCollection {
-	id: number;
-	name: string;
-	description: string;
-	image: string;
-	tags: string[];
-	usersImages: string[];
-	ownerImage: string;
-	size: string;
-	numFolders: number;
-}

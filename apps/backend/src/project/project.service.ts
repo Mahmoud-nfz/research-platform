@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DataCollection, Permission, User, Project } from '@/database/entities';
+import { ProjectAction } from './project-action.enum';
 
 @Injectable()
 export class ProjectService {
@@ -45,6 +46,25 @@ export class ProjectService {
       .where('project.owner_id = :userId', { userId: user.id })
       .orWhere(`project.id IN (${permissionSubQuery})`)
       .orWhere(`project.id IN (${data_collectionPermissionSubQuery})`)
+      .getMany();
+  }
+
+  async findManyByUserWithCreatePermission(user: User) {
+    // Subquery to select subjects where the user has `create` permission
+    const permissionSubQuery = this.repository.manager
+      .createQueryBuilder(Permission, 'permission')
+      .select('DISTINCT permission.subject_id')
+      .where('permission.user_id = :userId', { userId: user.id })
+      .andWhere('permission.action = :action', {
+        action: ProjectAction.create,
+      });
+
+    // Main query to select projects accessible by the user
+    return this.repository
+      .createQueryBuilder('project')
+      .where('project.owner_id = :ownerId', { ownerId: user.id })
+      .orWhere(`project.id IN (${permissionSubQuery.getQuery()})`)
+      .setParameters(permissionSubQuery.getParameters())
       .getMany();
   }
 

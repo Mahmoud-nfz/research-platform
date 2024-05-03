@@ -1,5 +1,5 @@
 import { Base, DataCollection } from '@/database/entities';
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, IsUrl } from 'class-validator';
 
 export class CreateDataCollectionDto
   implements Partial<Omit<DataCollection, keyof Base>>
@@ -10,4 +10,13 @@ export class CreateDataCollectionDto
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @IsUrl()
+  imageUrl: string;
+
+  @IsString()
+  description: string;
+
+  @IsString({ each: true })
+  tags: string[];
 }

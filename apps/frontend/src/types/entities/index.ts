@@ -1,4 +1,5 @@
 export * from "./base.entity";
+export * from "./data-collections/data-collection.entity";
 export * from "./subject.entity";
 export * from "./projects/project.entity";
 export * from "./projects/project-action.enum";
