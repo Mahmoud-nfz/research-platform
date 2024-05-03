@@ -8,17 +8,17 @@ import { User } from '@/database/entities';
 @Controller('permissions')
 @UseJwtAuth()
 export class PermissionController {
-  constructor(private readonly permissionService: PermissionService) {}
+	constructor(private readonly permissionService: PermissionService) {}
 
-  @Post()
-  async grant(@Body() { userId, subjectId, action }: GrantPermissionDto) {
-    const user = new User({ id: userId });
-    return this.permissionService.createOne(user, subjectId, action);
-  }
+	@Post()
+	async grant(@Body() { userId, subjectId, action }: GrantPermissionDto) {
+		const user = new User({ id: userId });
+		return this.permissionService.createOne(user, subjectId, action);
+	}
 
-  @Delete()
-  async revoke(@Body() { userId, subjectId, action }: RevokePermissionDto) {
-    const user = new User({ id: userId });
-    return this.permissionService.deleteOne(user, subjectId, action);
-  }
+	@Delete()
+	async revoke(@Body() { userId, subjectId, action }: RevokePermissionDto) {
+		const user = new User({ id: userId });
+		return this.permissionService.deleteOne(user, subjectId, action);
+	}
 }

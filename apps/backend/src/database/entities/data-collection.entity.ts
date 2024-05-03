@@ -5,32 +5,32 @@ import { Project } from './project.entity';
 
 @Entity()
 export class DataCollection extends Subject {
-  @Column({ type: 'varchar' })
-  name: string;
+	@Column({ type: 'varchar' })
+	name: string;
 
-  @ManyToOne(() => User, { nullable: false })
-  owner: User;
+	@ManyToOne(() => User, { nullable: false })
+	owner: User;
 
-  @RelationId((dataCollection: DataCollection) => dataCollection.owner)
-  ownerId: string;
+	@RelationId((dataCollection: DataCollection) => dataCollection.owner)
+	ownerId: string;
 
-  @ManyToOne(() => Project, { nullable: false })
-  project: Project;
+	@ManyToOne(() => Project, { nullable: false })
+	project: Project;
 
-  @RelationId((dataCollection: DataCollection) => dataCollection.project)
-  projectId: string;
+	@RelationId((dataCollection: DataCollection) => dataCollection.project)
+	projectId: string;
 
-  @Column({ type: 'varchar' })
-  imageUrl: string;
+	@Column({ type: 'varchar' })
+	imageUrl: string;
 
-  @Column({ type: 'varchar' })
-  description: string;
+	@Column({ type: 'varchar' })
+	description: string;
 
-  @Column({ type: 'varchar', array: true })
-  tags: string[];
+	@Column({ type: 'varchar', array: true })
+	tags: string[];
 
-  constructor(data: Partial<DataCollection>) {
-    super(data);
-    Object.assign(this, data);
-  }
+	constructor(data: Partial<DataCollection>) {
+		super(data);
+		Object.assign(this, data);
+	}
 }

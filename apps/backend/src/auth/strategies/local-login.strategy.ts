@@ -10,50 +10,50 @@ import { User } from '@/database/entities';
 
 @Injectable()
 export class LocalLoginsStrategy extends PassportStrategy(
-  Strategy,
-  AuthStrategy.local_login,
+	Strategy,
+	AuthStrategy.local_login
 ) {
-  constructor(
-    private readonly userService: UserService,
-    private readonly authUtilsService: AuthUtilsService,
-  ) {
-    super({
-      usernameField: 'email',
-      passwordField: 'password',
-    } as IStrategyOptions);
-  }
+	constructor(
+		private readonly userService: UserService,
+		private readonly authUtilsService: AuthUtilsService
+	) {
+		super({
+			usernameField: 'email',
+			passwordField: 'password',
+		} as IStrategyOptions);
+	}
 
-  async validate(email: string, password: string) {
-    let user: User;
-    try {
-      user = await this.userService.findOneByEmail(email, [
-        'id',
-        'createdAt',
-        'updatedAt',
-        'deletedAt',
-        'email',
-        'firstName',
-        'lastName',
-        'passwordHash',
-        'salt',
-        'status',
-      ]);
-    } catch (error) {
-      throw new UnauthorizedException('Incorrect email or password');
-    }
-    if (!user) {
-      throw new UnauthorizedException('Incorrect email or password');
-    }
+	async validate(email: string, password: string) {
+		let user: User;
+		try {
+			user = await this.userService.findOneByEmail(email, [
+				'id',
+				'createdAt',
+				'updatedAt',
+				'deletedAt',
+				'email',
+				'firstName',
+				'lastName',
+				'passwordHash',
+				'salt',
+				'status',
+			]);
+		} catch (error) {
+			throw new UnauthorizedException('Incorrect email or password');
+		}
+		if (!user) {
+			throw new UnauthorizedException('Incorrect email or password');
+		}
 
-    const isPasswordCorrect = await this.authUtilsService.verifyPassword(
-      user,
-      password,
-    );
-    if (!isPasswordCorrect)
-      throw new UnauthorizedException('Incorrect email or password');
+		const isPasswordCorrect = await this.authUtilsService.verifyPassword(
+			user,
+			password
+		);
+		if (!isPasswordCorrect)
+			throw new UnauthorizedException('Incorrect email or password');
 
-    this.authUtilsService.verifyStatus(user);
+		this.authUtilsService.verifyStatus(user);
 
-    return instanceToPlain(user);
-  }
+		return instanceToPlain(user);
+	}
 }

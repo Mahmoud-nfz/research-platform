@@ -1,5 +1,5 @@
 export enum ConfigKey {
-  auth = 'auth',
-  database = 'database',
-  misc = 'misc',
+	auth = 'auth',
+	database = 'database',
+	misc = 'misc',
 }
