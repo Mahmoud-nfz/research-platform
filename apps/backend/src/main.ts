@@ -6,6 +6,7 @@ import { ResponseWrapperInterceptor } from '@/common/response-wrapper.intercepto
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ProviderTokens } from '@/common/provider-tokens';
 import { LoggerOptions } from 'winston';
+import { ConfigService } from '@/config';
 
 export class ApplicationBootstrapper {
 	static async bootstrap() {
@@ -14,6 +15,7 @@ export class ApplicationBootstrapper {
 			ProviderTokens.WINSTON_CONFIG
 		);
 		const reflector = app.get(Reflector);
+		const configService = await app.resolve(ConfigService);
 
 		// Enable versioning
 		app.enableVersioning({
@@ -55,7 +57,8 @@ export class ApplicationBootstrapper {
 		// ) as string[];
 		app.enableCors();
 
-		await app.listen(3007);
+		const port = await configService.getMiscConfig().port;
+		await app.listen(port);
 	}
 
 	static async repl() {
