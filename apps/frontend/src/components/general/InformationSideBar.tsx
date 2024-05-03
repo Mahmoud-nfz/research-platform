@@ -33,7 +33,7 @@ export const InformationSidebar = ({
 					<div
 						className="rounded-lg m-1 absolute inset-0 bg-cover bg-center"
 						style={{
-							backgroundImage: `url(${entity.image})`,
+							backgroundImage: `url(${entity.imageUrl})`,
 							opacity: 0.5,
 						}}
 					></div>
@@ -81,7 +81,7 @@ export const InformationSidebar = ({
 
 interface Entity {
 	id: any;
-	image: string;
+	imageUrl: string;
 	name: string;
 	description: string;
 	tags: string[];
