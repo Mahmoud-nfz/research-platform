@@ -1,3 +1,4 @@
+import SearchPage from '../components/general/search/SearchPage'
 export default function Home() {
-	return <div>Hello, World!</div>;
+	return <SearchPage/>;
 }
