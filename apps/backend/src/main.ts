@@ -8,59 +8,59 @@ import { ProviderTokens } from '@/common/provider-tokens';
 import { LoggerOptions } from 'winston';
 
 export class ApplicationBootstrapper {
-  static async bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    const winstonConfig = await app.resolve<LoggerOptions>(
-      ProviderTokens.WINSTON_CONFIG,
-    );
-    const reflector = app.get(Reflector);
+	static async bootstrap() {
+		const app = await NestFactory.create(AppModule);
+		const winstonConfig = await app.resolve<LoggerOptions>(
+			ProviderTokens.WINSTON_CONFIG
+		);
+		const reflector = app.get(Reflector);
 
-    // Enable versioning
-    app.enableVersioning({
-      type: VersioningType.URI,
-    });
+		// Enable versioning
+		app.enableVersioning({
+			type: VersioningType.URI,
+		});
 
-    // enable validation
-    app.useGlobalPipes(
-      new ValidationPipe({
-        transform: true,
-        whitelist: true,
-      }),
-    );
+		// enable validation
+		app.useGlobalPipes(
+			new ValidationPipe({
+				transform: true,
+				whitelist: true,
+			})
+		);
 
-    // standardize response
-    app.useGlobalInterceptors(
-      new ResponseWrapperInterceptor(
-        LoggerService.create(winstonConfig, ResponseWrapperInterceptor.name),
-        reflector,
-      ),
-    );
+		// standardize response
+		app.useGlobalInterceptors(
+			new ResponseWrapperInterceptor(
+				LoggerService.create(winstonConfig, ResponseWrapperInterceptor.name),
+				reflector
+			)
+		);
 
-    // enable filters
-    app.useGlobalFilters(
-      new GlobalHttpExceptionFilter(
-        LoggerService.create(winstonConfig, GlobalHttpExceptionFilter.name),
-      ),
-    );
+		// enable filters
+		app.useGlobalFilters(
+			new GlobalHttpExceptionFilter(
+				LoggerService.create(winstonConfig, GlobalHttpExceptionFilter.name)
+			)
+		);
 
-    // enable logging
-    app.useLogger(LoggerService.create(winstonConfig, this.name));
+		// enable logging
+		app.useLogger(LoggerService.create(winstonConfig, this.name));
 
-    app.enableShutdownHooks();
+		app.enableShutdownHooks();
 
-    // @/configure CORS policy to accept requests only from frontend server
-    // const { front, dashboard } = configService.getMiscConfig();
-    // const allowedOrigins = [front, dashboard].filter(
-    //   (origin) => origin !== undefined,
-    // ) as string[];
-    app.enableCors();
+		// @/configure CORS policy to accept requests only from frontend server
+		// const { front, dashboard } = configService.getMiscConfig();
+		// const allowedOrigins = [front, dashboard].filter(
+		//   (origin) => origin !== undefined,
+		// ) as string[];
+		app.enableCors();
 
-    await app.listen(3001);
-  }
+		await app.listen(3007);
+	}
 
-  static async repl() {
-    await repl(AppModule);
-  }
+	static async repl() {
+		await repl(AppModule);
+	}
 }
 
 ApplicationBootstrapper.bootstrap();

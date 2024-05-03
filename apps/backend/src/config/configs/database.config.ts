@@ -7,24 +7,24 @@ const SUPPORTED_DATABASES = ['postgres'] as const;
 type SupportedDatabases = (typeof SUPPORTED_DATABASES)[number];
 
 export interface DatabaseConfig {
-  type: SupportedDatabases;
-  url: string;
+	type: SupportedDatabases;
+	url: string;
 }
 
 class EnvVariables {
-  @IsIn(SUPPORTED_DATABASES)
-  DB_TYPE: SupportedDatabases;
-  @IsNotEmpty()
-  DB_URI: string;
+	@IsIn(SUPPORTED_DATABASES)
+	DB_TYPE: SupportedDatabases;
+	@IsNotEmpty()
+	DB_URI: string;
 }
 
 export const databaseConfig = registerAs(
-  ConfigKey.database,
-  (): DatabaseConfig => {
-    const envVariables = validate(EnvVariables);
-    return {
-      type: envVariables.DB_TYPE,
-      url: envVariables.DB_URI,
-    };
-  },
+	ConfigKey.database,
+	(): DatabaseConfig => {
+		const envVariables = validate(EnvVariables);
+		return {
+			type: envVariables.DB_TYPE,
+			url: envVariables.DB_URI,
+		};
+	}
 );

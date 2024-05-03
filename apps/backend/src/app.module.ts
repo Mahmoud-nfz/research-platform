@@ -11,17 +11,17 @@ import { ProjectModule } from '@/project/project.module';
 import { DataCollectionModule } from './data-collection/data-collection.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    LoggerModule,
-    DatabaseModule,
-    UserModule,
-    PermissionModule,
-    AuthModule,
-    ProjectModule,
-    DataCollectionModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		ConfigModule.forRoot(),
+		LoggerModule,
+		DatabaseModule,
+		UserModule,
+		PermissionModule,
+		AuthModule,
+		ProjectModule,
+		DataCollectionModule,
+	],
+	controllers: [AppController],
+	providers: [AppService],
 })
 export class AppModule {}

@@ -5,27 +5,27 @@ import { registerAs } from '@nestjs/config';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export interface AuthConfig {
-  jwt: {
-    secret: string;
-    maximumAge: string;
-  };
+	jwt: {
+		secret: string;
+		maximumAge: string;
+	};
 }
 
 class EnvVariables {
-  @IsNotEmpty()
-  JWT_SECRET: string;
-  @IsVercelMs()
-  @IsOptional()
-  JWT_MAXIMUM_AGE?: string;
+	@IsNotEmpty()
+	JWT_SECRET: string;
+	@IsVercelMs()
+	@IsOptional()
+	JWT_MAXIMUM_AGE?: string;
 }
 
 export const authConfig = registerAs(ConfigKey.auth, (): AuthConfig => {
-  const envVariables = validate(EnvVariables);
+	const envVariables = validate(EnvVariables);
 
-  return {
-    jwt: {
-      secret: envVariables.JWT_SECRET,
-      maximumAge: envVariables.JWT_MAXIMUM_AGE ?? '30m',
-    },
-  };
+	return {
+		jwt: {
+			secret: envVariables.JWT_SECRET,
+			maximumAge: envVariables.JWT_MAXIMUM_AGE ?? '30m',
+		},
+	};
 });

@@ -5,8 +5,8 @@ import { AuthenticatedUser, UseJwtAuth } from '@/auth/decorators';
 @Controller('user')
 @UseJwtAuth()
 export class UserController {
-  @Get('profile')
-  async profile(@AuthenticatedUser() user: User) {
-    return user;
-  }
+	@Get('profile')
+	async profile(@AuthenticatedUser() user: User) {
+		return user;
+	}
 }

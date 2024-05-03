@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { FolderIcon } from "@/assets";
+import Image from 'next/image';
+import { FolderIcon } from '@/assets';
 
 export const FolderCard = ({ folder }: { folder: Folder }) => {
 	return (

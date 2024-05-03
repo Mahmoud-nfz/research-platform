@@ -1,10 +1,10 @@
-import { EditIcon, ShareIcon } from "@/assets";
-import React from "react";
-import { UsersSmallIcons } from "../users/UsersSmallIcons";
+import { EditIcon, ShareIcon } from '@/assets';
+import React from 'react';
+import { UsersSmallIcons } from '../users/UsersSmallIcons';
 
 export enum EntityTypes {
-	project = "projet",
-	dataCollection = "collection de données",
+	project = 'projet',
+	dataCollection = 'collection de données',
 }
 
 export const InformationSidebar = ({
@@ -44,8 +44,8 @@ export const InformationSidebar = ({
 					</div>
 				</div>
 				<h3 className="p-3 text-lg font-bold">
-					Description{" "}
-					{entityType == EntityTypes.dataCollection ? "de la" : "du"}{" "}
+					Description{' '}
+					{entityType == EntityTypes.dataCollection ? 'de la' : 'du'}{' '}
 					{entityType} :
 				</h3>
 				<p className="text-sm px-2">{entity.description}</p>
@@ -70,9 +70,7 @@ export const InformationSidebar = ({
 				<div className="flex flex-row px-5 py-1">
 					<UsersSmallIcons usersImages={entity.usersImages} />
 				</div>
-				<h3 className="px-3 mt-1 text-sm font-semibold">
-					Propriétaire:
-				</h3>
+				<h3 className="px-3 mt-1 text-sm font-semibold">Propriétaire:</h3>
 				<div className="flex flex-row px-5 py-1">
 					<UsersSmallIcons usersImages={[entity.ownerImage]} />
 				</div>

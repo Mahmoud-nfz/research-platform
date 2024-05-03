@@ -1,5 +1,5 @@
-import React from "react";
-import { ItemComponent, MenuItems, OtherItems } from "./Items";
+import React from 'react';
+import { ItemComponent, MenuItems, OtherItems } from './Items';
 
 export const SideBar = () => {
 	return (

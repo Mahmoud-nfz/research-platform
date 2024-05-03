@@ -5,7 +5,7 @@ import {
 	ProfileIcon,
 	SettingsOutlineIcon,
 	LogoutIcon,
-} from "@/assets";
+} from '@/assets';
 
 interface Item {
 	title: string;
@@ -22,74 +22,72 @@ export const ItemComponent = (item: Item) => (
 			<span className="inline-flex justify-center items-center ml-4">
 				{item.icon}
 			</span>
-			<span className="ml-2 text-sm tracking-wide truncate">
-				{item.title}
-			</span>
+			<span className="ml-2 text-sm tracking-wide truncate">{item.title}</span>
 		</a>
 	</li>
 );
 
-export const categories = ["Projects", "Data", "Models"];
+export const categories = ['Projects', 'Data', 'Models'];
 
 export const OtherItems: Item[] = [
 	{
-		title: "Profile",
+		title: 'Profile',
 		icon: <ProfileIcon />,
-		href: "/profile",
+		href: '/profile',
 	},
 	{
-		title: "Paramètres",
+		title: 'Paramètres',
 		icon: <SettingsOutlineIcon />,
-		href: "/settings",
+		href: '/settings',
 	},
 	{
-		title: "Se déconnecter",
+		title: 'Se déconnecter',
 		icon: <LogoutIcon />,
-		href: "/logout",
+		href: '/logout',
 	},
 ];
 
 export const MenuItems: Item[] = [
 	{
-		title: "Accueil",
+		title: 'Accueil',
 		icon: <HomeIcon />,
-		href: "/platform",
+		href: '/platform',
 	},
 	{
-		title: "Projets",
+		title: 'Projets',
 		icon: <ProjectIcon />,
-		href: "/platform/projects",
+		href: '/platform/projects',
 	},
 	{
-		title: "Données",
+		title: 'Données',
 		icon: <DataIcon />,
-		href: "/platform/data",
+		href: '/platform/data',
 	},
 ];
 
 export const actions: { [key: string]: Item[] } = {
 	Projects: [
 		{
-			title: "Liste des projets",
+			title: 'Liste des projets',
 			icon: <ProjectIcon />,
-			href: "/platform/projects/",
+			href: '/platform/projects/',
 		},
 		{
-			title: "Nouveau projet",
+			title: 'Nouveau projet',
 			icon: <ProjectIcon />,
-			href: "/platform/projects/new",
+			href: '/platform/projects/new',
 		},
 	],
 	Data: [
 		{
-			title: "Repertoire de données",
+			title: 'Repertoire de données',
 			icon: <DataIcon />,
-			href: "/platform/data/",
+			href: '/platform/data/',
 		},
 		{
-			title: "Créer une collection de données",
+			title: 'Créer une collection de données',
 			icon: <DataIcon />,
-			href: "/platform/data/new",
+			href: '/platform/data/new',
 		},
 	],
 };

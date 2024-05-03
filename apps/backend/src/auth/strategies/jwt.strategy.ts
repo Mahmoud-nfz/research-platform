@@ -12,45 +12,45 @@ import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, AuthStrategy.jwt) {
-  constructor(
-    configService: ConfigService,
-    private readonly userService: UserService,
-    private readonly authUtilsService: AuthUtilsService,
-  ) {
-    const { secret } = configService.getAuthConfig().jwt;
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: secret,
-      passReqToCallback: true,
-    });
-  }
+	constructor(
+		configService: ConfigService,
+		private readonly userService: UserService,
+		private readonly authUtilsService: AuthUtilsService
+	) {
+		const { secret } = configService.getAuthConfig().jwt;
+		super({
+			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+			ignoreExpiration: false,
+			secretOrKey: secret,
+			passReqToCallback: true,
+		});
+	}
 
-  async validate(request: Request, payload: JwtPayloadDto) {
-    const extractor = ExtractJwt.fromAuthHeaderAsBearerToken();
-    const accessToken = extractor(request);
-    if (!accessToken) throw new UnauthorizedException('Invalid token');
+	async validate(request: Request, payload: JwtPayloadDto) {
+		const extractor = ExtractJwt.fromAuthHeaderAsBearerToken();
+		const accessToken = extractor(request);
+		if (!accessToken) throw new UnauthorizedException('Invalid token');
 
-    try {
-      const user = await this.userService.findOne(payload.id, [
-        'id',
-        'createdAt',
-        'updatedAt',
-        'deletedAt',
-        'firstName',
-        'lastName',
-        'email',
-        'status',
-        'accessToken',
-      ]);
-      await this.authUtilsService.verifyStatus(user);
-      await this.authUtilsService.verifyAccessTokenAgainstDatabase(
-        user,
-        accessToken,
-      );
-      return instanceToPlain(user);
-    } catch {
-      throw new UnauthorizedException('Invalid token');
-    }
-  }
+		try {
+			const user = await this.userService.findOne(payload.id, [
+				'id',
+				'createdAt',
+				'updatedAt',
+				'deletedAt',
+				'firstName',
+				'lastName',
+				'email',
+				'status',
+				'accessToken',
+			]);
+			await this.authUtilsService.verifyStatus(user);
+			await this.authUtilsService.verifyAccessTokenAgainstDatabase(
+				user,
+				accessToken
+			);
+			return instanceToPlain(user);
+		} catch {
+			throw new UnauthorizedException('Invalid token');
+		}
+	}
 }

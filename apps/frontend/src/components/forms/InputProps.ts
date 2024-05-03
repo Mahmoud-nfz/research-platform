@@ -1,5 +1,5 @@
-import { InputHTMLAttributes } from "react";
-import { FieldValues, Path, UseFormRegister } from "react-hook-form";
+import { InputHTMLAttributes } from 'react';
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 export interface InputProps<D extends FieldValues>
 	extends InputHTMLAttributes<HTMLInputElement> {

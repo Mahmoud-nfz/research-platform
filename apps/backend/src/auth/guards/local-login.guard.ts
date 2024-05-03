@@ -5,9 +5,9 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class LocalLoginAuthGuard extends AuthGuard(AuthStrategy.local_login) {
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const temp = await super.canActivate(context);
-    const result = typeof temp === 'boolean' ? temp : await lastValueFrom(temp);
-    return result;
-  }
+	async canActivate(context: ExecutionContext): Promise<boolean> {
+		const temp = await super.canActivate(context);
+		const result = typeof temp === 'boolean' ? temp : await lastValueFrom(temp);
+		return result;
+	}
 }

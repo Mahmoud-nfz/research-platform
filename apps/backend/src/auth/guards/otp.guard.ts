@@ -6,15 +6,15 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class OtpAuthGuard extends AuthGuard(AuthStrategy.otp) {
-  constructor(private readonly userService: UserService) {
-    super();
-  }
+	constructor(private readonly userService: UserService) {
+		super();
+	}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const temp = await super.canActivate(context);
-    const result = typeof temp === 'boolean' ? temp : await lastValueFrom(temp);
-    const request = context.switchToHttp().getRequest();
-    request.user = await this.userService.findOne(request.user);
-    return result;
-  }
+	async canActivate(context: ExecutionContext): Promise<boolean> {
+		const temp = await super.canActivate(context);
+		const result = typeof temp === 'boolean' ? temp : await lastValueFrom(temp);
+		const request = context.switchToHttp().getRequest();
+		request.user = await this.userService.findOne(request.user);
+		return result;
+	}
 }
