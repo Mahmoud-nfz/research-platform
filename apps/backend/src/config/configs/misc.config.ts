@@ -3,7 +3,7 @@ import { validate } from '@/config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { LogLevel } from '@/logger/logger.types';
 import { Type } from 'class-transformer';
-import { IsBooleanString, IsEnum, IsOptional } from 'class-validator';
+import { IsBooleanString, IsEnum, IsOptional, IsPort } from 'class-validator';
 
 export enum Environment {
 	dev = 'development',
@@ -15,6 +15,7 @@ export interface MiscConfig {
 	environment: Environment;
 	debug: boolean;
 	level: LogLevel;
+	port: number;
 }
 
 class EnvVariables {
@@ -28,6 +29,9 @@ class EnvVariables {
 	@IsEnum(LogLevel)
 	@IsOptional()
 	LOG_LEVEL: LogLevel = LogLevel.trace;
+	@IsOptional()
+	@IsPort()
+	PORT?: string;
 }
 
 export const miscConfig = registerAs(ConfigKey.misc, (): MiscConfig => {
@@ -39,5 +43,6 @@ export const miscConfig = registerAs(ConfigKey.misc, (): MiscConfig => {
 				? envVariables.DEBUG === 'true'
 				: (envVariables.NODE_ENV ?? Environment.dev) === Environment.dev,
 		level: envVariables.LOG_LEVEL,
+		port: parseInt(envVariables.PORT ?? '3001'),
 	};
 });
