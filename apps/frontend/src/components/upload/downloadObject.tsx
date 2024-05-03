@@ -12,8 +12,9 @@ const Download: React.FC = () => {
 
   const handleGetObjects = async () => {
     try {
-      const objects = await getObjects(bucketName);
-      setObjects(objects.map((object) => object.name));
+      const {data: objects} = await getObjects(bucketName);
+
+      setObjects(objects);
     } catch (error) {
       console.error("Error getting objects:", error);
     }
