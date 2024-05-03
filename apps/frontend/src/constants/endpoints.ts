@@ -15,7 +15,7 @@ export const endpoints = {
     objectName: string
   ) => `/bucket/${sourceBucket}/${destinationBucket}/${objectName}`,
   upload: '/upload',
-  download: '/download'
+  download: '/download',
   createDataCollection: "/data-collections",
   allDataCollections: "/data-collections",
   dataCollectionsPerProject: "/data-collections",
