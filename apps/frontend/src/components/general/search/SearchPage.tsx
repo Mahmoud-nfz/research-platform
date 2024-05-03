@@ -1,5 +1,5 @@
 "use client";
-import { searchObjects } from '@/actions/metadata/searchObjects';
+import { searchObjectsMetadata } from '@/actions/metadata/searchObjectsMetadata';
 import { useState } from 'react';
 
 const SearchPage = () => {
@@ -8,7 +8,7 @@ const [searchResults, setSearchResults] = useState<{ objectName: string; descrip
 
 const handleSearch = async () => {
     try {
-        const results = await searchObjects(query);
+        const results = await searchObjectsMetadata(query);
         setSearchResults(results);
     } catch (error) {
         console.error('Error searching:', error);

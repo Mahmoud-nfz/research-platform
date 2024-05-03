@@ -4,7 +4,7 @@ export const endpoints = {
   projects: "/projects",
   createProject: "/projects",
   createObjectMetadata: "/elastic/create",
-  searchObjects: "/elastic",
+  searchObjectsMetadata: "/elastic",
   getObjects: (bucketName: string) => `/bucket/${bucketName}/objects`,
   deleteObject: (bucketName: string, objectName: string) =>
     `/bucket/${bucketName}/object/${objectName}`,
