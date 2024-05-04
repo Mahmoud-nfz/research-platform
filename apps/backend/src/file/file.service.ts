@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataCollection, File } from '@/database/entities';
 import { DataSource, Repository } from 'typeorm';
@@ -36,7 +40,16 @@ export class FileService {
 				.where('id = :id', { id: file.id })
 				.returning('*')
 				.execute()
-				.then((res) => res.raw[0]);
+				.then((res) => {
+					if (res.affected === 0)
+						throw new BadRequestException('File not found');
+					else
+						return new File({
+							uploadedAt: res.raw[0]?.uploaded_at ?? null,
+							dataCollectionId: res.raw[0]?.data_collection_id,
+						});
+				});
+
 			await this.elasticsearchService.index({
 				index: MetadataIndex.files,
 				document: new FileMetadata(result),
@@ -49,5 +62,17 @@ export class FileService {
 		} finally {
 			await queryRunner.release();
 		}
+	}
+
+	async findFilesByDataCollection(dataCollection: DataCollection) {
+		const result = await this.elasticsearchService.search<FileMetadata>({
+			index: MetadataIndex.files,
+			query: {
+				term: {
+					dataCollectionId: dataCollection.id,
+				},
+			},
+		});
+		return result.hits.hits.map((res) => res._source);
 	}
 }

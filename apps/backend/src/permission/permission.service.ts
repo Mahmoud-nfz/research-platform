@@ -30,6 +30,8 @@ export class PermissionService {
 		user: User,
 		permissions: Record<string, string[]>
 	): Promise<boolean> {
+		if (Object.keys(permissions).length == 0) return true;
+
 		const raw = await this.repositrory
 			.createQueryBuilder('permission')
 			.select('permission.subject_id')
