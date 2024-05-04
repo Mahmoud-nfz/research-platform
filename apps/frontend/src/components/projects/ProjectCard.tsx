@@ -68,17 +68,11 @@ export const ProjectCard = ({ project }: { project: Project }) => {
 							))}
 						</div>
 						<div className="flex flex-row">
-							<div
-								className="p-1 flex flex-row justify-center items-center font-normal"
-								style={{ fontSize: '12px' }}
-							>
+							<div className="p-1 text-xs flex flex-row justify-center items-center font-normal">
 								<CloudUploadIcon className="h-4 w-4 mr-1" />
 								{'5.7 GB'}
 							</div>
-							<div
-								className="p-1 flex flex-row justify-center items-center font-normal"
-								style={{ fontSize: '12px' }}
-							>
+							<div className="p-1 text-xs flex flex-row justify-center items-center font-normal">
 								<FolderIcon className="h-3 w-3 mr-1" />
 								{12} {' collections'}
 							</div>

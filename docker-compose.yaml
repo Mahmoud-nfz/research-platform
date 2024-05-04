@@ -41,6 +41,25 @@ services:
       - db_password
     networks:
       - db_network
+      - es_network
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    restart: always
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    volumes:
+      - type: tmpfs
+        target: /usr/share/elasticsearch/data
+        tmpfs:
+          size: "1000000"
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - es_network
 
 secrets:
   db_password:
@@ -50,3 +69,4 @@ secrets:
 
 networks:
   db_network:
+  es_network:

@@ -6,14 +6,14 @@ import {
 } from 'typeorm';
 
 export abstract class Base {
-	@PrimaryGeneratedColumn('uuid', { name: 'id' })
+	@PrimaryGeneratedColumn('uuid')
 	id: string;
-	@CreateDateColumn({ name: 'created_at' })
+	@CreateDateColumn()
 	createdAt: Date;
-	@UpdateDateColumn({ name: 'updated_at' })
+	@UpdateDateColumn()
 	updatedAt: Date;
-	@DeleteDateColumn({ name: 'deleted_at' })
-	deletedAt: Date;
+	@DeleteDateColumn()
+	deletedAt: Date | null;
 
 	constructor(values: Partial<Base>) {
 		Object.assign(this, values);
