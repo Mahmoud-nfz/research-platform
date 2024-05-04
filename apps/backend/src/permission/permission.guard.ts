@@ -26,7 +26,6 @@ export class PermissionGuard implements CanActivate {
 			>(PERMISSION_KEY, [context.getHandler(), context.getClass()])
 			.filter((permission) => !!permission);
 
-		console.log(requiredPermissionsArray);
 		const requiredPermissionsMap = requiredPermissionsArray
 			.map((p) => {
 				const subject = p.subject(request);

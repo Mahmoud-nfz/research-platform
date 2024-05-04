@@ -39,6 +39,7 @@ export class FileMetadata implements Partial<File> {
 
 	constructor(file: File) {
 		this.id = file.id;
+		this.name = file.name;
 		this.dataCollectionId = file.dataCollectionId;
 		this.hash = file.hash;
 		this.size = file.size;
