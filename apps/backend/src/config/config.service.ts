@@ -4,6 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService as ConfigurationService } from '@nestjs/config';
 import { CONFIGURATION_TOKEN } from '@nestjs/config/dist/config.constants';
 import { ConfigKey } from './config-key.enum';
+import { ElasticsearchConfig } from './configs/elasticsearch.config';
 
 @Injectable()
 export class ConfigService extends ConfigurationService {
@@ -23,5 +24,9 @@ export class ConfigService extends ConfigurationService {
 
 	getMiscConfig(): MiscConfig {
 		return this.getOrThrow<MiscConfig>(ConfigKey.misc);
+	}
+
+	getElasticsearchConfig(): ElasticsearchConfig {
+		return this.getOrThrow<ElasticsearchConfig>(ConfigKey.elasticsearch);
 	}
 }
