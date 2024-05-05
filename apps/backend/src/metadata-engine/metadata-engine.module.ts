@@ -5,7 +5,7 @@ import {
 	ElasticsearchService,
 } from '@nestjs/elasticsearch';
 import { IndexFactory, PropertiesFactory } from './_metadata';
-import { FileMetadata } from './schemas';
+import * as metadataSchemas from './schemas';
 
 @Global()
 @Module({
@@ -27,18 +27,20 @@ export class MetadataEngineModule implements OnApplicationBootstrap {
 
 	async onApplicationBootstrap() {
 		// ensure that mappings are created at startup
-		const indexMetadata = IndexFactory.createForClass(FileMetadata);
-		this.elasticsearchService.indices
-			.exists({ index: indexMetadata.index })
-			.then((exists) => {
-				if (exists) return;
-				this.elasticsearchService.indices.create({
-					...indexMetadata,
-					mappings: {
-						properties: PropertiesFactory.createForClass(FileMetadata),
-						...(indexMetadata.mappings?.properties ?? {}),
-					},
+		Object.values(metadataSchemas).forEach((SchemaMetadata) => {
+			const indexMetadata = IndexFactory.createForClass(SchemaMetadata);
+			this.elasticsearchService.indices
+				.exists({ index: indexMetadata.index })
+				.then((exists) => {
+					if (exists) return;
+					this.elasticsearchService.indices.create({
+						...indexMetadata,
+						mappings: {
+							properties: PropertiesFactory.createForClass(SchemaMetadata),
+							...(indexMetadata.mappings?.properties ?? {}),
+						},
+					});
 				});
-			});
+		});
 	}
 }
