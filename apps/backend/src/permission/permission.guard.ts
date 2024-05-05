@@ -20,9 +20,11 @@ export class PermissionGuard implements CanActivate {
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 		const request = context.switchToHttp().getRequest<Request>();
 		const user = request.user as User;
-		const requiredPermissionsArray = this.reflector.getAllAndMerge<
-			PermissionAggregate[]
-		>(PERMISSION_KEY, [context.getHandler(), context.getClass()]);
+		const requiredPermissionsArray = this.reflector
+			.getAll<
+				PermissionAggregate[]
+			>(PERMISSION_KEY, [context.getHandler(), context.getClass()])
+			.filter((permission) => !!permission);
 
 		const requiredPermissionsMap = requiredPermissionsArray
 			.map((p) => {

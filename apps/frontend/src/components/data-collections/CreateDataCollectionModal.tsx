@@ -44,7 +44,6 @@ export const CreateDataCollectionModal = ({
 	} = useCreateDataCollection();
 
 	const onSubmit = useCallback((data: CreateDataCollectionSchema) => {
-		console.log(data);
 		createDataCollection(
 			{ ...data },
 			{
