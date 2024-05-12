@@ -128,4 +128,32 @@ export class ProjectService {
 				.getCount();
 		}
 	}
+
+	async searchAllProjects(user: User, query: string) {
+		const accessibleProjects = await this.findManyByUser(user);
+
+		const result = await this.elasticsearchService.search<ProjectMetadata>({
+			index: MetadataIndex.projects,
+			query: {
+				bool: {
+					must: [
+						{
+							terms: {
+								id: accessibleProjects.map((p) => p.id),
+							},
+						},
+						{
+							multi_match: {
+								query,
+								fields: ['name', 'tags', 'description'],
+							},
+						},
+					],
+				},
+			},
+		});
+
+		console.log(result.hits.hits);
+		return result.hits.hits.map((res) => res._source);
+	}
 }

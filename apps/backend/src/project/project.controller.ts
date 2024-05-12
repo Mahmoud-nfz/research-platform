@@ -1,4 +1,11 @@
-import { Body, Controller, Get, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Get,
+	ParseUUIDPipe,
+	Post,
+	Query,
+} from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { AuthenticatedUser, UseJwtAuth } from '@/auth/decorators';
 import { CreateProjectDto } from './dtos/create-project.dto';
@@ -52,5 +59,16 @@ export class ProjectController {
 	@Get('can-create')
 	async findWithCreatePermission(@AuthenticatedUser() user: User) {
 		return this.projectSerice.findManyByUserWithCreatePermission(user);
+	}
+
+	/**
+	 * Search through all projects accessible by authenticated user.
+	 */
+	@Get('search')
+	async searchAllProjects(
+		@AuthenticatedUser() user: User,
+		@Query('query') query: string
+	) {
+		return this.projectSerice.searchAllProjects(user, query);
 	}
 }

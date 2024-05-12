@@ -22,6 +22,7 @@ export class ProjectMetadata implements Partial<Project> {
 
 	constructor(project: Project) {
 		this.id = project.id;
+		this.name = project.name;
 		this.ownerId = project.ownerId;
 		this.tags = project.tags;
 		this.description = project.description;

@@ -1,71 +1,111 @@
 'use client';
 
-import React, { useState } from 'react';
-import { DownChevronIcon, SearchIcon } from '@/assets';
+import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import { CheckIcon, DownChevronIcon, SearchIcon } from '@/assets';
+import { Listbox, Transition } from '@headlessui/react';
+import clsxm from '@/utils/clsxm';
+import { useForm } from 'react-hook-form';
+import { usePathname, useRouter } from 'next/navigation';
 
-const searchCategories = ['Projects', 'Data', 'Models'];
+const searchCategories = [
+	{ value: 'all', label: 'Tous' },
+	{ value: 'projects', label: 'Projets' },
+	{ value: 'data', label: 'Data' },
+	{ value: 'models', label: 'Models' },
+];
 
 export const SearchBar = () => {
-	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const router = useRouter();
+	const path = usePathname();
+	const defaultSelected = useMemo(() => {
+		const index = searchCategories.findIndex((category) =>
+			path.includes(category.value)
+		);
+		return searchCategories[index == -1 ? 0 : index];
+	}, [path]);
+	const [selected, setSelected] = useState(defaultSelected);
+	const { register, handleSubmit } = useForm<{ search: string }>({
+		mode: 'onTouched',
+	});
 
-	const toggleDropdown = () => {
-		setIsDropdownOpen(!isDropdownOpen);
-	};
-
-	const uniformHeightStyle = {
-		height: '40px',
-		display: 'flex',
-		alignItems: 'center',
+	const handleSearch = (data: { search: string }) => {
+		router.push(
+			`/platform/${selected.value}/search-results?query=${data.search}`
+		);
 	};
 
 	return (
-		<form className="flex-grow mx-auto flex">
-			<div className="relative">
-				<button
-					id="dropdown-button"
-					className="flex-shrink-0 z-10 inline-flex items-center py-1 pl-4 pr-2 text-sm font-medium text-center text-gray-900 bg-gray-100 rounded-l-md hover:bg-gray-200"
-					type="button"
-					onClick={toggleDropdown}
-					style={uniformHeightStyle}
-				>
-					Tous
-					<DownChevronIcon className="h-3 w-3 ml-3" />
-				</button>
-				<div
-					id="dropdown"
-					className={`absolute mt-1 z-10 ${isDropdownOpen ? 'block' : 'hidden'} bg-white divide-y divide-gray-100 rounded-lg shadow w-44`}
-					style={{ left: 0 }}
-				>
-					<ul
-						className="py-2 text-sm text-gray-700"
-						aria-labelledby="dropdown-button"
-					>
-						{searchCategories.map((category, idx) => (
-							<li key={idx}>
-								<button
-									type="button"
-									className="inline-flex w-full px-4 py-2 hover:bg-gray-100"
-								>
-									{category}
-								</button>
-							</li>
-						))}
-					</ul>
-				</div>
+		<form
+			onSubmit={handleSubmit(handleSearch)}
+			className="flex-grow mx-auto flex h-10"
+		>
+			<div>
+				<Listbox value={selected} onChange={setSelected}>
+					<div className="relative h-full">
+						<Listbox.Button
+							type="button"
+							className="relative w-32 h-full text-gray-900 cursor-default rounded-l-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+						>
+							<span className="block truncate">{selected.label}</span>
+							<span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+								<DownChevronIcon className="h-3 w-3" aria-hidden="true" />
+							</span>
+						</Listbox.Button>
+						<Transition
+							as={Fragment}
+							leave="transition ease-in duration-100"
+							leaveFrom="opacity-100"
+							leaveTo="opacity-0"
+						>
+							<Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+								{searchCategories.map((category, idx) => (
+									<Listbox.Option
+										key={idx}
+										className={({ active }) =>
+											clsxm(
+												'relative cursor-default select-none py-2 pl-10 pr-4',
+												active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+											)
+										}
+										value={category}
+									>
+										{({ selected }) => (
+											<>
+												<span
+													className={clsxm(
+														'block truncate',
+														selected ? 'font-medium' : 'font-normal'
+													)}
+												>
+													{category.label}
+												</span>
+												{selected ? (
+													<span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+														<CheckIcon className="h-5 w-5" aria-hidden="true" />
+													</span>
+												) : null}
+											</>
+										)}
+									</Listbox.Option>
+								))}
+							</Listbox.Options>
+						</Transition>
+					</div>
+				</Listbox>
 			</div>
-			<div className="relative w-full">
+			<div className="relative w-full flex">
 				<input
-					type="search"
-					id="search-dropdown"
-					className="block px-3 py-0 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-md border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+					id="search"
 					placeholder="Search Projects, Data, Templates..."
+					{...register('search')}
+					className={clsxm(
+						'p-2 placeholder-gray-500 text-gray-900 text-sm h-full w-full border focus:border-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-300 transition-colors duration-300'
+					)}
 					required
-					style={uniformHeightStyle}
 				/>
 				<button
 					type="submit"
-					className="absolute top-0 right-0 pl-2 text-sm font-medium text-black bg-gray-200 rounded-r-md border hover:bg-blue-100 focus:ring-4 focus:outline-none focus:ring-blue-300"
-					style={{ ...uniformHeightStyle, width: '40px' }} // This sets the width of the search button
+					className="pl-2 h-full w-10 text-sm font-medium text-black bg-gray-200 rounded-r-md border focus:ring-4 focus:outline-none focus:ring-blue-300"
 				>
 					<SearchIcon className="h-5 w-5" />
 					<span className="sr-only">Search</span>
