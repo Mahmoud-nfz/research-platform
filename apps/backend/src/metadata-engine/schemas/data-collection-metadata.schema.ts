@@ -24,6 +24,7 @@ export class DataCollectionMetadata implements Partial<DataCollection> {
 
 	constructor(dataCollection: DataCollection) {
 		this.id = dataCollection.id;
+		this.name = dataCollection.name;
 		this.ownerId = dataCollection.ownerId;
 		this.projectId = dataCollection.projectId;
 		this.tags = dataCollection.tags;

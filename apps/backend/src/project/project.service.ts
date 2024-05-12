@@ -153,7 +153,6 @@ export class ProjectService {
 			},
 		});
 
-		console.log(result.hits.hits);
 		return result.hits.hits.map((res) => res._source);
 	}
 }
