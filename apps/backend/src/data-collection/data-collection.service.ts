@@ -1,14 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataCollection } from '../database/entities/data-collection.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Permission, Project, User } from '@/database/entities';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
+import { MetadataIndex } from '@/metadata-engine/metadata-index.enum';
+import { DataCollectionMetadata } from '@/metadata-engine/schemas';
 
 @Injectable()
 export class DataCollectionService {
 	constructor(
 		@InjectRepository(DataCollection)
-		private readonly repository: Repository<DataCollection>
+		private readonly repository: Repository<DataCollection>,
+		private readonly elasticsearchService: ElasticsearchService,
+		private readonly dataSource: DataSource
 	) {}
 
 	async createOne(
@@ -16,8 +21,28 @@ export class DataCollectionService {
 		project: Project,
 		values: Partial<DataCollection>
 	) {
-		const dataCollection = new DataCollection({ ...values, owner, project });
-		return this.repository.save(dataCollection);
+		const queryRunner = this.dataSource.createQueryRunner();
+		await queryRunner.connect();
+		await queryRunner.startTransaction();
+		try {
+			const dataCollection = new DataCollection({ ...values, owner, project });
+			const result = await queryRunner.manager
+				.withRepository(this.repository)
+				.save(dataCollection);
+			await this.elasticsearchService.index({
+				index: MetadataIndex.data_collections,
+				document: new DataCollectionMetadata(result),
+			});
+			await queryRunner.commitTransaction();
+			// do not worry about the finally clause executing after the return.
+			// it is always executed. this can be tested easily.
+			return result;
+		} catch (error) {
+			await queryRunner.rollbackTransaction();
+			throw new InternalServerErrorException(error);
+		} finally {
+			await queryRunner.release();
+		}
 	}
 
 	async findManyByOwner(owner: User) {

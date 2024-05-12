@@ -1,9 +1,13 @@
+import { getHref } from '@/utils/getHref';
+
 export * from './files';
 
 export const login = '/auth/login';
 export const profile = '/user/profile';
 export const projects = '/projects';
 export const createProject = '/projects';
+export const searchProjects = (searchParams: { query: string }) =>
+	getHref('/projects/search', searchParams);
 export const createObjectMetadata = '/elastic/create';
 export const searchObjectsMetadata = '/elastic';
 export const getObjects = (bucketName: string) =>

@@ -1,18 +1,43 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { DataCollection, Permission, User, Project } from '@/database/entities';
 import { ProjectAction } from './project-action.enum';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
+import { MetadataIndex } from '@/metadata-engine/metadata-index.enum';
+import { ProjectMetadata } from '@/metadata-engine/schemas';
 
 @Injectable()
 export class ProjectService {
 	constructor(
-		@InjectRepository(Project) private readonly repository: Repository<Project>
+		@InjectRepository(Project) private readonly repository: Repository<Project>,
+		private readonly elasticsearchService: ElasticsearchService,
+		private readonly dataSource: DataSource
 	) {}
 
 	async createOne(owner: User, infos: Partial<Project>) {
-		const project = new Project({ ...infos, owner });
-		return this.repository.save(project);
+		const queryRunner = this.dataSource.createQueryRunner();
+		await queryRunner.connect();
+		await queryRunner.startTransaction();
+		try {
+			const project = new Project({ ...infos, owner });
+			const result = await queryRunner.manager
+				.withRepository(this.repository)
+				.save(project);
+			await this.elasticsearchService.index({
+				index: MetadataIndex.projects,
+				document: new ProjectMetadata(result),
+			});
+			await queryRunner.commitTransaction();
+			// do not worry about the finally clause executing after the return.
+			// it is always executed. this can be tested easily.
+			return result;
+		} catch (error) {
+			await queryRunner.rollbackTransaction();
+			throw new InternalServerErrorException(error);
+		} finally {
+			await queryRunner.release();
+		}
 	}
 
 	async findManyByOwner(owner: User) {
@@ -102,5 +127,32 @@ export class ProjectService {
 				)
 				.getCount();
 		}
+	}
+
+	async searchAllProjects(user: User, query: string) {
+		const accessibleProjects = await this.findManyByUser(user);
+
+		const result = await this.elasticsearchService.search<ProjectMetadata>({
+			index: MetadataIndex.projects,
+			query: {
+				bool: {
+					must: [
+						{
+							terms: {
+								id: accessibleProjects.map((p) => p.id),
+							},
+						},
+						{
+							multi_match: {
+								query,
+								fields: ['name', 'tags', 'description'],
+							},
+						},
+					],
+				},
+			},
+		});
+
+		return result.hits.hits.map((res) => res._source);
 	}
 }
