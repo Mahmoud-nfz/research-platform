@@ -24,7 +24,6 @@ const CopyObjects: React.FC = () => {
 		try {
 			for (const objectName of selectedObjects) {
 				await copyObject(sourceBucketName, targetBucketName, objectName);
-				console.log('Object copied:', objectName);
 			}
 		} catch (error) {
 			console.error('Error copying objects:', error);
