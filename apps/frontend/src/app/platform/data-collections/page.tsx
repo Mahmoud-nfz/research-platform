@@ -4,6 +4,8 @@ import { DataCollection, Project } from '@/types/entities';
 import { fetcher } from '@/utils/fetcher';
 import { endpoints } from '@/constants';
 
+export const dynamic = 'force-dynamic';
+
 async function getDataCollections() {
 	return fetcher<DataCollection[]>(endpoints.allDataCollections, {
 		method: 'GET',

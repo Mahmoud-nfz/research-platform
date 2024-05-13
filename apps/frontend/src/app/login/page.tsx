@@ -25,7 +25,7 @@ export default function Login(): JSX.Element {
 
 	const { mutate: login, isError, isPending } = useLogin();
 
-	const onSubmit = useCallback((data: LoginSchema) => {
+	const onSubmit = (data: LoginSchema) => {
 		login(
 			{
 				email: data.email,
@@ -38,7 +38,7 @@ export default function Login(): JSX.Element {
 				},
 			}
 		);
-	}, []);
+	};
 
 	return (
 		<div className="flex h-screen">

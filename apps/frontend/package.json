@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
+		"prod": "node server.js",
 		"start": "next start",
 		"lint": "next lint",
 		"svgr": "pnpx @svgr/cli -d src/assets --ignore-existing --icon --typescript public/icons"
@@ -20,6 +21,7 @@
 		"react": "^18",
 		"react-dom": "^18",
 		"react-hook-form": "^7.51.3",
+		"sharp": "^0.33.3",
 		"tailwind-merge": "^2.3.0",
 		"websocket": "^1.0.34",
 		"zod": "^3.22.5"

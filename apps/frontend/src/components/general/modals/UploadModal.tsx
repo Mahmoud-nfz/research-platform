@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { uploadSchema, UploadSchema } from '@/types/schemas/upload.schema';
 import Input from '@/components/forms/Input';
@@ -28,12 +28,12 @@ export default function UploadModal() {
 
 	const { mutate: uploadFile, isError, isPending } = useUploadFile();
 
-	const handleUpload = useCallback((data: UploadSchema) => {
+	const handleUpload = (data: UploadSchema) => {
 		uploadFile({
 			data,
 			setUploadProgress,
 		});
-	}, []);
+	};
 
 	return (
 		<>

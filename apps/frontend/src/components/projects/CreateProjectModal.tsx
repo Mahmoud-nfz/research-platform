@@ -31,7 +31,7 @@ export const CreateProjectModal = () => {
 
 	const { mutate: createProject, isPending, isError } = useCreateProject();
 
-	const onSubmit = useCallback((data: CreateProjectSchema) => {
+	const onSubmit = (data: CreateProjectSchema) => {
 		createProject(
 			{ ...data },
 			{
@@ -40,7 +40,7 @@ export const CreateProjectModal = () => {
 				},
 			}
 		);
-	}, []);
+	};
 
 	return (
 		<>

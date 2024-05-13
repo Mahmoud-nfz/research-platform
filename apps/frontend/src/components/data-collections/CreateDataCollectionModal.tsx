@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import Input from '../forms/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -43,7 +43,7 @@ export const CreateDataCollectionModal = ({
 		isError,
 	} = useCreateDataCollection();
 
-	const onSubmit = useCallback((data: CreateDataCollectionSchema) => {
+	const onSubmit = (data: CreateDataCollectionSchema) => {
 		createDataCollection(
 			{ ...data },
 			{
@@ -52,7 +52,7 @@ export const CreateDataCollectionModal = ({
 				},
 			}
 		);
-	}, []);
+	};
 
 	const projectOptions = useMemo(
 		() =>
@@ -61,7 +61,7 @@ export const CreateDataCollectionModal = ({
 				value: p.id,
 				label: p.name,
 			})),
-		[]
+		[projectsWithCreatePermission]
 	);
 
 	return (

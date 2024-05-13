@@ -2,5 +2,9 @@
 /**/dist
 /**/.gitignore
 /**/.env*
+/**/.next
+/**/Dockerfile
+/**/.dockerignore
+/**/docker-compose.yaml
 /.vscode
 *.md
