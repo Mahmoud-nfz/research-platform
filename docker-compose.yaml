@@ -23,7 +23,7 @@ services:
     depends_on:
       - backend
     ports:
-      - 3000:3000
+      - 3010:3000
     env_file:
       - apps/frontend/.env.example
     environment:
@@ -40,7 +40,7 @@ services:
       - db
       - elasticsearch
     ports:
-      - 3001:3001
+      - 3011:3001
     env_file:
       - apps/backend/.env.example
     environment:
