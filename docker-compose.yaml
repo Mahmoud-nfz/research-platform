@@ -5,43 +5,53 @@ services:
     image: postgres:16
     restart: on-failure
     environment:
-      - POSTGRES_PASSWORD=/run/secrets/db_password
-      - POSTGRES_USER=/run/secrets/db_username
-      - POSTGRES_DB=${DB_NAME:-db}
-    entrypoint: /usr/local/bin/database_entrypoint.sh
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=efrei
+      - POSTGRES_DB=db
     volumes:
-      - ${SSL_DIR:?}:/ssl
-      - ./scripts/database_entrypoint.sh:/usr/local/bin/database_entrypoint.sh
-    secrets:
-      - db_username
-      - db_password
+      - type: tmpfs
+        target: /var/lib/postgresql/data
+        tmpfs:
+          size: 134217728 # 128*2^20 bytes = 128Mb
     networks:
       - db_network
 
+  frontend:
+    build:
+      dockerfile: ./apps/frontend/Dockerfile
+    restart: on-failure
+    depends_on:
+      - backend
+    ports:
+      - 3010:3000
+    env_file:
+      - apps/frontend/.env.example
+    environment:
+      - BACKEND_URL=http://localhost:3001
+      - ELASTICSEARCH_URL=http://elasticsearch:3002
+    networks:
+      - app_network
+
   backend:
     build:
-      args:
-        APP: backend
+      dockerfile: ./apps/backend/Dockerfile
     restart: on-failure
     depends_on:
       - db
+      - elasticsearch
     ports:
-      - 3001:3001
+      - 3011:3001
     env_file:
-      - apps/backend/.env
+      - apps/backend/.env.example
     environment:
-      - DB_TYPE=postgres
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=${DB_NAME:-db}
-      - DB_PASSWORD=/run/secrets/db_password
-      - DB_USERNAME=/run/secrets/db_username
-    secrets:
-      - db_username
-      - db_password
+      - NODE_ENV=development
+      - DB_URI=postgres://efrei:secret@db:5432/db
+      - ELASTICSEARCH_NODE=http://elasticsearch:9200
+      - FRONTEND_URL=http://frontend:3000
     networks:
       - db_network
       - es_network
+      - app_network
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
@@ -54,19 +64,23 @@ services:
       - type: tmpfs
         target: /usr/share/elasticsearch/data
         tmpfs:
-          size: "1000000"
+          size: 134217728 # 128*2^20 bytes = 128Mb
     ports:
       - 9200:9200
       - 9300:9300
     networks:
       - es_network
 
-secrets:
-  db_password:
-    file: ${SECRETS_DIR:?}/db_password.txt
-  db_username:
-    file: ${SECRETS_DIR:?}/db_username.txt
+  adminer:
+    image: adminer:4.8.1
+    restart: on-failure
+    ports:
+      - 8080:8080
+    networks:
+      - es_network
+      - db_network
 
 networks:
   db_network:
   es_network:
+  app_network:

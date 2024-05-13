@@ -2,7 +2,6 @@ import { ConfigKey } from '@/config/config-key.enum';
 import { validate } from '@/config/config.validator';
 import { registerAs } from '@nestjs/config';
 import { LogLevel } from '@/logger/logger.types';
-import { Type } from 'class-transformer';
 import {
 	IsBooleanString,
 	IsEnum,
@@ -31,7 +30,6 @@ class EnvVariables {
 	@IsEnum(Environment)
 	@IsOptional()
 	NODE_ENV?: Environment;
-	@Type(() => Number)
 	@IsBooleanString()
 	@IsOptional()
 	DEBUG?: 'true' | 'false';

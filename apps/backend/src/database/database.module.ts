@@ -17,7 +17,7 @@ import { BuisnessEntities } from './entities';
 					type: dbConfig.type,
 					synchronize: env === Environment.dev,
 					autoLoadEntities: true,
-					ssl: true,
+					ssl: env === Environment.prod,
 					namingStrategy: new DatabaseSnakeNamingStrategy(),
 					logging: 'all',
 				};

@@ -31,6 +31,7 @@ const Upload: React.FC = () => {
 		if (!folderName) {
 			setFolderName('');
 		}
+		// @ts-ignore
 		uploadFile({ selectedFile, bucketName, folderName, setUploadProgress });
 	};
 

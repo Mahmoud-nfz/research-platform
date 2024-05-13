@@ -7,6 +7,8 @@ import path from 'path';
 import { PageProps } from '@/types/page-props';
 import { notFound } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 async function getDataCollections(projectId: string) {
 	const endpoint = path.join(endpoints.dataCollectionsPerProject, projectId);
 	return fetcher<DataCollection[]>(endpoint, {
