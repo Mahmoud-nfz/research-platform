@@ -61,7 +61,7 @@ export const MenuItems: Item[] = [
 	{
 		title: 'Données',
 		icon: <DataIcon />,
-		href: '/platform/data',
+		href: '/platform/data-collections',
 	},
 ];
 

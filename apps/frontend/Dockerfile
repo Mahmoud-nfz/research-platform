@@ -45,11 +45,11 @@ RUN pnpm run build
 FROM base AS app
 
 # Copy production files
-COPY --from=builder /prod/apps/frontend/public ./public
+COPY --from=builder /prod/apps/frontend/public ./apps/frontend/public
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder /prod/apps/frontend/.next/standalone ./
-COPY --from=builder /prod/apps/frontend/.next/static ./.next/static
+COPY --from=builder /prod/apps/frontend/.next/static ./apps/frontend/.next/static
 
 ENV NODE_ENV production
 

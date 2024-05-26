@@ -27,7 +27,7 @@ services:
     env_file:
       - apps/frontend/.env.example
     environment:
-      - BACKEND_URL=http://localhost:3001
+      - BACKEND_URL=http://backend:3001
       - ELASTICSEARCH_URL=http://elasticsearch:3002
     networks:
       - app_network
