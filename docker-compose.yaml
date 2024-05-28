@@ -1,6 +1,16 @@
 name: research-platform
 
 services:
+  minio:
+    extends: 
+      file: apps/object-storage-solution/docker-compose.yml
+      service: minio
+  
+  go-wrapper:
+    extends: 
+      file: apps/object-storage-solution/docker-compose.yml
+      service: go-wrapper
+
   db:
     image: postgres:16
     restart: on-failure
@@ -27,7 +37,7 @@ services:
     env_file:
       - apps/frontend/.env.example
     environment:
-      - BACKEND_URL=http://localhost:3001
+      - BACKEND_URL=http://backend:3001
       - ELASTICSEARCH_URL=http://elasticsearch:3002
     networks:
       - app_network

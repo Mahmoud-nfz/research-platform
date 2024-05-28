@@ -1,0 +1,3 @@
+[submodule "apps/object-storage-solution"]
+	path = apps/object-storage-solution
+	url = https://github.com/Mahmoud-nfz/object-storage-solution.git

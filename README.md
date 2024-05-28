@@ -2,12 +2,20 @@
 
 This is an official starter Turborepo.
 
-## Using this example
+## How to use?
 
 Run the following command:
 
 ```sh
-npx create-turbo@latest
+# Https is set as default way to fetch repositories
+# For SSH Users: you should run:
+# git config submodule.apps/object-storage-solution.url git@github.com:Mahmoud-nfz/object-storage-solution.git
+# git submodule sync
+
+# if running for the first time : 
+# git submodule update --init --recursive
+git submodule update --remote --merge
+docker compose up
 ```
 
 ## What's inside?
@@ -37,7 +45,6 @@ This Turborepo has some additional tools already setup for you:
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
 pnpm build
 ```
 
@@ -46,7 +53,6 @@ pnpm build
 To develop all apps and packages, run the following command:
 
 ```
-cd my-turborepo
 pnpm dev
 ```
 
@@ -57,7 +63,6 @@ Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo
 By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd my-turborepo
 npx turbo login
 ```
 
