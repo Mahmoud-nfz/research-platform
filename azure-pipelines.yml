@@ -1,0 +1,41 @@
+trigger:
+  - main
+  - dev
+  - azure-pipelines
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  azureContainerRegistry: efrei.azurecr.io
+  azureSubscriptionEndpoint: efrei
+
+steps:
+  # For more info on schema definition: https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/docker-compose-v0?view=azure-pipelines
+  - task: DockerCompose@0
+    displayName: Container registry login
+    inputs:
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureContainerRegistry: $(azureContainerRegistry)
+  - task: DockerCompose@0
+    inputs:
+      action: Build services
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureContainerRegistry: $(azureContainerRegistry)
+      dockerComposeFile: docker-compose.yml
+      additionalDockerComposeFiles: apps/object-storage-solution/docker-compose.yml
+      projectName: $(Build.Repository.Name)
+      qualifyImageNames: true
+      additionalImageTags: $(Build.BuildId)
+  - task: DockerCompose@0
+    displayName: Push services
+    inputs:
+      action: Push services
+      azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+      azureContainerRegistry: $(azureContainerRegistry)
+      dockerComposeFile: docker-compose.yml
+      additionalDockerComposeFiles: apps/object-storage-solution/docker-compose.yml
+      projectName: $(Build.Repository.Name)
+      qualifyImageNames: true
+      additionalImageTags: $(Build.BuildId)
