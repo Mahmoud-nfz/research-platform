@@ -38,7 +38,8 @@ services:
       - apps/frontend/.env.example
     environment:
       - BACKEND_URL=http://backend:3001
-      - ELASTICSEARCH_URL=http://elasticsearch:3002
+      - MINIO_WRAPPER_HTTP_URL=http://go-wrapper:1206
+      - NEXT_PUBLIC_MINIO_WRAPPER_WEBSOCKET_URL=ws://go-wrapper:1206
     networks:
       - app_network
 
