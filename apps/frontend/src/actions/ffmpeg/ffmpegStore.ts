@@ -2,7 +2,7 @@ import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { get, set } from 'idb-keyval';
 
-import { VideoTransform } from '../types/types';
+import { VideoTransform } from '../../types/types';
 const ffmpegVersion = '0.12.3';
 const ffmpegName = 'core';
 const ffmpegWorker = undefined;

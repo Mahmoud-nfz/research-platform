@@ -5,8 +5,8 @@ import { observer } from 'mobx-react-lite';
 import { BsDownload } from 'react-icons/bs';
 import { runInAction } from 'mobx';
 
-import styles from './Render.module.scss';
-import { ffmpegStore } from '../../stores/ffmpegStore';
+import styles from './Ffmpeg.module.scss';
+import { ffmpegStore } from '../../actions/ffmpeg/ffmpegStore';
 import { Slider } from './Slider';
 
 export const Render: React.FC = observer(() => {
@@ -100,7 +100,7 @@ export const Render: React.FC = observer(() => {
 		<div className={styles.step}>
 			{ffmpeg.running ? (
 				<>
-					<div className={styles.actions}>
+					<div className={styles.actionsRender}>
 						<button onClick={() => ffmpeg.cancel()}>
 							<span>Cancel</span>
 						</button>
@@ -131,7 +131,7 @@ export const Render: React.FC = observer(() => {
 							/>
 						</div>
 					</div>
-					<div className={styles.actions}>
+					<div className={styles.actionsRender}>
 						<button onClick={crop}>
 							<span>Render MP4</span>
 						</button>

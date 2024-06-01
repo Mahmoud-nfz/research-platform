@@ -31,6 +31,7 @@
 		"mobx": "^6.12.3",
 		"mobx-react": "^9.1.1",
 		"mobx-react-lite": "^4.0.7",
+		"react-icons": "^5.2.1",
 		"react-intersection-observer": "^9.10.2",
 		"react-observer": "0.1.0-alpha1",
 		"react-use-pointer-drag": "^0.1.2",

@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 
-import styles from './SelectFile.module.scss';
-import { ffmpegStore } from '../../stores/ffmpegStore';
+import styles from './Ffmpeg.module.scss';
+import { ffmpegStore } from '../../actions/ffmpeg/ffmpegStore';
 
 const file = ffmpegStore.file;
 export const SelectFile: React.FC = observer(() => {

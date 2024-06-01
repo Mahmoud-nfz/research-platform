@@ -4,8 +4,8 @@ import { BsPlay, BsPause } from 'react-icons/bs';
 import { usePointerDrag } from 'react-use-pointer-drag';
 import clsx from 'clsx';
 
-import styles from './VideoTrim.module.scss';
-import { clamp, humanTime } from './helpers';
+import styles from './Ffmpeg.module.scss';
+import { clamp, humanTime } from '../../utils/helpers';
 import { Time } from '../../types/types';
 
 interface VideoTrimProps {

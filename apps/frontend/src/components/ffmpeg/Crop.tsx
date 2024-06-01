@@ -10,8 +10,8 @@ import {
 	BsArrowCounterclockwise,
 } from 'react-icons/bs';
 
-import styles from './Crop.module.scss';
-import { ffmpegStore } from '../../stores/ffmpegStore';
+import styles from './Ffmpeg.module.scss';
+import { ffmpegStore } from '../../actions/ffmpeg/ffmpegStore';
 import { VideoCrop } from './VideoCrop';
 import { VideoTrim } from './VideoTrim';
 
@@ -23,7 +23,7 @@ export const Crop: React.FC = observer(() => {
 
 	return (
 		<div className={styles.step}>
-			<div className={styles.controls}>
+			<div className={styles.controlsCrop}>
 				<div>
 					<button
 						title={ffmpegStore.transform.mute ? 'Unmute' : 'Mute'}

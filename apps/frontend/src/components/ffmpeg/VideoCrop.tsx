@@ -2,8 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { usePointerDrag } from 'react-use-pointer-drag';
 
-import styles from './VideoCrop.module.scss';
-import { clamp } from './helpers';
+import styles from './Ffmpeg.module.scss';
+import { clamp } from '../../utils/helpers';
 import { Area, Ratio, VideoTransform } from '../../types/types';
 
 const MIN_CROP_SIZE = 100;
