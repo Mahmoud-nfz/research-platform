@@ -221,8 +221,6 @@ class FfmpegStore {
 		video.setAttribute('playsinline', '');
 		video.preload = 'metadata';
 		video.autoplay = false;
-
-		// Required when using a Service Worker on iOS Safari.
 		video.crossOrigin = 'anonymous';
 
 		video.addEventListener('loadedmetadata', () => {
