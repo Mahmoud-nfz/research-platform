@@ -9,11 +9,9 @@ Run the following command:
 ```sh
 # Https is set as default way to fetch repositories
 # For SSH Users: you should run:
-# git config submodule.apps/object-storage-solution.url git@github.com:Mahmoud-nfz/object-storage-solution.git
-# git submodule sync
-
-# if running for the first time : 
-# git submodule update --init --recursive
+git config submodule.apps/object-storage-solution.url git@github.com:Mahmoud-nfz/object-storage-solution.git
+git submodule sync
+git submodule update --init --recursive
 git submodule update --remote --merge
 docker compose up
 ```
