@@ -2,18 +2,24 @@ import {
 	Body,
 	Controller,
 	Get,
+	Param,
 	ParseUUIDPipe,
 	Post,
 	Query,
+	UseGuards,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
-import { AuthenticatedUser, UseJwtAuth } from '@/auth/decorators';
+import { AuthenticatedUser } from '@/auth/decorators';
 import { CreateProjectDto } from './dtos/create-project.dto';
 import { User, Project } from '@/database/entities';
 import { VerifyIdPresenceInDatabase } from '@/common';
+import { JwtAuthGuard } from '@/auth/guards';
+import { PermissionGuard } from '@/permission/permission.guard';
+import { RequirePermission } from '@/permission/require-permission.decorator';
+import { ProjectAction } from './project-action.enum';
 
 @Controller('projects')
-@UseJwtAuth()
+@UseGuards(JwtAuthGuard, PermissionGuard)
 export class ProjectController {
 	constructor(private readonly projectSerice: ProjectService) {}
 
@@ -70,5 +76,11 @@ export class ProjectController {
 		@Query('query') query: string
 	) {
 		return this.projectSerice.searchAllProjects(user, query);
+	}
+
+	@Get(':id')
+	@RequirePermission((req) => req.params.id, ProjectAction.read)
+	async getProject(@Param('id') id: string) {
+		return this.projectSerice.findOne(id);
 	}
 }

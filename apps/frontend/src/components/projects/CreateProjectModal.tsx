@@ -1,12 +1,11 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment, useState } from 'react';
 import Input from '../forms/Input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { z } from 'zod';
 import useCreateProject from '@/hooks/useCreateProject';
 import Select from '../forms/Select';
 import { CreateProjectSchema, createProjectSchema } from '@/types/schemas';
@@ -21,6 +20,7 @@ export const CreateProjectModal = () => {
 		setValue,
 		watch,
 		formState: { errors },
+		reset,
 	} = useForm<CreateProjectSchema>({
 		resolver: zodResolver(createProjectSchema),
 		mode: 'onTouched',
@@ -37,6 +37,8 @@ export const CreateProjectModal = () => {
 			{
 				onSuccess() {
 					router.refresh();
+					setIsOpen(false);
+					reset();
 				},
 			}
 		);

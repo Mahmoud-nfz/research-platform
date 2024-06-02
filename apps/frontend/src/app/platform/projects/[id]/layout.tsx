@@ -2,21 +2,40 @@ import {
 	EntityTypes,
 	InformationSidebar,
 } from '@/components/general/InformationSideBar';
+import { endpoints } from '@/constants';
+import { Project } from '@/types/entities';
+import { PageProps } from '@/types/page-props';
+import { fetcher } from '@/utils/fetcher';
+import { notFound } from 'next/navigation';
 
-export default function ProjectLayout({
+async function getProjectInfo(projectId: string) {
+	return fetcher<Project>(endpoints.getProject(projectId), {
+		method: 'GET',
+	});
+}
+
+export default async function ProjectLayout({
 	children,
+	params,
 }: Readonly<{
 	children: React.ReactNode;
-}>) {
+}> & { params: { id: string } }) {
+	if (!params?.id) notFound();
+
+	const { data: project } = await getProjectInfo(params.id);
+
 	return (
 		<div className="flex h-full">
 			{children}
-			<InformationSidebar entity={project} entityType={EntityTypes.project} />
+			<InformationSidebar
+				entity={{ ...dummyProject, ...project }}
+				entityType={EntityTypes.project}
+			/>
 		</div>
 	);
 }
 
-const project = {
+const dummyProject = {
 	id: 156456,
 	name: 'Project 1',
 	description: "C'est un projet de recherche sur les chevaux de course.",
