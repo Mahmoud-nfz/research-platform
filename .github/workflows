@@ -3,7 +3,7 @@ name: Deploy via SSH with Password
 on:
   push:
     branches:
-      - main  # Set this to your branch that will trigger this deployment
+      - prod
 
 jobs:
   deploy:
