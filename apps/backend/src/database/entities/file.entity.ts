@@ -3,7 +3,7 @@ import { Base } from './base.entity';
 import { DataCollection } from './data-collection.entity';
 
 @Entity()
-@Index(['path', 'name'], { unique: true })
+@Index(['dataCollection', 'path', 'name'], { unique: true })
 export class File extends Base {
 	@Column({ type: 'varchar' })
 	name: string;

@@ -8,10 +8,17 @@ import Input from '@/components/forms/Input';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import useUploadFile from '@/hooks/upload/useUploadFile';
-import { CloudUploadIcon, FileIcon, UploadIcon } from '@/assets';
+import { CancelIcon, CloudUploadIcon, FileIcon, UploadIcon } from '@/assets';
 import toHumanReadableSize from '@/utils/toHumanReadableSize';
+import { ProgressBar } from '../ProgressBar';
+import { useRouter } from 'next/navigation';
 
-export default function UploadModal() {
+export default function UploadModal({
+	dataCollectionId,
+}: {
+	dataCollectionId: string;
+}) {
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -24,15 +31,21 @@ export default function UploadModal() {
 	});
 
 	const [isOpen, setIsOpen] = useState(false);
-	const [uploadProgress, setUploadProgress] = useState(0);
 
-	const { mutate: uploadFile, isError, isPending } = useUploadFile();
+	const {
+		mutate: uploadFile,
+		isError,
+		isPending,
+		progress,
+		isSuccess,
+		cancel,
+	} = useUploadFile();
 
 	const handleUpload = (data: UploadSchema) => {
-		uploadFile({
-			data,
-			setUploadProgress,
-		});
+		uploadFile(
+			{ ...data, dataCollectionId },
+			{ onSuccess: () => router.refresh() }
+		);
 	};
 
 	return (
@@ -94,27 +107,29 @@ export default function UploadModal() {
 													Selectionne un fichier ou bien drag'N'drop ici
 												</label>
 												<label
-													htmlFor="files"
+													htmlFor="file"
 													className="text-center cursor-pointer p-2 text-xs font-bold uppercase bg-primary-300 hover:bg-primary-400 transition rounded-lg"
 												>
 													Sélectionner un fichier
 												</label>
 												<input
-													id="files"
+													id="file"
 													type="file"
 													{...register('files')}
 													className="hidden"
 												/>
 											</div>
-											{watch('files')?.length > 0 && (
+											{watch('files') && (
 												<div className="relative select-none p-3 gap-3 bg-gray-300 rounded-lg flex items-center justify-between">
 													<FileIcon width={12} height={18} />
 													<div className="flex grow basis-full items-center justify-between">
 														<span className="font-semibold text-xs">
-															{watch('files')[0]?.name}
+															{watch('files')?.[0]?.name}
 														</span>
 														<span className="font-semibold text-xs">
-															{toHumanReadableSize(watch('files')[0]?.size)}
+															{toHumanReadableSize(
+																watch('files')?.[0]?.size ?? 0
+															)}
 														</span>
 													</div>
 													<button
@@ -130,16 +145,16 @@ export default function UploadModal() {
 											</span>
 										</div>
 										<Input
-											name="parentFolder"
+											name="path"
 											register={register}
-											label="Dossier parent"
-											error={errors.parentFolder?.message}
+											label="Chemin du fichier"
+											error={errors.path?.message}
 										/>
 										<Input
-											name="description"
+											name="name"
 											register={register}
-											label="Description"
-											error={errors.description?.message}
+											label="Nom du fichier"
+											error={errors.name?.message}
 										/>
 										<div className="flex items-center justify-center">
 											<button
@@ -163,6 +178,22 @@ export default function UploadModal() {
 										{isError && (
 											<div className="mt-4 text-sm text-red-600 text-center">
 												<p>Une erreur est survenue. Veuillez réessayer.</p>
+											</div>
+										)}
+										{isPending && (
+											<div className="flex items-center">
+												<ProgressBar
+													className="grow"
+													progress={progress}
+												></ProgressBar>
+												<button onClick={cancel}>
+													<CancelIcon fill="black" />
+												</button>
+											</div>
+										)}
+										{isSuccess && (
+											<div className="mt-4 text-sm text-primary-600 text-center">
+												<p>Téléversement terminé!</p>
 											</div>
 										)}
 									</form>

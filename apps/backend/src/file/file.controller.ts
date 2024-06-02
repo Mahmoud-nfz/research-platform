@@ -3,7 +3,6 @@ import {
 	Post,
 	Body,
 	ParseUUIDPipe,
-	Delete,
 	Get,
 	Param,
 	UseGuards,
@@ -12,14 +11,14 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { CreateFileDto } from './dtos/create-file.dto';
-import { DataCollection, File } from '@/database/entities';
-import { CommitUploadDto } from './dtos/commit-upload.dto';
+import { DataCollection, User } from '@/database/entities';
 import { RequirePermission } from '@/permission/require-permission.decorator';
 import { JwtAuthGuard } from '@/auth/guards';
 import { PermissionGuard } from '@/permission/permission.guard';
 import { DataCollectionAction } from '@/data-collection/data-collection-action.enum';
 import { ParsePathPipe } from '@/common/pipes/parse-path.pipe';
 import { normalize } from 'path';
+import { AuthenticatedUser } from '@/auth/decorators';
 
 @Controller('files')
 @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -29,30 +28,11 @@ export class FileController {
 	@Post('/create')
 	async create(
 		@Body() createFileDto: CreateFileDto,
-		@Body('dataCollectionId', ParseUUIDPipe) dataCollectionId: string
+		@Body('dataCollectionId', ParseUUIDPipe) dataCollectionId: string,
+		@AuthenticatedUser() user: User
 	) {
 		const dataCollection = new DataCollection({ id: dataCollectionId });
-		return this.fileService.createOne(createFileDto, dataCollection);
-	}
-
-	/**
-	 * @notes
-	 * Intended for MinIO wrapper use
-	 */
-	@Post('/upload/commit')
-	async commitUpload(@Body() finishUploadDto: CommitUploadDto) {
-		const file = new File({ ...finishUploadDto });
-		return this.fileService.commitUpload(file);
-	}
-
-	/**
-	 * @notes
-	 * Intended for MinIO wrapper use
-	 */
-	@Delete('/upload/rollback')
-	async rollbackUpload(@Body('id', ParseUUIDPipe) fileId: string) {
-		const file = new File({ id: fileId });
-		return this.fileService.rollbackUpload(file);
+		return this.fileService.createOne(createFileDto, dataCollection, user);
 	}
 
 	@Get(':id')

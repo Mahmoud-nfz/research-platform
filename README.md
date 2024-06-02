@@ -5,7 +5,8 @@ This project is put together with turborepo and git modules.
 Object storage module : https://github.com/Mahmoud-nfz/object-storage-solution
 
 Turborepo Apps:
-- Frontend: Next.js 14 
+
+- Frontend: Next.js 14
 - Backend: Nest.js
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
@@ -20,13 +21,11 @@ Run the following command:
 # git config submodule.apps/object-storage-solution.url git@github.com:Mahmoud-nfz/object-storage-solution.git
 # git submodule sync
 
-# if running for the first time : 
+# if running for the first time :
 # git submodule update --init --recursive
 git submodule update --remote --merge
 docker compose up
 ```
-
-
 
 ## Turborepo
 
