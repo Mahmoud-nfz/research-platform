@@ -14,7 +14,7 @@ services:
       service: go-wrapper
     hostname: wrapper
     environment:
-      - BACKEND_URL=http://backend:3011
+      - BACKEND_URL=${BACKEND_URL}
     networks:
       - app_network
       - minio_network
@@ -23,9 +23,9 @@ services:
     image: postgres:16
     restart: on-failure
     environment:
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_USER=efrei
-      - POSTGRES_DB=db
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - db_data:/var/lib/postgresql/data
     networks:
@@ -42,8 +42,8 @@ services:
     env_file:
       - apps/frontend/.env.example
     environment:
-      - BACKEND_URL=http://backend:3011
-      - MINIO_WRAPPER_HTTP_URL=http://wrapper:1206
+      - BACKEND_URL=${BACKEND_URL}
+      - MINIO_WRAPPER_HTTP_URL=${MINIO_WRAPPER_HTTP_URL}
     networks:
       - app_network
 
@@ -60,12 +60,11 @@ services:
       - apps/backend/.env.example
     environment:
       - NODE_ENV=development
-      - DB_URI=postgres://efrei:secret@db:5432/db
-      - ELASTICSEARCH_NODE=http://elasticsearch:9200
-      - FRONTEND_URL=http://frontend:3000
-      # For some reason, this url with the hostname of the MinIO wrapper doesn't work
-      - MINIO_WRAPPER_WS_URL=ws://localhost:1206
-      - MINIO_WRAPPER_HTTP_URL=http://wrapper:1206
+      - DB_URI=${DB_URI}
+      - ELASTICSEARCH_NODE=${ELASTICSEARCH_NODE}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - MINIO_WRAPPER_WS_URL=${MINIO_WRAPPER_WS_URL}
+      - MINIO_WRAPPER_HTTP_URL=${MINIO_WRAPPER_HTTP_URL}
     networks:
       - db_network
       - es_network
@@ -77,7 +76,7 @@ services:
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     volumes:
       - elastic_data:/usr/share/elasticsearch/data
     ports:
@@ -92,8 +91,8 @@ services:
     ports:
       - 8080:8080
     networks:
-      - es_network
       - db_network
+      - es_network
 
 volumes:
   db_data:
