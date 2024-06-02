@@ -8,14 +8,15 @@ services:
     networks:
       - minio_network
   
-  go-wrapper:
+  wrapper:
     extends: 
       file: apps/object-storage-solution/docker-compose.yml
       service: go-wrapper
+    hostname: wrapper
     environment:
       - BACKEND_URL=http://backend:3011
     networks:
-      - go_network
+      - app_network
       - minio_network
 
   db:
@@ -45,7 +46,7 @@ services:
       - apps/frontend/.env.example
     environment:
       - BACKEND_URL=http://backend:3011
-      - MINIO_WRAPPER_HTTP_URL=http://go-wrapper:1206
+      - MINIO_WRAPPER_HTTP_URL=http://wrapper:1206
     networks:
       - app_network
 
@@ -65,13 +66,13 @@ services:
       - DB_URI=postgres://efrei:secret@db:5432/db
       - ELASTICSEARCH_NODE=http://elasticsearch:9200
       - FRONTEND_URL=http://frontend:3000
-      - MINIO_WRAPPER_WS_URL=ws://go-wrapper:1206
-      - MINIO_WRAPPER_HTTP_URL=http://go-wrapper:1206
+      # For some reason, this url with the hostname of the MinIO wrapper doesn't work
+      - MINIO_WRAPPER_WS_URL=ws://localhost:1206
+      - MINIO_WRAPPER_HTTP_URL=http://wrapper:1206
     networks:
       - db_network
       - es_network
       - app_network
-      - go_network
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
@@ -104,5 +105,4 @@ networks:
   db_network:
   es_network:
   app_network:
-  go_network:
   minio_network:
