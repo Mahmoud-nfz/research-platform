@@ -21,4 +21,4 @@ jobs:
 
     - name: SSH and Run Script
       run: |
-        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "bash /path/to/redeploy.sh"
+        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "bash /home/${{ secrets.SSH_USERNAME }}/redeploy.sh"
