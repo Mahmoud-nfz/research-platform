@@ -1,4 +1,6 @@
 # This script should be placed in th VM on creation
+# Don't forget to make it executable by running chmod +x redeploy.sh 
+
 #  pull latest changes
 cd work/research-platform
 git pull
