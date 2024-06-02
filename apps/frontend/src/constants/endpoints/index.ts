@@ -8,7 +8,7 @@ export const projects = '/projects';
 export const createProject = '/projects';
 export const searchProjects = (searchParams: { query: string }) =>
 	getHref('/projects/search', searchParams);
-export const createObjectMetadata = '/elastic/create';
+export const createFile = '/files/create';
 export const searchObjectsMetadata = '/elastic';
 export const getObjects = (bucketName: string) =>
 	`/bucket/${bucketName}/objects`;

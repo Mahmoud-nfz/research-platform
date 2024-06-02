@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeftDouble, CloudUploadIcon } from '@/assets';
+import { ChevronLeftDouble } from '@/assets';
 import { FolderCard } from '@/components/data-collections/FolderCard';
 import UploadModal from '@/components/general/modals/UploadModal';
 import { fetcher } from '@/utils/fetcher';
@@ -29,6 +29,7 @@ export default async function DataCollections({
 	const {
 		data: { folders, files },
 	} = await getFiles(dataCollectionId, path);
+	console.log(folders);
 
 	return (
 		<div className="flex flex-col p-5 flex-grow justify-between h-full">
@@ -47,7 +48,7 @@ export default async function DataCollections({
 					))}
 				</div>
 			</div>
-			<UploadModal />
+			<UploadModal dataCollectionId={dataCollectionId} />
 		</div>
 	);
 }

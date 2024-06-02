@@ -1,3 +1,4 @@
+export { default as CancelIcon } from './CancelIcon';
 export { default as CheckIcon } from './CheckIcon';
 export { default as ChevronLeftDouble } from './ChevronLeftDouble';
 export { default as ChevronUpDownIcon } from './ChevronUpDownIcon';
