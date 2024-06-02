@@ -40,6 +40,10 @@ export class ProjectService {
 		}
 	}
 
+	async findOne(projectId: string) {
+		return this.repository.findOne({ where: { id: projectId } });
+	}
+
 	async findManyByOwner(owner: User) {
 		return this.repository
 			.createQueryBuilder('project')

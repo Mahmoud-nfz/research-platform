@@ -1,0 +1,21 @@
+name: Deploy via SSH with Password
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install SSH Pass
+      run: sudo apt-get install -y sshpass
+
+    - name: SSH and Run Script
+      run: |
+        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "bash /home/${{ secrets.SSH_USERNAME }}/redeploy.sh"

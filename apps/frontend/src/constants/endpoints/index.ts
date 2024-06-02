@@ -27,3 +27,4 @@ export const createDataCollection = '/data-collections';
 export const allDataCollections = '/data-collections';
 export const dataCollectionsPerProject = '/data-collections';
 export const projectsWithCreatePermission = '/projects/can-create';
+export const getProject = (projectId: string) => `/projects/${projectId}`;
