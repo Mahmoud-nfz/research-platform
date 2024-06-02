@@ -11,13 +11,14 @@ import {
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { CreateFileDto } from './dtos/create-file.dto';
-import { DataCollection } from '@/database/entities';
+import { DataCollection, User } from '@/database/entities';
 import { RequirePermission } from '@/permission/require-permission.decorator';
 import { JwtAuthGuard } from '@/auth/guards';
 import { PermissionGuard } from '@/permission/permission.guard';
 import { DataCollectionAction } from '@/data-collection/data-collection-action.enum';
 import { ParsePathPipe } from '@/common/pipes/parse-path.pipe';
 import { normalize } from 'path';
+import { AuthenticatedUser } from '@/auth/decorators';
 
 @Controller('files')
 @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -27,10 +28,11 @@ export class FileController {
 	@Post('/create')
 	async create(
 		@Body() createFileDto: CreateFileDto,
-		@Body('dataCollectionId', ParseUUIDPipe) dataCollectionId: string
+		@Body('dataCollectionId', ParseUUIDPipe) dataCollectionId: string,
+		@AuthenticatedUser() user: User
 	) {
 		const dataCollection = new DataCollection({ id: dataCollectionId });
-		return this.fileService.createOne(createFileDto, dataCollection);
+		return this.fileService.createOne(createFileDto, dataCollection, user);
 	}
 
 	@Get(':id')
