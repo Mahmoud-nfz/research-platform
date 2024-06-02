@@ -9,7 +9,7 @@ import { DataSource, Repository } from 'typeorm';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { MetadataIndex } from '@/metadata-engine/metadata-index.enum';
 import { FileMetadata } from '@/metadata-engine/schemas';
-import { dirname } from 'path';
+import { basename, dirname } from 'path';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@/config';
 import { timingSafeEqual } from 'crypto';
@@ -163,8 +163,8 @@ export class FileService {
 
 		const toFolder = (file: FileMetadata) => ({
 			...file,
-			name: file.path.split('/').at(-2),
-			path: dirname(file.path),
+			name: basename(file.path),
+			path: file.path,
 		});
 
 		return result.hits.hits.reduce(
