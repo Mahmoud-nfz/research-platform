@@ -9,4 +9,5 @@ export const files = {
 		searchParams: { path?: string }
 	) =>
 		getHref(join('files', dataCollectionId, 'direct-children'), searchParams),
+	createFile: () => '/files/create',
 };

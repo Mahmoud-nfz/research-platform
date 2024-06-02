@@ -3,21 +3,22 @@ import { DataCollectionsList } from '@/components/data-collections/DataCollectio
 import { DataCollection, Project } from '@/types/entities';
 import { fetcher } from '@/utils/fetcher';
 import { endpoints } from '@/constants';
-import path from 'path';
 import { PageProps } from '@/types/page-props';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
 async function getDataCollections(projectId: string) {
-	const endpoint = path.join(endpoints.dataCollectionsPerProject, projectId);
-	return fetcher<DataCollection[]>(endpoint, {
-		method: 'GET',
-	});
+	return fetcher<DataCollection[]>(
+		endpoints.dataCollections.getAllPerProject(projectId),
+		{
+			method: 'GET',
+		}
+	);
 }
 
 async function getProjectsWithCreatePermission() {
-	return fetcher<Project[]>(endpoints.projectsWithCreatePermission, {
+	return fetcher<Project[]>(endpoints.projects.getAllWithCreatePermission(), {
 		method: 'GET',
 	});
 }
