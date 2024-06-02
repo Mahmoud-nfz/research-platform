@@ -1,5 +1,5 @@
 import { DatabaseConfig } from '@/config/configs/database.config';
-import { MiscConfig, AuthConfig } from '@/config/configs';
+import { MiscConfig, AuthConfig, MinioWrapperConfig } from '@/config/configs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService as ConfigurationService } from '@nestjs/config';
 import { CONFIGURATION_TOKEN } from '@nestjs/config/dist/config.constants';
@@ -28,5 +28,9 @@ export class ConfigService extends ConfigurationService {
 
 	getElasticsearchConfig(): ElasticsearchConfig {
 		return this.getOrThrow<ElasticsearchConfig>(ConfigKey.elasticsearch);
+	}
+
+	getMinioWrapperConfig(): MinioWrapperConfig {
+		return this.getOrThrow<MinioWrapperConfig>(ConfigKey.minio_wrapper);
 	}
 }

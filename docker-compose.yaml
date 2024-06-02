@@ -27,8 +27,9 @@ services:
     env_file:
       - apps/frontend/.env.example
     environment:
-      - BACKEND_URL=http://localhost:3001
-      - ELASTICSEARCH_URL=http://elasticsearch:3002
+      - BACKEND_URL=http://backend:3011
+      - MINIO_WRAPPER_HTTP_URL=http://go-wrapper:1206
+      - NEXT_PUBLIC_MINIO_WRAPPER_WEBSOCKET_URL=ws://go-wrapper:1206
     networks:
       - app_network
 
@@ -40,7 +41,7 @@ services:
       - db
       - elasticsearch
     ports:
-      - 3011:3001
+      - 3011:3011
     env_file:
       - apps/backend/.env.example
     environment:
