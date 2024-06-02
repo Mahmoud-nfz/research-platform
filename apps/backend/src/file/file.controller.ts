@@ -8,6 +8,7 @@ import {
 	UseGuards,
 	Query,
 	DefaultValuePipe,
+	Put,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { CreateFileDto } from './dtos/create-file.dto';
@@ -19,6 +20,7 @@ import { DataCollectionAction } from '@/data-collection/data-collection-action.e
 import { ParsePathPipe } from '@/common/pipes/parse-path.pipe';
 import { normalize } from 'path';
 import { AuthenticatedUser } from '@/auth/decorators';
+import { DownloadFileDto } from './dtos/download-file.dto';
 
 @Controller('files')
 @UseGuards(JwtAuthGuard, PermissionGuard)
@@ -33,6 +35,18 @@ export class FileController {
 	) {
 		const dataCollection = new DataCollection({ id: dataCollectionId });
 		return this.fileService.createOne(createFileDto, dataCollection, user);
+	}
+
+	@Put('/request-download')
+	@RequirePermission(
+		(req) => req.body.dataCollectionId,
+		DataCollectionAction.read
+	)
+	async requestDownload(
+		@Body() { dataCollectionId, path, name }: DownloadFileDto,
+		@AuthenticatedUser() user: User
+	) {
+		return this.fileService.requestDownload(dataCollectionId, path, name, user);
 	}
 
 	@Get(':id')

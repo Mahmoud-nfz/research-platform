@@ -1,6 +1,6 @@
 import { File } from '@/database/entities';
 
-export type UploadTokenPayloadDto = Pick<
+export type FileTokenPayloadDto = Pick<
 	Partial<File>,
-	'id' | 'hash' | 'name' | 'path' | 'size'
+	'id' | 'hash' | 'name' | 'path' | 'size' | 'dataCollectionId'
 > & { userId: string };

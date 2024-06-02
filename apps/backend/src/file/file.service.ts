@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Injectable,
 	InternalServerErrorException,
+	NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataCollection, File, User } from '@/database/entities';
@@ -10,9 +11,9 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { MetadataIndex } from '@/metadata-engine/metadata-index.enum';
 import { FileMetadata } from '@/metadata-engine/schemas';
 import { basename, dirname } from 'path';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@/config';
 import { timingSafeEqual } from 'crypto';
+import { FileUtils } from './file.utils';
 
 @Injectable()
 export class FileService {
@@ -20,8 +21,8 @@ export class FileService {
 		@InjectRepository(File) private readonly repository: Repository<File>,
 		private readonly elasticsearchService: ElasticsearchService,
 		private readonly dataSource: DataSource,
-		private readonly jwtService: JwtService,
-		private readonly configService: ConfigService
+		private readonly configService: ConfigService,
+		private readonly fileUtils: FileUtils
 	) {}
 
 	async createOne(
@@ -58,28 +59,14 @@ export class FileService {
 			}
 
 			// If the file exists and the hash is the same, return the existing file's JWT and URL
-			const jwt = this.jwtService.sign({
-				id: existingFile.id,
-				hash: existingFile.hash,
-				userId: user.id,
-				size: existingFile.size,
-				path: existingFile.path,
-				name: existingFile.name,
-			});
+			const jwt = this.fileUtils.getFileToken(existingFile, user);
 			return { jwt, url: this.configService.getMinioWrapperConfig().wsUrl };
 		} else {
 			// If the file doesn't exist, insert the new file
 			await this.repository.save(file);
 
 			// Generate the JWT for the new file
-			const jwt = this.jwtService.sign({
-				id: file.id,
-				hash: file.hash,
-				userId: user.id,
-				size: file.size,
-				path: file.path,
-				name: file.name,
-			});
+			const jwt = this.fileUtils.getFileToken(file, user);
 
 			// Return the JWT and URL
 			return { jwt, url: this.configService.getMinioWrapperConfig().wsUrl };
@@ -126,6 +113,26 @@ export class FileService {
 		} finally {
 			await queryRunner.release();
 		}
+	}
+
+	async requestDownload(
+		dataCollectionId: string,
+		path: string,
+		name: string,
+		user: User
+	) {
+		const file = await this.repository.findOne({
+			where: {
+				dataCollection: new DataCollection({ id: dataCollectionId }),
+				path,
+				name,
+			},
+		});
+		if (!file) {
+			throw new NotFoundException('File not found');
+		}
+		const jwt = this.fileUtils.getFileToken(file, user);
+		return { jwt, url: this.configService.getMinioWrapperConfig().wsUrl };
 	}
 
 	async findFilesByDataCollection(dataCollection: DataCollection) {

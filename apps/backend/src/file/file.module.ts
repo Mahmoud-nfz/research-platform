@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@/config';
 import { ParseJwtPipe } from '@/common/pipes/parse-jwt.pipe';
 import { FileInternalController } from './file-internal.controller';
+import { FileUtils } from './file.utils';
 
 @Module({
 	imports: [
@@ -22,6 +23,6 @@ import { FileInternalController } from './file-internal.controller';
 		}),
 	],
 	controllers: [FileController, FileInternalController],
-	providers: [FileService, ParseJwtPipe],
+	providers: [FileService, ParseJwtPipe, FileUtils],
 })
 export class FileModule {}
