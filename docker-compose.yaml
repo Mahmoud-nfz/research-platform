@@ -27,10 +27,7 @@ services:
       - POSTGRES_USER=efrei
       - POSTGRES_DB=db
     volumes:
-      - type: tmpfs
-        target: /var/lib/postgresql/data
-        tmpfs:
-          size: 134217728 # 128*2^20 bytes = 128Mb
+      - db_data:/var/lib/postgresql/data
     networks:
       - db_network
 
@@ -82,10 +79,7 @@ services:
       - discovery.type=single-node
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
     volumes:
-      - type: tmpfs
-        target: /usr/share/elasticsearch/data
-        tmpfs:
-          size: 134217728 # 128*2^20 bytes = 128Mb
+      - elastic_data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
       - 9300:9300
@@ -100,6 +94,12 @@ services:
     networks:
       - es_network
       - db_network
+
+volumes:
+  db_data:
+    driver: local
+  elastic_data:
+    driver: local
 
 networks:
   db_network:
