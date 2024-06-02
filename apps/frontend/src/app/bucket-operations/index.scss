@@ -1,23 +1,6 @@
 :root {
-	--color-bg: #f1f1fa;
-	--color-bg-soft: #d1d1e4;
-	--color-fg: #fefefe;
-	--color-fg-soft: #444444;
-	--color-interactive-dark: #111111;
-	--color-interactive: #33333a;
-	--color-interactive-hover: #444444;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--color-bg: #11111a;
-		--color-bg-soft: #23232a;
-		--color-fg: #ffffff;
-		--color-fg-soft: #eeeeee;
-		--color-interactive-dark: #29292a;
-		--color-interactive: #33333a;
-		--color-interactive-hover: #444444;
-	}
+	--color-bg: beige;
+	--color-bg-soft: #3232ba;
 }
 
 body {
@@ -70,7 +53,7 @@ progress {
 	}
 
 	&::-webkit-progress-bar {
-		background: rgba(0, 0, 0, 0.3);
+		background: beige;
 		border-radius: 8px;
 	}
 }
@@ -80,10 +63,10 @@ button,
 	display: inline-flex;
 	align-items: center;
 	text-decoration: none;
-	background: var(--color-interactive);
-	color: white;
+	background: beige;
+	color: black;
 	cursor: pointer;
-	border: none;
+	border: 2px solid beige;
 	padding: 0.4rem 1rem;
 	height: 2rem;
 	margin-right: 0.25rem;
@@ -98,19 +81,19 @@ button,
 	}
 
 	&:hover {
-		background: #444444;
+		background: #cb8625;
 	}
 }
 
 .select {
 	display: inline-block;
-	background: var(--color-interactive);
+	background: beige;
 	padding: 0 0.25rem;
 }
 
 select {
-	background: var(--color-interactive);
-	color: white;
+	background: beige;
+	color: rgb(0, 0, 0);
 	border: none;
 	outline: none !important;
 	padding: 0.25rem 0;

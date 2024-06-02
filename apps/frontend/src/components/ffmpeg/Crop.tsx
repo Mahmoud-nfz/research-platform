@@ -94,17 +94,6 @@ export const Crop: React.FC = observer(() => {
 					>
 						<BsArrowCounterclockwise />
 					</button>
-					<button
-						onClick={() => {
-							runInAction(() => {
-								video.pause();
-								ffmpegStore.step = 2;
-							});
-						}}
-						title="Confirm"
-					>
-						<BsCheck />
-					</button>
 				</div>
 			</div>
 			<VideoTrim

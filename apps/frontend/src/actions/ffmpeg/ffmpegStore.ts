@@ -204,7 +204,6 @@ class FfmpegStore {
 				if (newFile) {
 					this.loadVideo(newFile);
 				} else {
-					// TODO: Error handling.
 					runInAction(() => {
 						this.fileLoading = false;
 					});

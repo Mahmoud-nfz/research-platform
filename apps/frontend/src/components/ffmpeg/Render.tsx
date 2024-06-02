@@ -115,9 +115,6 @@ export const Render: React.FC = observer(() => {
 				<>
 					<div className={styles.settings}>
 						<div>
-							Resolution: {width}px x {height}px
-						</div>
-						<div>
 							Scale: {Math.round(scale * 100) / 100}
 							<Slider
 								min={0.1}
