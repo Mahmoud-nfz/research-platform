@@ -44,7 +44,7 @@ export default async function DataCollections({
 						<FolderCard key={idx} folder={folder} />
 					))}
 					{files.map((file, idx) => (
-						<FileCard key={idx} folder={file} />
+						<FileCard key={idx} file={file} />
 					))}
 				</div>
 			</div>

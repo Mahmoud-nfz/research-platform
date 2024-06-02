@@ -1,10 +1,22 @@
+'use client';
+
 import Image from 'next/image';
 import { File } from '@/types/entities';
+import useDownloadFile from '@/hooks/download/useDownloadFile';
 
-export const FileCard = ({ folder }: { folder: File }) => {
+export const FileCard = ({ file }: { file: File }) => {
+	const { mutate: downloadFile } = useDownloadFile();
+
+	const handleDownload = () => {
+		downloadFile(file);
+	};
+
 	return (
-		<div className="bg-white shadow-lg rounded-lg w-42 h-32 m-3 flex flex-col">
-			<div className="text-lg text-center font-semibold m-2">{folder.name}</div>
+		<button
+			onClick={handleDownload}
+			className="bg-white shadow-lg rounded-lg w-42 h-32 m-3 flex flex-col"
+		>
+			<div className="text-lg text-center font-semibold m-2">{file.name}</div>
 
 			<div className="w-full px-3 pt-2">
 				<Image
@@ -12,9 +24,9 @@ export const FileCard = ({ folder }: { folder: File }) => {
 					height={100}
 					width={100}
 					className="w-full rounded-lg object-cover"
-					alt={folder.name}
+					alt={file.name}
 				/>
 			</div>
-		</div>
+		</button>
 	);
 };
