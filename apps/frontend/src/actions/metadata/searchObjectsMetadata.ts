@@ -8,9 +8,8 @@ export async function searchObjectsMetadata(query: string) {
 	const endpoint = new URL(endpoints.searchObjectsMetadata);
 	endpoint.searchParams.set('search', encodeURIComponent(query));
 
-	const data = await fetcher<ElasticSearchMetaData[]>(endpoint.href, {
+	const { data } = await fetcher<ElasticSearchMetaData[]>(endpoint.href, {
 		method: 'GET',
-		base: process.env.ELASTICSEARCH_URL as string,
 	});
 
 	return data.map((result) => ({

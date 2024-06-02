@@ -3,4 +3,5 @@ export enum AuthStrategy {
 	otp = 'otp',
 	email_login = 'email_login',
 	jwt = 'jwt',
+	api_key = 'api_key',
 }

@@ -5,11 +5,19 @@ services:
     extends: 
       file: apps/object-storage-solution/docker-compose.yml
       service: minio
+    networks:
+      - minio_network
   
-  go-wrapper:
+  wrapper:
     extends: 
       file: apps/object-storage-solution/docker-compose.yml
       service: go-wrapper
+    hostname: wrapper
+    environment:
+      - BACKEND_URL=http://backend:3011
+    networks:
+      - app_network
+      - minio_network
 
   db:
     image: postgres:16
@@ -19,10 +27,7 @@ services:
       - POSTGRES_USER=efrei
       - POSTGRES_DB=db
     volumes:
-      - type: tmpfs
-        target: /var/lib/postgresql/data
-        tmpfs:
-          size: 134217728 # 128*2^20 bytes = 128Mb
+      - db_data:/var/lib/postgresql/data
     networks:
       - db_network
 
@@ -37,8 +42,8 @@ services:
     env_file:
       - apps/frontend/.env.example
     environment:
-      - BACKEND_URL=http://backend:3001
-      - ELASTICSEARCH_URL=http://elasticsearch:3002
+      - BACKEND_URL=http://backend:3011
+      - MINIO_WRAPPER_HTTP_URL=http://wrapper:1206
     networks:
       - app_network
 
@@ -50,7 +55,7 @@ services:
       - db
       - elasticsearch
     ports:
-      - 3011:3001
+      - 3011:3011
     env_file:
       - apps/backend/.env.example
     environment:
@@ -58,6 +63,9 @@ services:
       - DB_URI=postgres://efrei:secret@db:5432/db
       - ELASTICSEARCH_NODE=http://elasticsearch:9200
       - FRONTEND_URL=http://frontend:3000
+      # For some reason, this url with the hostname of the MinIO wrapper doesn't work
+      - MINIO_WRAPPER_WS_URL=ws://localhost:1206
+      - MINIO_WRAPPER_HTTP_URL=http://wrapper:1206
     networks:
       - db_network
       - es_network
@@ -71,10 +79,7 @@ services:
       - discovery.type=single-node
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
     volumes:
-      - type: tmpfs
-        target: /usr/share/elasticsearch/data
-        tmpfs:
-          size: 134217728 # 128*2^20 bytes = 128Mb
+      - elastic_data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
       - 9300:9300
@@ -90,7 +95,14 @@ services:
       - es_network
       - db_network
 
+volumes:
+  db_data:
+    driver: local
+  elastic_data:
+    driver: local
+
 networks:
   db_network:
   es_network:
   app_network:
+  minio_network:

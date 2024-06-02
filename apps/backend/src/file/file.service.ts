@@ -4,24 +4,86 @@ import {
 	InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataCollection, File } from '@/database/entities';
+import { DataCollection, File, User } from '@/database/entities';
 import { DataSource, Repository } from 'typeorm';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { MetadataIndex } from '@/metadata-engine/metadata-index.enum';
 import { FileMetadata } from '@/metadata-engine/schemas';
-import { dirname } from 'path';
+import { basename, dirname } from 'path';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@/config';
+import { timingSafeEqual } from 'crypto';
 
 @Injectable()
 export class FileService {
 	constructor(
 		@InjectRepository(File) private readonly repository: Repository<File>,
 		private readonly elasticsearchService: ElasticsearchService,
-		private readonly dataSource: DataSource
+		private readonly dataSource: DataSource,
+		private readonly jwtService: JwtService,
+		private readonly configService: ConfigService
 	) {}
 
-	async createOne(values: Partial<File>, dataCollection: DataCollection) {
-		const file = new File({ ...values, dataCollection: dataCollection });
-		return this.repository.save(file);
+	async createOne(
+		values: Partial<File>,
+		dataCollection: DataCollection,
+		user: User
+	) {
+		// Create a File entity with the provided values
+		const file = this.repository.create({
+			...values,
+			dataCollection,
+		});
+
+		// Check if a file with the same dataCollectionId, path, and name already exists
+		const existingFile = await this.repository.findOne({
+			where: {
+				dataCollection,
+				path: values.path,
+				name: values.name,
+			},
+		});
+
+		if (existingFile) {
+			// If the file exists and the hash is different, throw a 400 Bad Request error
+			if (
+				!timingSafeEqual(
+					Buffer.from(existingFile.hash),
+					Buffer.from(values.hash)
+				)
+			) {
+				throw new BadRequestException(
+					'A different file with the same path and name already exists/is currently being uploaded in this data collection.'
+				);
+			}
+
+			// If the file exists and the hash is the same, return the existing file's JWT and URL
+			const jwt = this.jwtService.sign({
+				id: existingFile.id,
+				hash: existingFile.hash,
+				userId: user.id,
+				size: existingFile.size,
+				path: existingFile.path,
+				name: existingFile.name,
+			});
+			return { jwt, url: this.configService.getMinioWrapperConfig().wsUrl };
+		} else {
+			// If the file doesn't exist, insert the new file
+			await this.repository.save(file);
+
+			// Generate the JWT for the new file
+			const jwt = this.jwtService.sign({
+				id: file.id,
+				hash: file.hash,
+				userId: user.id,
+				size: file.size,
+				path: file.path,
+				name: file.name,
+			});
+
+			// Return the JWT and URL
+			return { jwt, url: this.configService.getMinioWrapperConfig().wsUrl };
+		}
 	}
 
 	async rollbackUpload(file: File) {
@@ -101,8 +163,8 @@ export class FileService {
 
 		const toFolder = (file: FileMetadata) => ({
 			...file,
-			name: file.path.split('/').at(-2),
-			path: dirname(file.path),
+			name: basename(file.path),
+			path: file.path,
 		});
 
 		return result.hits.hits.reduce(
