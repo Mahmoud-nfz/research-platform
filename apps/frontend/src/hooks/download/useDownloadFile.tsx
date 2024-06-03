@@ -13,7 +13,7 @@ export default function useDownloadFile() {
 			bucketName: string;
 		}) => {
 			const url = new URL(
-				endpoints.download,
+				endpoints.minioWrapper.download(),
 				process.env.NEXT_PUBLIC_MINIO_WRAPPER_WEBSOCKET_URL
 			);
 

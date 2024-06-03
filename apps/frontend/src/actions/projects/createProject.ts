@@ -5,7 +5,7 @@ import { Project } from '@/types/entities';
 import { fetcher } from '@/utils/fetcher';
 
 export async function createProject(data: Partial<Project>) {
-	return fetcher(endpoints.createProject, {
+	return fetcher(endpoints.projects.create(), {
 		method: 'POST',
 		body: JSON.stringify(data),
 	});

@@ -7,13 +7,13 @@ import { endpoints } from '@/constants';
 export const dynamic = 'force-dynamic';
 
 async function getDataCollections() {
-	return fetcher<DataCollection[]>(endpoints.allDataCollections, {
+	return fetcher<DataCollection[]>(endpoints.dataCollections.getAll(), {
 		method: 'GET',
 	});
 }
 
 async function getProjectsWithCreatePermission() {
-	return fetcher<Project[]>(endpoints.projectsWithCreatePermission, {
+	return fetcher<Project[]>(endpoints.projects.getAllWithCreatePermission(), {
 		method: 'GET',
 	});
 }

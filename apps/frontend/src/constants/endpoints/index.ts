@@ -1,14 +1,9 @@
-import { getHref } from '@/utils/getHref';
-
+export * from './auth';
+export * from './data-collections';
 export * from './files';
+export * from './minio';
+export * from './projects';
 
-export const login = '/auth/login';
-export const profile = '/user/profile';
-export const projects = '/projects';
-export const createProject = '/projects';
-export const searchProjects = (searchParams: { query: string }) =>
-	getHref('/projects/search', searchParams);
-export const createFile = '/files/create';
 export const searchObjectsMetadata = '/elastic';
 export const getObjects = (bucketName: string) =>
 	`/bucket/${bucketName}/objects`;
@@ -21,10 +16,3 @@ export const copyObject = (
 	destinationBucket: string,
 	objectName: string
 ) => `/bucket/${sourceBucket}/${destinationBucket}/${objectName}`;
-export const upload = '/upload';
-export const download = '/download';
-export const createDataCollection = '/data-collections';
-export const allDataCollections = '/data-collections';
-export const dataCollectionsPerProject = '/data-collections';
-export const projectsWithCreatePermission = '/projects/can-create';
-export const getProject = (projectId: string) => `/projects/${projectId}`;

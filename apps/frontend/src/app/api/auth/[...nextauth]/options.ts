@@ -44,19 +44,25 @@ export const options: NextAuthOptions = {
 				 */
 
 				/* login user */
-				const { data: tokens } = await fetcher<LoginResponse>(endpoints.login, {
-					method: 'POST',
-					body: JSON.stringify({
-						email: credentials.email,
-						password: credentials.password,
-					}),
-					token: '',
-				});
+				const { data: tokens } = await fetcher<LoginResponse>(
+					endpoints.auth.login(),
+					{
+						method: 'POST',
+						body: JSON.stringify({
+							email: credentials.email,
+							password: credentials.password,
+						}),
+						token: '',
+					}
+				);
 
-				const { data: user } = await fetcher<User | null>(endpoints.profile, {
-					token: tokens.accessToken,
-					method: 'GET',
-				});
+				const { data: user } = await fetcher<User | null>(
+					endpoints.auth.profile(),
+					{
+						token: tokens.accessToken,
+						method: 'GET',
+					}
+				);
 				return { user, ...tokens };
 			},
 		}),
