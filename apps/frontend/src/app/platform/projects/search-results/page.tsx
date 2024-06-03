@@ -6,7 +6,7 @@ import { getServerSideSearchParams } from '@/utils/getServerSideSearchParams';
 import { PageProps } from '@/types/page-props';
 
 async function getProjects(data: { query: string }) {
-	return fetcher<Project[]>(endpoints.searchProjects(data), {
+	return fetcher<Project[]>(endpoints.projects.search(data), {
 		method: 'GET',
 	});
 }

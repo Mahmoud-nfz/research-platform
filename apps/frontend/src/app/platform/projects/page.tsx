@@ -6,7 +6,7 @@ import { ProjectsList } from '@/components/projects/ProjectsList';
 export const dynamic = 'force-dynamic';
 
 async function getProjects() {
-	return fetcher<Project[]>(endpoints.projects, {
+	return fetcher<Project[]>(endpoints.projects.getAll(), {
 		method: 'GET',
 	});
 }

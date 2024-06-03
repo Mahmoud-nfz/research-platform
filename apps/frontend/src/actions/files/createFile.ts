@@ -10,7 +10,7 @@ type CreateFile = Pick<
 >;
 
 export async function createFile(data: CreateFile) {
-	return fetcher<{ url: string; jwt: string }>(endpoints.createFile, {
+	return fetcher<{ url: string; jwt: string }>(endpoints.files.createFile(), {
 		method: 'POST',
 		body: JSON.stringify(data),
 	});

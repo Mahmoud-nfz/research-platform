@@ -9,7 +9,7 @@ import { fetcher } from '@/utils/fetcher';
 import { notFound } from 'next/navigation';
 
 async function getProjectInfo(projectId: string) {
-	return fetcher<Project>(endpoints.getProject(projectId), {
+	return fetcher<Project>(endpoints.projects.getOne(projectId), {
 		method: 'GET',
 	});
 }

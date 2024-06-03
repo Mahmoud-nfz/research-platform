@@ -1,6 +1,6 @@
 'use client';
 
-import { createFile } from '@/actions/metadata/createFile';
+import { createFile } from '@/actions/files/createFile';
 import { DEFAULT_CHUNK_SIZE, endpoints } from '@/constants';
 import { UploadSchema } from '@/types/schemas';
 import { hash } from '@/utils/hash';
@@ -50,7 +50,7 @@ export default function useUploadFileSequentially() {
 					dataCollectionId: data.dataCollectionId,
 				});
 
-				const url = new URL(endpoints.upload, base).href;
+				const url = new URL(endpoints.minioWrapper.upload(), base).href;
 				const socket = new WebSocket(url);
 				let chunkSize = DEFAULT_CHUNK_SIZE;
 
