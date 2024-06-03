@@ -2,7 +2,7 @@
 	"name": "reseach-center",
 	"private": true,
 	"scripts": {
-		"build": "turbo build --force",
+		"build": "turbo build",
 		"dev": "turbo dev",
 		"prod": "turbo prod",
 		"lint": "turbo lint",
