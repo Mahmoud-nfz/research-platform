@@ -7,8 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureContainerRegistry: efrei.azurecr.io
-  azureSubscriptionEndpoint: efrei
+  - group: pipeline-variables
 
 steps:
   # For more info on schema definition: https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/docker-compose-v0?view=azure-pipelines
