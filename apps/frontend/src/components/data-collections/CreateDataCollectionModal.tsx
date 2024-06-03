@@ -29,6 +29,7 @@ export const CreateDataCollectionModal = ({
 		setValue,
 		watch,
 		formState: { errors },
+		reset,
 	} = useForm<CreateDataCollectionSchema>({
 		resolver: zodResolver(createDataCollectionSchema),
 		mode: 'onTouched',
@@ -49,6 +50,8 @@ export const CreateDataCollectionModal = ({
 			{
 				onSuccess() {
 					router.refresh();
+					setIsOpen(false);
+					reset();
 				},
 			}
 		);

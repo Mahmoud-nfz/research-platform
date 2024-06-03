@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { CloudUploadIcon, FolderIcon } from '@/assets';
 import { DataCollection } from '@/types/entities';
+import Link from 'next/link';
 
 function truncateText(text: string) {
 	const truncated = text.substring(0, 70) + '...';
@@ -13,7 +14,10 @@ export const DataCollectionCard = ({
 	dataCollection: DataCollection;
 }) => {
 	return (
-		<div className="bg-white shadow-lg rounded-lg w-72 h-52 m-3 flex flex-col">
+		<Link
+			href={`/platform/data-collections/${dataCollection.id}`}
+			className="bg-white shadow-lg rounded-lg w-72 h-52 m-3 flex flex-col"
+		>
 			<div className="relative">
 				{/* Background div */}
 				<div
@@ -90,6 +94,6 @@ export const DataCollectionCard = ({
 					</div>
 				</div>
 			</div>
-		</div>
+		</Link>
 	);
 };

@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { ConfigService } from '@/config';
 import { AuthUtilsService } from './auth-utils.service';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ApiKeyStrategy } from './strategies/api-key.strategy';
 
 @Module({
 	imports: [
@@ -39,6 +40,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 		LocalLoginsStrategy,
 		JwtStrategy,
 		OneTimePasswordStrategy,
+		ApiKeyStrategy,
 	],
 })
 export class AuthModule {}
