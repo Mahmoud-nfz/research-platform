@@ -1,58 +1,21 @@
 'use client';
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { ffmpegStore } from '../../actions/ffmpeg/ffmpegStore';
-
-const file = ffmpegStore.file;
+import useDownloadFfmpeg from '../../hooks/download/useDownloadFfmpeg';
 
 export const SelectFile: React.FC = observer(() => {
 	const [bucketName, setBucketName] = useState('');
 	const [fileName, setFileName] = useState('');
-	const [isLoading, setIsLoading] = useState(false); // State to manage loading animation
+	const [isLoading, setIsLoading] = useState(false);
+	const { mutate } = useDownloadFfmpeg();
 
-	const handleFileSelection = () => {
-		setIsLoading(true); // Start loading animation
-
-		// Create a WebSocket connection
-		const socket = new WebSocket('ws://localhost:1206/download');
-
-		// Handle connection open event
-		socket.onopen = () => {
-			console.log('WebSocket connection established');
-
-			// Send a message to the server with bucket name and file name
-			const message = {
-				bucketName: bucketName,
-				fileName: fileName,
-			};
-			socket.send(JSON.stringify(message));
-		};
-
-		// Handle received messages from the server
-		socket.onmessage = (event) => {
-			const fileData = event.data;
-
-			// Handle received file data here
-			console.log('Received file data:', fileData);
-
-			// Pass the received file data to ffmpeg function
-			// Here you may need to process the fileData according to your requirements
-			ffmpegStore.loadVideo(fileData);
-
-			setIsLoading(false); // Stop loading animation
-		};
-
-		// Handle connection error
-		socket.onerror = (error) => {
-			console.error('WebSocket error:', error);
-			setIsLoading(false); // Stop loading animation
-		};
-
-		// Handle connection close event
-		socket.onclose = () => {
-			console.log('WebSocket connection closed');
-			setIsLoading(false); // Stop loading animation
-		};
+	const handleFileSelection = async (): Promise<void> => {
+		setIsLoading(true);
+		await mutate({
+			selectedObjects: [fileName],
+			bucketName: bucketName,
+		});
+		setIsLoading(false);
 	};
 
 	return (
