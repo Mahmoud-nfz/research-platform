@@ -1,3 +1,4 @@
+'use client';
 import React, { useRef } from 'react';
 import { IPointerDragData, usePointerDrag } from 'react-use-pointer-drag';
 import { clamp } from '../../utils/helpers';

@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { ffmpegStore } from '../../actions/ffmpeg/ffmpegStore';

@@ -1,4 +1,3 @@
-'use client';
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
@@ -92,8 +91,11 @@ export const Render: React.FC = observer(() => {
 			args.push('-c:a', 'copy');
 		}
 
-		const newFile = await ffmpeg.exec(ffmpegStore.file!, args);
-		setOutputUrl(URL.createObjectURL(newFile));
+		// Ensure ffmpegStore.file is defined before using it
+		if (ffmpegStore.file) {
+			const newFile = await ffmpeg.exec(ffmpegStore.file, args);
+			setOutputUrl(URL.createObjectURL(newFile || new Blob()));
+		}
 	};
 
 	return (

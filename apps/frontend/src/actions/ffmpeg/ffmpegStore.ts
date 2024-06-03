@@ -1,3 +1,4 @@
+'use client';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { get, set } from 'idb-keyval';
@@ -7,7 +8,9 @@ const ffmpegVersion = '0.12.3';
 const ffmpegName = 'core';
 const ffmpegWorker = undefined;
 const ffmpegBaseURL = `https://unpkg.com/@ffmpeg/${ffmpegName}@${ffmpegVersion}/dist/esm`;
-
+if (typeof window !== 'undefined') {
+	const ffmpegStore = undefined;
+}
 async function retrieveBlob(
 	url: string,
 	type: string,
@@ -255,5 +258,6 @@ class FfmpegStore {
 		video.src = URL.createObjectURL(file);
 	}
 }
+// if it's server side, do nothing
 
 export const ffmpegStore = new FfmpegStore();

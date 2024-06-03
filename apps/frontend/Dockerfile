@@ -38,7 +38,7 @@ COPY --from=deps /prod/apps/frontend/node_modules ./apps/frontend/node_modules
 COPY apps/frontend apps/frontend
 
 # Build app
-RUN pnpm run dev --force
+RUN pnpm run build
 
 ### ========================= ###
 # 3. Production image, copy all the files and run next
