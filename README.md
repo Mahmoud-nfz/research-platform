@@ -4,6 +4,11 @@ This project is put together with turborepo and git modules.
 
 Object storage module : https://github.com/Mahmoud-nfz/object-storage-solution
 
+The architecture:
+![A Scalable Platform for Data-Driven Research Development and Applications in Collaborative Environments(1)](https://github.com/user-attachments/assets/fb4e980e-0011-4cba-b06f-34fdeb0fb349)
+
+
+
 Turborepo Apps:
 
 - Frontend: Next.js 14
